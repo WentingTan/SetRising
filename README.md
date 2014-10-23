@@ -10,7 +10,7 @@ Group 1:
 * Wenting Tan
 
 
-Design Document 
+Design Document (Simple Version)
 ===============
 
 Logo:
