@@ -8,10 +8,9 @@ Group 1:
 *Jinri Hong
 *Matthew Stephens 
 *Wenting Tan
----
+
 
 Design Document 
-
 ---
 
 
