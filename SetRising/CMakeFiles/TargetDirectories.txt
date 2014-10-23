@@ -1,0 +1,1 @@
+/home/f85/wenting/CScoursework/GameDesign/SFML-master/SetRising/CMakeFiles/main.dir
