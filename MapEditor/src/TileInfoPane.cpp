@@ -10,6 +10,7 @@ TileInfoPane::TileInfoPane(const sf::Font& f):
 	tileType(f, 5),
 	scrollXBarrier(f, 2),
 	scrollYBarrier(f, 2),
+	enemySpawn(f, 5),
 	top(f, "Top", 16, 5),
 	left(f, "Left", 16, 5),
 	width(f, "Width", 16, 5),
@@ -47,7 +48,7 @@ void TileInfoPane::init()
 	tileType.setOption(std::string("Wall"), 16, TileNS::WALL);
 	tileType.setOption(std::string("Ladder"), 16, TileNS::LADDER);
 	tileType.setOption(std::string("Ladder Top"), 16, TileNS::LADDER_TOP);
-	tileType.setPosition(sf::Vector2f(815.0f, 55.0f));
+	tileType.setPosition(sf::Vector2f(815.0f, 35.0f));
 
 	// Initialize hitbox text
 	hitbox.setFont(font);
@@ -56,22 +57,22 @@ void TileInfoPane::init()
 	hitbox.setColor(sf::Color::Black);
 	bounds = hitbox.getLocalBounds();
 	//hitbox.setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
-	hitbox.setPosition(815.0f, 225.0f);
+	hitbox.setPosition(815.0f, 175.0f);
 
 	// Initialize the top field
-	top.setPosition(sf::Vector2f(835.0f, 255.0f));
+	top.setPosition(sf::Vector2f(835.0f, 205.0f));
 	top.setTextAreaOutline(2, sf::Color::Black);
 
 	// Initialize the left field
-	left.setPosition(sf::Vector2f(835.0f, 285.0f));
+	left.setPosition(sf::Vector2f(835.0f, 235.0f));
 	left.setTextAreaOutline(2, sf::Color::Black);
 
 	// Initialize the width field
-	width.setPosition(sf::Vector2f(820.0f, 315.0f));
+	width.setPosition(sf::Vector2f(820.0f, 265.0f));
 	width.setTextAreaOutline(2, sf::Color::Black);
 
 	// Initialize the height field
-	height.setPosition(sf::Vector2f(815.0f, 345.0f));
+	height.setPosition(sf::Vector2f(815.0f, 295.0f));
 	height.setTextAreaOutline(2, sf::Color::Black);
 
 	// Initialize the scrollXbarrier radiobutton
@@ -80,7 +81,7 @@ void TileInfoPane::init()
 	scrollXBarrier.setTitle(std::string("ScrollX Barrier"), 18);
 	scrollXBarrier.setOption(std::string("No"), 16, 0);
 	scrollXBarrier.setOption(std::string("Yes"), 16, 1);
-	scrollXBarrier.setPosition(sf::Vector2f(815.0f, 390.0f));
+	scrollXBarrier.setPosition(sf::Vector2f(815.0f, 320.0f));
 
 	// Initialize the scrollYbarrier radiobutton
 	scrollYBarrier.init();
@@ -88,7 +89,18 @@ void TileInfoPane::init()
 	scrollYBarrier.setTitle(std::string("ScrollY Barrier"), 18);
 	scrollYBarrier.setOption(std::string("No"), 16, 0);
 	scrollYBarrier.setOption(std::string("Yes"), 16, 1);
-	scrollYBarrier.setPosition(sf::Vector2f(815.0f, 470.0f));
+	scrollYBarrier.setPosition(sf::Vector2f(815.0f, 400.0f));
+
+	// Initialize the scrollYbarrier radiobutton
+	enemySpawn.init();
+	enemySpawn.setSelected(0);
+	enemySpawn.setTitle(std::string("Spawn Enemy"), 18);
+	enemySpawn.setOption(std::string("None"), 16, 0);
+	enemySpawn.setOption(std::string("Soldier"), 16, 1);
+	enemySpawn.setOption(std::string("Grenadier"), 16, 2);
+	enemySpawn.setOption(std::string("Super Soldier"), 16, 3);
+	enemySpawn.setOption(std::string("Turret"), 16, 4);
+	enemySpawn.setPosition(sf::Vector2f(815.0f, 470.0f));
 
 	// Initialize the apply button
 	sf::Vector2f size;
@@ -144,6 +156,8 @@ void TileInfoPane::getTileInfo(Tile *t, sf::Vector2i index)
 
 	scrollXBarrier.setSelected(tile->scrollXBarrier ? 1 : 0);
 	scrollYBarrier.setSelected(tile->scrollYBarrier ? 1 : 0);
+
+	enemySpawn.setSelected(tile->enemy);
 }
 
 
@@ -156,6 +170,7 @@ void TileInfoPane::handleInput(Input *input)
 		tileType.handleInput(input);
 		scrollXBarrier.handleInput(input);
 		scrollYBarrier.handleInput(input);
+		enemySpawn.handleInput(input);
 		top.handleInput(input);
 		left.handleInput(input);
 		width.handleInput(input);
@@ -169,6 +184,7 @@ void TileInfoPane::update(float dt)
 	tileType.update(dt);
 	scrollXBarrier.update(dt);
 	scrollYBarrier.update(dt);
+	enemySpawn.update(dt);
 
 	if (apply.wasClicked())
 	{
@@ -179,6 +195,7 @@ void TileInfoPane::update(float dt)
 		tile->hitbox.height = (float)atof(height.getEnteredText().c_str());
 		tile->scrollXBarrier = scrollXBarrier.getSelected() == 0 ? false : true;
 		tile->scrollYBarrier = scrollYBarrier.getSelected() == 0 ? false : true;
+		tile->enemy = enemySpawn.getSelected();
 	}
 
 }
@@ -195,5 +212,6 @@ void TileInfoPane::draw(sf::RenderWindow& window)
 	height.draw(window);
 	scrollXBarrier.draw(window);
 	scrollYBarrier.draw(window);
+	enemySpawn.draw(window);
 	apply.draw(window);
 }

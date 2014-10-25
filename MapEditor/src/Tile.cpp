@@ -44,6 +44,9 @@ std::istream& operator>>(std::istream& stream, Tile& tile)
 	stream >> c;
 	tile.scrollYBarrier = c == 'y' ? true : false;
 
+	// Read in enemy to spawn
+	stream >> tile.enemy;
+
 	// Read in and ignore closing ')'
 	stream >> c;
 	
@@ -72,6 +75,8 @@ std::ostream& operator<<(std::ostream& stream, Tile& tile)
 	
 	stream << (tile.scrollYBarrier ? 'y' : 'n') << ' ';
 
+	stream << tile.enemy;
+
 	// Output a closing )
 	stream << ')';
 	
@@ -93,6 +98,7 @@ void Tile::setDefault()
 	solid = false;
 	scrollXBarrier = false;
 	scrollYBarrier = false;
+	enemy = E_NONE;
 	hitbox.top = 0.0f;
 	hitbox.left = 0.0f;
 	hitbox.width = (float)TileNS::SIZE;

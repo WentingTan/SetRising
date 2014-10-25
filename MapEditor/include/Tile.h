@@ -25,6 +25,12 @@ namespace TileNS
 	bool Solid[];
 }
 
+const int E_NONE = 0;
+const int E_SOLDIER = 1;
+const int E_GRENADIER = 2;
+const int E_SUP_SOLDIER = 3;
+const int E_TURRET = 4;
+
 class Tile
 {
 public:
@@ -38,6 +44,7 @@ public:
 	bool scrollXBarrier;
 	bool scrollYBarrier;
 	TileNS::Type type;
+	int enemy;
 	short tileNum;
 };
 

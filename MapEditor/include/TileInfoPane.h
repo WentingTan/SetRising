@@ -45,6 +45,7 @@ private:
 	TextField height;
 	RadioButton scrollXBarrier;
 	RadioButton scrollYBarrier;
+	RadioButton enemySpawn;
 
 	sf::FloatRect bounds;
 	sf::RectangleShape background;
