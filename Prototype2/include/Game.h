@@ -15,7 +15,7 @@ const int MAX_STATES = 8;
 
 const int NUM_TEXTURES = 2;
 const char TILE_TEXTURE[] = "tiles.png";
-const char PLAYER_TEXTURE[] = "mm.png";
+const char PLAYER_TEXTURE[] = "setsprite.png";
 
 const int TILES = 0;
 const int PLAYER = 1;

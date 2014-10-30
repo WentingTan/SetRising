@@ -96,11 +96,17 @@ void WalkState::update(float dt)
 	// Walking Animation
 	if (time > step)
 	{
-		prevFrame = currFrame;
-		currFrame = nextFrame;
+		int currentF = ((int)currFrame + 1) %  10;
+		if (currentF == 0)
+			currentF = 2;
+		
+		currFrame = (PlayerNS::graphics)currentF;
 		// Update the frame of the animation 
 		player->setGraphics(currFrame, dir);
 
+
+
+		/*
 		// Update the next frame of animation
 		switch (currFrame)
 		{
@@ -122,6 +128,7 @@ void WalkState::update(float dt)
 		default:
 			break;
 		}
+		*/
 
 		time = 0.0f;
 	}

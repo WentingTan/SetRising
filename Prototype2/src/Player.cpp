@@ -160,7 +160,7 @@ bool Player::init()
 
 	// Allocate space for the Player's states
 	standing = new StandState(this);
-	walking = new WalkState(this, 0.175f);
+	walking = new WalkState(this, 0.095f);
 	jumping = new JumpState(this, 160.0f);
 	falling = new FallState(this);
 	climbing = new ClimbState(this, 0.175f);
