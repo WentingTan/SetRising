@@ -51,7 +51,7 @@ void BossStandState::handleInput(Input& input)
 	if (input.wasPressed(InputNS::JUMP))
 	{
 		//player->move(0.0f, -180.0f * dt);
-		boss->setState(BossNS::S_ATTACK, dir);
+		boss->setState(BossNS::S_JUMP, dir);
 	}
 
 	// Transition to walking state, direction = right

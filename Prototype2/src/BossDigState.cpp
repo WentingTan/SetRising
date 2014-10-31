@@ -31,7 +31,7 @@ void BossDigState::enter(float direction)
 {
 	time = 0.0f;
 	dir = direction;
-	boss->setHitboxWidth(138.0f);
+	boss->setHitboxWidth(134.0f);
 	initialHeight = boss->getPosition().y;
 	falling = false;
 	land = false;
@@ -105,6 +105,9 @@ void BossDigState::update(float dt)
 				break;
 			
 			default:
+				//falling = false;
+				//land = false;
+				//boss->setState(BossNS::S_STAND, dir);
 				break;
 			}
 
@@ -125,7 +128,7 @@ void BossDigState::update(float dt)
 		if (jumpedHeight > maxHeight)
 		{
 			boss->setPosition(boss->getPosition().x, initialHeight - maxHeight);
-			boss->setState(BossNS::S_DIG, dir);
+			//boss->setState(BossNS::S_DIG, dir);
 			falling = true;
 
 		}
@@ -141,15 +144,22 @@ void BossDigState::update(float dt)
 		}
 
 		// Check for collision with walls
-		if (boss->hasHitWall(dir)){
+		/*if (boss->hasHitWall(dir)){
 			falling = false;
 			boss->setGraphics(BossNS::G_DIG1, dir);
 			//		boss->setState(BossNS::S_STAND, dir);
 			land = true;
+			}*/
+		boss->hasHitWall(dir);
+
+		if (boss->isOnGround() && falling){
+		boss->setGraphics(BossNS::G_DIG1, dir);
+
+		land = true;
 		}
 	}
 	// Check for collision with floor
-
+//	boss->hasHitWall(dir);
 	// If no collision, transition to FallState
 
 }

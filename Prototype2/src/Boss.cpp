@@ -167,8 +167,8 @@ bool Boss::init()
 	standing = new BossStandState(this);
 	walking = new BossWalkState(this, 0.175f);
 	digging = new BossDigState(this, 1.0f, 100.0f);
-	jumping = new BossJumpState(this, 200.0f);
-	falling = new BossFallState(this);
+	jumping = new BossJumpState(this, 200.0f, 0.15f);
+	falling = new BossFallState(this, 0.15f);
 	//jumping = new AirState(this, -400.0f);
 	//falling = new AirState(this, 250.0f);
 
@@ -325,7 +325,7 @@ bool Boss::hasHitWall(float direction)
 
 			if (hitbox.intersects(box, overlap) && overlap.height > 2.5f)
 			{
-			//	move(-direction * overlap.width, 0.0f);
+				move(-direction * overlap.width, 0.0f);
 				return true;
 			}
 		}

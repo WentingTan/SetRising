@@ -13,7 +13,7 @@ class BossFallState : public BossState
 {
 public:
 	// Constructor
-	explicit BossFallState(Boss *b);
+	explicit BossFallState(Boss *b, float s);
 	// Destructor
 	virtual ~BossFallState() {}
 
@@ -24,6 +24,11 @@ public:
 
 private:
 	bool move;
+	float step;
+	float time;
+	BossNS::graphics nextFrame;
+	BossNS::graphics currFrame;
+	BossNS::graphics prevFrame;
 };
 
 #endif

@@ -8,7 +8,9 @@
 //=============================
 // Constructor(Player*)
 //=============================
-BossFallState::BossFallState(Boss *b) :
+BossFallState::BossFallState(Boss *b, float s) :
+step(s),
+time(0.0f),
 BossState(b),
 move(false)
 {
@@ -24,9 +26,13 @@ move(false)
 //==============
 void BossFallState::enter(float direction)
 {
+	
 	dir = direction;
 	boss->setHitboxWidth(100.0f);
-	boss->setGraphics(BossNS::G_STAND, dir);
+
+	currFrame = BossNS::G_JUMP0;
+	nextFrame = BossNS::G_JUMP1;
+	boss->setGraphics(currFrame, dir);
 }
 
 //===============
@@ -34,6 +40,7 @@ void BossFallState::enter(float direction)
 //===============
 void BossFallState::handleInput(Input& input)
 {
+
 
 	float x;
 	// Transition to jumping state, maintain current direction
@@ -45,13 +52,13 @@ void BossFallState::handleInput(Input& input)
 	if (input.isPressed(InputNS::RIGHT))
 	{
 		dir = BossNS::RIGHT;
-		boss->setGraphics(BossNS::G_STAND, dir);
+		//boss->setGraphics(BossNS::G_STAND, dir);
 		move = true;
 	}
 	else if (input.isPressed(InputNS::LEFT))
 	{
 		dir = BossNS::LEFT;
-		boss->setGraphics(BossNS::G_STAND, dir);
+		//boss->setGraphics(BossNS::G_STAND, dir);
 		move = true;
 	}
 }
@@ -61,6 +68,37 @@ void BossFallState::handleInput(Input& input)
 //===============
 void BossFallState::update(float dt)
 {
+	time += dt;
+
+	// Walking Animation
+	if (time > step)
+	{
+		prevFrame = currFrame;
+		currFrame = nextFrame;
+		// Update the frame of the animation 
+		boss->setGraphics(currFrame, dir);
+
+		// Update the next frame of animation
+		switch (currFrame)
+		{
+		case BossNS::G_JUMP0:
+			nextFrame = BossNS::G_JUMP1;
+			break;
+		case BossNS::G_JUMP1:
+			nextFrame = BossNS::G_JUMP2;
+			break;
+		case BossNS::G_JUMP2:
+			nextFrame = BossNS::G_JUMP3;
+			break;
+		default:
+			nextFrame = BossNS::G_JUMP0;
+			break;
+		}
+
+		time = 0.0f;
+	}
+
+
 	if (move)
 		boss->move(dir * 200.0f * dt, 0.0f);
 

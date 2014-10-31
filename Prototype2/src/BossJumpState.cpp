@@ -8,8 +8,10 @@
 //=============================
 // Constructor(Boss*, float)
 //=============================
-BossJumpState::BossJumpState(Boss *b, float maxHeight) :
+BossJumpState::BossJumpState(Boss *b, float maxHeight, float s) :
 BossState(b),
+step(s),
+time(0.0f),
 maxHeight(maxHeight),
 move(false)
 {
@@ -28,7 +30,7 @@ void BossJumpState::enter(float direction)
 	dir = direction;
 	boss->setHitboxWidth(64.0f);
 	initialHeight = boss->getPosition().y;
-	boss->setGraphics(BossNS::G_JUMP2, dir);
+	boss->setGraphics(BossNS::G_JUMP0, dir);
 }
 
 //===============
@@ -36,13 +38,15 @@ void BossJumpState::enter(float direction)
 //===============
 void BossJumpState::handleInput(Input& input)
 {
+
 	move = false;
+	/*
 	// Transition to falling state if jump button no longer pressed
 	if (input.wasReleased(InputNS::JUMP))
 	{
-		boss->setState(BossNS::S_JUMP, dir);
+		boss->setState(BossNS::S_FALL, dir);
 	}
-
+	*/
 
 
 	float x;
@@ -54,14 +58,14 @@ void BossJumpState::handleInput(Input& input)
 	// direction is no longer being pressed
 	if (input.isPressed(InputNS::RIGHT))
 	{
-		boss->setState(BossNS::S_JUMP, dir);
-
+		dir = BossNS::RIGHT;
+		//boss->setGraphics(BossNS::G_JUMP1, dir);
 		move = true;
 	}
 	else if (input.isPressed(InputNS::LEFT))
 	{
-		boss->setState(BossNS::S_JUMP, dir);
-
+		dir = BossNS::LEFT;
+	//	boss->setGraphics(BossNS::G_JUMP1, dir);
 		move = true;
 	}
 }
@@ -71,6 +75,38 @@ void BossJumpState::handleInput(Input& input)
 //===============
 void BossJumpState::update(float dt)
 {
+
+	time += dt;
+
+	// Walking Animation
+	if (time > step)
+	{
+		prevFrame = currFrame;
+		currFrame = nextFrame;
+		// Update the frame of the animation 
+		boss->setGraphics(currFrame, dir);
+
+		// Update the next frame of animation
+		switch (currFrame)
+		{
+		case BossNS::G_JUMP0:
+			nextFrame = BossNS::G_JUMP1;
+			break;
+		case BossNS::G_JUMP1:
+			nextFrame = BossNS::G_JUMP2;
+			break;
+		case BossNS::G_JUMP2:
+			nextFrame = BossNS::G_JUMP3;
+			break;
+		default:
+			nextFrame = BossNS::G_JUMP0;
+			break;
+		}
+
+		time = 0.0f;
+	}
+
+
 	if (move)
 		boss->move(dir * 200.0f * dt, 0.0f);
 
@@ -83,6 +119,7 @@ void BossJumpState::update(float dt)
 	else if (jumpedHeight > maxHeight)
 	{
 		boss->setPosition(boss->getPosition().x, initialHeight - maxHeight);
+		boss->setState(BossNS::S_FALL, dir);
 	}
 	else
 	{

@@ -13,7 +13,7 @@ class BossJumpState : public BossState
 {
 public:
 	// Constructor
-	BossJumpState(Boss *b, float maxHeight);
+	BossJumpState(Boss *b, float maxHeight, float s);
 	// Destructor
 	virtual ~BossJumpState() {}
 
@@ -25,6 +25,11 @@ public:
 private:
 	float maxHeight;
 	float initialHeight;
+	float step;
+	float time;
+	BossNS::graphics nextFrame;
+	BossNS::graphics currFrame;
+	BossNS::graphics prevFrame;
 
 	bool move;
 };
