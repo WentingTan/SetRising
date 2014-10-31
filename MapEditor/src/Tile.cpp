@@ -4,14 +4,6 @@
 //==========================//
 #include "Tile.h"
 
-bool TileNS::Solid[TileNS::NUM_TYPES] = {
-	false,
-	true,
-	true,
-	false,
-	false
-};
-
 //===========//
 // Operators //
 //===========//
@@ -30,7 +22,16 @@ std::istream& operator>>(std::istream& stream, Tile& tile)
 	tile.type = (TileNS::Type)t;
 	
 	// Set the tile solidity based on tile type
-	tile.solid = TileNS::Solid[t];
+	switch (tile.type)
+	{
+	case TileNS::FLOOR:
+	case TileNS::WALL:
+		tile.solid = true;
+		break;
+	default: // BACKGROUND, LADDER, LADDER_TOP
+		tile.solid = false;
+		break;
+	}
 	
 	// Read in the hitbox values
 	stream >> tile.hitbox.left;
