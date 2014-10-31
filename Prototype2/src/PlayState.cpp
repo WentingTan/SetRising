@@ -29,9 +29,13 @@ bool PlayState::init()
 	tmap.loadFromFile("enemymap.txt");
 	tmap.setEnemyManager(&enemies);
 
-	player.setTexture(pGame->getTexture(PLAYER));
+	/*player.setTexture(pGame->getTexture(PLAYER));
 	player.init();
 	player.setTileMap(&tmap);
+	*/
+	boss.setTexture(pGame->getTexture(BOSS));
+	boss.init();
+	boss.setTileMap(&tmap);
 	
 	enemies.init();
 
@@ -40,19 +44,22 @@ bool PlayState::init()
 
 void PlayState::handleInput(Input *input)
 {
-	player.handleInput(*input);
+	boss.handleInput(*input);
+	//player.handleInput(*input);
 }
 
 void PlayState::update(float dt)
 {
-	player.update(dt);
+	//player.update(dt);
 	tmap.update(dt);
+	boss.update(dt);
 	enemies.update(dt);
 }
 
 void PlayState::draw(sf::RenderWindow& window)
 {
 	tmap.draw(window);
-	player.draw(window);
+	//player.draw(window);
+	boss.draw(window);
 	enemies.draw(window);
 }

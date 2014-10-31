@@ -13,12 +13,14 @@ class GameState;
 const char GAME_NAME[] = "Platform Demo 2";
 const int MAX_STATES = 8;
 
-const int NUM_TEXTURES = 2;
+const int NUM_TEXTURES = 3;
 const char TILE_TEXTURE[] = "tiles.png";
 const char PLAYER_TEXTURE[] = "mm.png";
+const char BOSS_TEXTURE[] = "enemy3.png";
 
 const int TILES = 0;
 const int PLAYER = 1;
+const int BOSS = 2;
 
 class Game
 {

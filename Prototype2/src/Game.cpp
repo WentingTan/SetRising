@@ -38,6 +38,7 @@ void Game::init()
 	// Load textures used by the game
 	textures[TILES].loadFromFile(TILE_TEXTURE);
 	textures[PLAYER].loadFromFile(PLAYER_TEXTURE);
+	textures[BOSS].loadFromFile(BOSS_TEXTURE);
 
 	// Push the play state onto the stack and initialize it
 	states[n] = new PlayState(this);

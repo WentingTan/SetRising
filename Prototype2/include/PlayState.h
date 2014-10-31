@@ -7,6 +7,7 @@
 
 #include "GameState.h"
 #include "TileMap.h"
+#include "Boss.h"
 #include "Player.h"
 #include "EnemyManager.h"
 
@@ -26,6 +27,7 @@ public:
 
 protected:
 	TileMap tmap;
+	Boss boss;
 	Player player;
 	EnemyManager enemies;
 };

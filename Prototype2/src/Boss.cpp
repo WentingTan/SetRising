@@ -1,36 +1,30 @@
 //==========================//
-// Player.cpp               //
-// Author: Matthew Stephens //
+// Boss.cpp               //
+// Author: Jinri Hong //
 //==========================//
-#include "Player.h"
-#include "StandState.h"
-#include "WalkState.h"
-#include "JumpState.h"
-#include "FallState.h"
-#include "ClimbState.h"
+#include "Boss.h"
+#include "BossStandState.h"
+#include "BossWalkState.h"
+
+
 
 //===============
 // Constructor()
 //===============
-Player::Player()
+Boss::Boss()
 {
 	// Do nothing
 }
 
 //==============================================
 // Destructor()
-// Deallocates storage for the Player's states.
+// Deallocates storage for the Boss's states.
 //==============================================
-Player::~Player()
+Boss::~Boss()
 {
 	if (standing)
 		delete standing;
-	if (walking)
-		delete walking;
-	if (jumping)
-		delete jumping;
-	if (falling)
-		delete falling;
+	
 }
 
 
@@ -40,23 +34,23 @@ Player::~Player()
 
 //===============================================
 // getPosition()
-// Returns the screen coordinates of the Player.
+// Returns the screen coordinates of the Boss.
 //===============================================
-sf::Vector2f Player::getPosition() const
+sf::Vector2f Boss::getPosition() const
 {
 	return sprite.getPosition();
 }
 
 //============================================================================
 // getHitBox()
-// Returns the hitbox (rectangle used for collision detection) of the Player.
+// Returns the hitbox (rectangle used for collision detection) of the Boss.
 //============================================================================
-sf::FloatRect Player::getHitBox() const
+sf::FloatRect Boss::getHitBox() const
 {
 	return hitbox;
 }
 
-void Player::setHitboxWidth(float w)
+void Boss::setHitboxWidth(float w)
 {
 	hitbox.width = w;
 }
@@ -68,68 +62,67 @@ void Player::setHitboxWidth(float w)
 
 //====================================
 // setTileMap(TileMap*)
-// Sets the Player's TileMap pointer.
+// Sets the Boss's TileMap pointer.
 //====================================
-void Player::setTileMap(TileMap *m)
+void Boss::setTileMap(TileMap *m)
 {
 	map = m;
+	// Set initial Boss state and position
+	setState(BossNS::S_STAND, BossNS::RIGHT);
+	sprite.setPosition(400.0f, 450.0f);
 }
 
 //============================================
 // setPosition(float,float)
-// Sets the screen coordinates of the Player.
+// Sets the screen coordinates of the Boss.
 //============================================
-void Player::setPosition(float x, float y)
+void Boss::setPosition(float x, float y)
 {
 	sprite.setPosition(x, y);
 }
 
 //===================================================================================
-// setState(PlayerNS::state, float)
-// Sets the Player's state pointer to the given state, and then calls the state's
+// setState(BossNS::state, float)
+// Sets the Boss's state pointer to the given state, and then calls the state's
 // enter method, which initializes the state. The direction argument specifies which
 // direction the character is facing upon entering the state.
 //===================================================================================
-void Player::setState(PlayerNS::state s, float dir)
+void Boss::setState(BossNS::state s, float dir)
 {
 	switch (s)
 	{
-	case PlayerNS::S_STAND:
+	case BossNS::S_STAND:
 		state = standing;
 		break;
-	case PlayerNS::S_WALK:
+	case BossNS::S_WALK:
 		state = walking;
 		break;
-	case PlayerNS::S_JUMP:
-		state = jumping;
+	default:
+		state = standing;
 		break;
-	case PlayerNS::S_CLIMB:
-		state = climbing;
-		break;
-	default: // S_FALL
-		state = falling;
-		break;
+	
 	}
-
+	
 	state->enter(dir);
+
 }
 
 //==================================================================================
-// setGraphics(PlayerNS::graphics, float)
-// Sets the Player's sprite to the specified image, facing the specified direction.
+// setGraphics(BossNS::graphics, float)
+// Sets the Boss's sprite to the specified image, facing the specified direction.
 //==================================================================================
-void Player::setGraphics(PlayerNS::graphics g, float dir)
+void Boss::setGraphics(BossNS::graphics g, float dir)
 {
 	// Calculate texture rect for the requested image
-	int row = (int)g / PlayerNS::IRP;
-	int col = (int)g % PlayerNS::IRP;
+	int row = (int)g / BossNS::IRP;
+	int col = (int)g % BossNS::IRP;
 
 	sf::IntRect rect;
-	rect.top = row * PlayerNS::IMG_SIZE.y;
-	rect.left = col * PlayerNS::IMG_SIZE.x;
-	rect.width = PlayerNS::IMG_SIZE.x;
-	rect.height = PlayerNS::IMG_SIZE.y;
-	
+	rect.top = row * BossNS::IMG_SIZE.y;
+	rect.left = col * BossNS::IMG_SIZE.x;
+	rect.width = BossNS::IMG_SIZE.x;
+	rect.height = BossNS::IMG_SIZE.y;
+
 	// Now set the sprite texture rect
 	sprite.setTextureRect(rect);
 	sprite.setOrigin(64.0f, 64.0f);
@@ -143,50 +136,45 @@ void Player::setGraphics(PlayerNS::graphics g, float dir)
 // Methods //
 //=========//
 
-void Player::setTexture(sf::Texture *t)
+void Boss::setTexture(sf::Texture *t)
 {
 	texture = t;
 }
 
 //==============================================================================================
 // init()
-// Initializes the Player object. Loads the Player texture, sets the Player's hitbox, allocates
-// storage for the Player's states, and sets the initial state of the Player. Returns true if
+// Initializes the Boss object. Loads the Boss texture, sets the Boss's hitbox, allocates
+// storage for the Boss's states, and sets the initial state of the Boss. Returns true if
 // successful, false otherwise.
 //==============================================================================================
-bool Player::init()
+bool Boss::init()
 {
 	sprite.setTexture(*texture);
 
-	// Allocate space for the Player's states
-	standing = new StandState(this);
-	walking = new WalkState(this, 0.175f);
-	jumping = new JumpState(this, 160.0f);
-	falling = new FallState(this);
-	climbing = new ClimbState(this, 0.175f);
+	// Allocate space for the Boss's states
+	standing = new BossStandState(this);
+	walking = new BossWalkState(this, 0.175f);
 	//jumping = new AirState(this, -400.0f);
 	//falling = new AirState(this, 250.0f);
 
 
-	// Set Player's hitbox
-	hitbox.width = 64.0f;
-	hitbox.height = 92.0f;
+	// Set Boss's hitbox
+	hitbox.width = 100.0f;
+	hitbox.height = 100.0f;
 
-	// Set initial Player state and position
-	setState(PlayerNS::S_FALL, PlayerNS::RIGHT);
-	sprite.setPosition(400.0f, 300.0f);
+	
 
 	return true;
 }
 
 //=================================================================================
 // move(float, float)
-// Move's the Player by the given amount. If the Player is at one end or the other
-// of the TileMap, the Player will actually change screen coordinates. Otherwise,
-// the Player's x-corrdinate is kept centered relative the screen, and the TileMap
+// Move's the Boss by the given amount. If the Boss is at one end or the other
+// of the TileMap, the Boss will actually change screen coordinates. Otherwise,
+// the Boss's x-corrdinate is kept centered relative the screen, and the TileMap
 // is scrolled to give the appearance of movement.
 //=================================================================================
-void Player::move(float x, float y)
+void Boss::move(float x, float y)
 {
 	// Determine if the movement should be accomplished by moving the sprite's
 	// screen coordinates or by scrolling the tile map.
@@ -203,7 +191,7 @@ void Player::move(float x, float y)
 		if ((x > 0.0f) || (sprite.getPosition().x > 400.0f))
 			moveSprite = true;
 	}
-	
+
 	if (moveSprite)
 		sprite.move(x, y);
 	else
@@ -212,25 +200,25 @@ void Player::move(float x, float y)
 		map->scroll(x, 0.0f);
 	}
 
-	// Update position of Player's hitbox
+	// Update position of Boss's hitbox
 	hitbox.top = sprite.getPosition().y - 0.5f * hitbox.height;
 	hitbox.left = sprite.getPosition().x - 0.5f * hitbox.width;
 }
 
 //========================================================
 // handleInput()
-// Delegate input handling to the Player's current state.
+// Delegate input handling to the Boss's current state.
 //========================================================
-void Player::handleInput(Input& input)
+void Boss::handleInput(Input& input)
 {
 	state->handleInput(input);
 }
 
 //=========================================
 // update(float)
-// Delegate to the Player's current state.
+// Delegate to the Boss's current state.
 //=========================================
-void Player::update(float dt)
+void Boss::update(float dt)
 {
 	state->update(dt);
 }
@@ -238,18 +226,18 @@ void Player::update(float dt)
 
 //=======================================
 // draw(sf::RenderWindow&)
-// Draws the Player to the RenderWindow.
+// Draws the Boss to the RenderWindow.
 //=======================================
-void Player::draw(sf::RenderWindow& backBuffer)
+void Boss::draw(sf::RenderWindow& backBuffer)
 {
 	backBuffer.draw(sprite);
 }
 
 //=================================================================================
 // isOnGround()
-// Returns true if the bottom of the Player's hitbox is currently colliding with a
+// Returns true if the bottom of the Boss's hitbox is currently colliding with a
 // solid tile's hitbox, false otherwise. Given the following diagram representing
-// tiles of the TileMap, where the center of the Player's hitbox is somewhere in
+// tiles of the TileMap, where the center of the Boss's hitbox is somewhere in
 // tile 5, only tiles 7, 8, and 9 are checked.
 //	+---+---+---+
 //	| 1 | 2 | 3 |
@@ -259,12 +247,12 @@ void Player::draw(sf::RenderWindow& backBuffer)
 //	| 7 | 8 | 9 |
 //	+---+---+---+
 //=================================================================================
-bool Player::isOnGround()
+bool Boss::isOnGround()
 {
-	// Get the index of the tile that coincides with the center of the Player
+	// Get the index of the tile that coincides with the center of the Boss
 	sf::Vector2f pos = sprite.getPosition();
 	sf::Vector2i index = map->getTileIndex(pos.x, pos.y);
-	
+
 	sf::FloatRect box;
 	sf::FloatRect overlap;
 
@@ -290,9 +278,9 @@ bool Player::isOnGround()
 //=====================================================================================
 // hasHitWall(float)
 // Returns true if the left or right side (depending on direction argument) of the
-// Player's hitbox is currently colliding with a solid tile's hitbox, false otherwise.
+// Boss's hitbox is currently colliding with a solid tile's hitbox, false otherwise.
 // Given the following diagram representing tiles of the TileMap, where the center of 
-// the Player's hitbox is somewhere in tile 5, then for dir == RIGHT, only tiles 3, 6,
+// the Boss's hitbox is somewhere in tile 5, then for dir == RIGHT, only tiles 3, 6,
 // and 9 are checked, and for dir == LEFT, only tiles 1, 4, and 7 are checked.
 //	+---+---+---+
 //	| 1 | 2 | 3 |
@@ -302,9 +290,9 @@ bool Player::isOnGround()
 //	| 7 | 8 | 9 |
 //	+---+---+---+
 //=====================================================================================
-bool Player::hasHitWall(float direction)
+bool Boss::hasHitWall(float direction)
 {
-	// Get the index of the tile that coincides with the center of the Player
+	// Get the index of the tile that coincides with the center of the Boss
 	sf::Vector2f pos = sprite.getPosition();
 	sf::Vector2i index = map->getTileIndex(pos.x, pos.y);
 	sf::FloatRect box;
@@ -332,9 +320,9 @@ bool Player::hasHitWall(float direction)
 
 //================================================================================
 // hasHitCeiling()
-// Returns true if the top of the Player's hitbox is currently colliding with a
+// Returns true if the top of the Boss's hitbox is currently colliding with a
 // solid tile's hitbox, false otherwise. Given the following diagram representing
-// tiles of the TileMap, where the center of the Player's hitbox is somewhere in
+// tiles of the TileMap, where the center of the Boss's hitbox is somewhere in
 // tile 5, only tiles 1, 2, and 3 are checked.
 //	+---+---+---+
 //	| 1 | 2 | 3 |
@@ -344,7 +332,7 @@ bool Player::hasHitWall(float direction)
 //	| 7 | 8 | 9 |
 //	+---+---+---+
 //================================================================================
-bool Player::hasHitCeiling()
+bool Boss::hasHitCeiling()
 {
 	sf::Vector2f pos = sprite.getPosition();
 	sf::Vector2i index = map->getTileIndex(pos.x, pos.y);
@@ -370,12 +358,12 @@ bool Player::hasHitCeiling()
 	return false;
 }
 
-bool Player::isOnLadderTop(float& xCoord)
+bool Boss::isOnLadderTop(float& xCoord)
 {
-	// Get the index of the tile that coincides with the center of the Player
+	// Get the index of the tile that coincides with the center of the Boss
 	sf::Vector2f pos = sprite.getPosition();
 	sf::Vector2i index = map->getTileIndex(pos.x, pos.y);
-	
+
 	sf::FloatRect box;
 	sf::FloatRect overlap;
 
@@ -399,7 +387,7 @@ bool Player::isOnLadderTop(float& xCoord)
 	return false;
 }
 
-bool Player::isTouchingLadder(float& xCoord)
+bool Boss::isTouchingLadder(float& xCoord)
 {
 	sf::Vector2f pos = sprite.getPosition();
 	sf::Vector2i index = map->getTileIndex(pos.x, pos.y);
