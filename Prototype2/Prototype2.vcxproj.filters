@@ -66,6 +66,15 @@
     <ClCompile Include="src\BossWalkState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BossDigState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BossFallState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BossJumpState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ClimbState.h">
@@ -128,6 +137,15 @@
     <ClInclude Include="include\BossWalkState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\BossDigState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BossFallState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BossJumpState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Prototype2.rc">
@@ -145,6 +163,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\enemy3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\enemy3cut.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -27,7 +27,7 @@ BossState(k)
 void BossStandState::enter(float direction)
 {
 	dir = direction;
-	boss->setHitboxWidth(64.0f);
+	boss->setHitboxWidth(130.0f);
 	boss->isOnGround();
 	boss->setGraphics(BossNS::G_STAND, dir);
 
@@ -43,11 +43,9 @@ void BossStandState::handleInput(Input& input)
 
 	if (input.isPressed(InputNS::DOWN))
 	{
-		if (boss->isOnLadderTop(x))
-		{
-			boss->move(x - boss->getPosition().x, 0.5f);
+		
 			boss->setState(BossNS::S_DIG, dir);
-		}
+		
 	}
 
 	if (input.wasPressed(InputNS::JUMP))

@@ -13,6 +13,9 @@
 // Forward declarations
 class BossStandState;
 class BossWalkState;
+class BossJumpState;
+class BossFallState;
+class BossDigState;
 
 namespace BossNS
 {
@@ -30,26 +33,20 @@ namespace BossNS
 		G_WALK0 = 0,
 		G_WALK1 = 1,
 		G_WALK2 = 2,
-		G_DIG0 = 6,
-		G_DIG1 = 7,
-		G_DIG2 = 8,
-		G_ATTACK0 = 12,
-		G_ATTACK1 = 13,
-		G_ATTACK2 = 14,
-		G_ATTACK3 = 15,
-		G_ATTACK4 = 16,
-		G_ATTACK5 = 17,
-		G_JUMP0 = 18,
-		G_JUMP1 = 19,
-		G_JUMP2 = 20,
-		G_JUMP3 = 21,
-		G_STAND = 22,
-		G_DIE1 = 25,
+		G_DIG0 = 3,
+		G_DIG1 = 4,
+		G_DIG2 = 5,
+		G_JUMP0 = 6,
+		G_JUMP1 = 7,
+		G_JUMP2 = 8,
+		G_JUMP3 = 9,
+		G_STAND = 10,
+		G_DIE1 = 11,
 	};
 	// Images per row in Boss texture
 	const int IRP = 6;
 	// Image size
-	const sf::Vector2i IMG_SIZE = sf::Vector2i(138, 138);
+	const sf::Vector2i IMG_SIZE = sf::Vector2i(134, 134);
 
 	const float LEFT = -1.0f;
 	const float RIGHT = 1.0f;
@@ -101,8 +98,9 @@ private:
 	BossState *state;
 	BossStandState *standing;
 	BossWalkState *walking;
-	//BossFallState *falling;
-	//BossDigState *digging;
+	BossFallState *falling;
+	BossJumpState *jumping;
+	BossDigState *digging;
 
 	//AirState *jumping;
 	//AirState *falling;

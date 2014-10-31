@@ -51,11 +51,9 @@ void StandState::handleInput(Input& input)
 
 	if (input.isPressed(InputNS::DOWN))
 	{
-		if (player->isOnLadderTop(x))
-		{
-			player->move(x - player->getPosition().x, 0.5f);
+		
 			player->setState(PlayerNS::S_CLIMB, dir);
-		}
+		
 	}
 
 	if (input.wasPressed(InputNS::JUMP))

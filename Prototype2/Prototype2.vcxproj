@@ -75,6 +75,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Boss.cpp" />
+    <ClCompile Include="src\BossDigState.cpp" />
+    <ClCompile Include="src\BossFallState.cpp" />
+    <ClCompile Include="src\BossJumpState.cpp" />
     <ClCompile Include="src\BossStandState.cpp" />
     <ClCompile Include="src\BossWalkState.cpp" />
     <ClCompile Include="src\ClimbState.cpp" />
@@ -94,6 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Boss.h" />
+    <ClInclude Include="include\BossDigState.h" />
+    <ClInclude Include="include\BossFallState.h" />
+    <ClInclude Include="include\BossJumpState.h" />
     <ClInclude Include="include\BossStandState.h" />
     <ClInclude Include="include\BossState.h" />
     <ClInclude Include="include\BossWalkState.h" />
@@ -119,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\enemy3.png" />
+    <Image Include="assets\enemy3cut.png" />
     <Image Include="assets\mm.png" />
     <Image Include="assets\set.png" />
     <Image Include="assets\tiles.png" />

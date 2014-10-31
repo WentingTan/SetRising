@@ -9,8 +9,8 @@
 //=============================
 // Constructor(Boss*, float)
 //=============================
-BossWalkState::BossWalkState(Boss *p, float s) :
-BossState(p),
+BossWalkState::BossWalkState(Boss *b, float s) :
+BossState(b),
 step(s),
 time(0.0f)
 {
@@ -48,18 +48,15 @@ void BossWalkState::handleInput(Input& input)
 
 	if (input.isPressed(InputNS::DOWN))
 	{
-		boss->setState(BossNS::S_WALK, dir);
+		boss->setState(BossNS::S_DIG, dir);
 		
 	}
 
 	if (input.wasPressed(InputNS::JUMP))
 	{
 		//player->move(0.0f, -180.0f * dt);
-		boss->setState(BossNS::S_WALK, dir);
+		boss->setState(BossNS::S_JUMP, dir);
 	}
-
-
-
 
 
 

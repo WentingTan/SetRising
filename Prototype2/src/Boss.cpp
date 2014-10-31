@@ -4,7 +4,10 @@
 //==========================//
 #include "Boss.h"
 #include "BossStandState.h"
+#include "BossDigState.h"
+#include "BossFallState.h"
 #include "BossWalkState.h"
+#include "BossJumpState.h"
 
 
 
@@ -68,8 +71,8 @@ void Boss::setTileMap(TileMap *m)
 {
 	map = m;
 	// Set initial Boss state and position
-	setState(BossNS::S_STAND, BossNS::RIGHT);
-	sprite.setPosition(400.0f, 450.0f);
+	setState(BossNS::S_FALL, BossNS::RIGHT);
+	sprite.setPosition(400.0f, 158.0f);
 }
 
 //============================================
@@ -96,6 +99,15 @@ void Boss::setState(BossNS::state s, float dir)
 		break;
 	case BossNS::S_WALK:
 		state = walking;
+		break;
+	case BossNS::S_DIG:
+		state = digging;
+		break;
+	case BossNS::S_FALL:
+		state = falling;
+		break;
+	case BossNS::S_JUMP:
+		state = jumping;
 		break;
 	default:
 		state = standing;
@@ -125,7 +137,7 @@ void Boss::setGraphics(BossNS::graphics g, float dir)
 
 	// Now set the sprite texture rect
 	sprite.setTextureRect(rect);
-	sprite.setOrigin(64.0f, 64.0f);
+	sprite.setOrigin(67.0f, 67.0f);
 
 	// The images face right by default, set scale in x direction to flip if necessary
 	sprite.setScale(dir, 1.0f);
@@ -154,13 +166,16 @@ bool Boss::init()
 	// Allocate space for the Boss's states
 	standing = new BossStandState(this);
 	walking = new BossWalkState(this, 0.175f);
+	digging = new BossDigState(this, 1.0f, 100.0f);
+	jumping = new BossJumpState(this, 200.0f);
+	falling = new BossFallState(this);
 	//jumping = new AirState(this, -400.0f);
 	//falling = new AirState(this, 250.0f);
 
 
 	// Set Boss's hitbox
-	hitbox.width = 100.0f;
-	hitbox.height = 100.0f;
+	hitbox.width = 90.0f;
+	hitbox.height = 90.0f;
 
 	
 
@@ -310,7 +325,7 @@ bool Boss::hasHitWall(float direction)
 
 			if (hitbox.intersects(box, overlap) && overlap.height > 2.5f)
 			{
-				move(-direction * overlap.width, 0.0f);
+			//	move(-direction * overlap.width, 0.0f);
 				return true;
 			}
 		}
