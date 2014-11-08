@@ -10,6 +10,7 @@
 #include "EnemyManager.h"
 #include <string>
 #include <fstream>
+#include "EventHandler.h"
 
 namespace TileMapNS
 {
@@ -27,6 +28,23 @@ typedef struct sTileMapInfo
 	sf::Vector2i mapSize;
 } TileMapInfo;
 
+class TileMap;
+
+//=============================================
+// TileMap EventHandler for Event::ENEMY_DEATH
+//=============================================
+class TMEnemyDeathHandler : public EventHandler
+{
+public:
+	//Constructor
+	TMEnemyDeathHandler(TileMap *tm): pTM(tm) {}
+	// Methods
+	virtual void handleEvent(Event::Data e);
+private:
+	TileMap *pTM;
+};
+
+
 class TileMap
 {
 public:
@@ -38,7 +56,9 @@ public:
 	bool isAtLeftEdge();
 	bool isAtRightEdge();
 
-	void setEnemyManager(EnemyManager *em);
+	void init();
+	void resetEnemySpawnPoint(sf::Vector2i tile);
+
 
 	void loadFromFile(std::string filename);
 	void create(sf::Texture *pTexture, TileMapInfo info);
@@ -65,7 +85,6 @@ public:
 private:
 	sf::Sprite sprite;
 	sf::Texture *texture;
-	//sf::Vector2i mapSize;
 	sf::Vector2i minTiles;
 	sf::Vector2i maxTiles;
 	Tile *tiles;
@@ -76,6 +95,10 @@ private:
 	TileMapInfo tInfo;
 	sf::Vector2f ds;
 	EnemyManager *enemies;
+	EventHandler *eDeathHandler;
+
+	// Helpers
+	void spawnEnemy(sf::Vector2i tile, float dir);
 };
 
 #endif

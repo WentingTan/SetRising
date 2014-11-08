@@ -10,12 +10,14 @@
 #include "PlayerState.h"
 #include "Input.h"
 
+
 // Forward declarations
 class StandState;
 class WalkState;
 class JumpState;
 class FallState;
 class ClimbState;
+class PlayerProjectiles;
 
 namespace PlayerNS
 {
@@ -73,6 +75,7 @@ public:
 	void setState(PlayerNS::state s, float dir);
 	void setTexture(sf::Texture *t);
 	void setGraphics(PlayerNS::graphics g, float dir);
+    void setProjectiles(PlayerProjectiles *p);
 
 	// Methods
 	bool init();
@@ -80,6 +83,7 @@ public:
 	void handleInput(Input& input);
 	void update(float dt);
 	void draw(sf::RenderWindow& backBuffer);
+    void shoot(float dir);
 
 	bool isOnGround();
 	bool isOnLadderTop(float& xCoord);
@@ -92,6 +96,7 @@ private:
 	sf::Texture *texture;
 	TileMap *map;
 	sf::FloatRect hitbox;
+    PlayerProjectiles *projectiles;
 
 	// Player states
 	PlayerState *state;

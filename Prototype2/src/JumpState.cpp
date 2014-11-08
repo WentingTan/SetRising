@@ -57,6 +57,12 @@ void JumpState::handleInput(Input& input)
 	}
 
 
+	 // Shooting
+    if (input.wasPressed(InputNS::SHOOT))
+	{
+		player->shoot(dir);
+	}
+
 	// Transition back to standing state if the arrow key corresponding to the current
 	// direction is no longer being pressed
 	else if (input.isPressed(InputNS::RIGHT))

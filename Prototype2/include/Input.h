@@ -15,10 +15,11 @@ namespace InputNS
 		RIGHT = 1,
 		UP = 2,
 		DOWN = 3,
-		JUMP = 4
+		JUMP = 4,
+		SHOOT = 5
 	};
 
-	const int NUM_BUTTONS = 5;
+	const int NUM_BUTTONS = 6;
 };
 
 class Input
