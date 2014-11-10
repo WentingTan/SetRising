@@ -17,16 +17,8 @@ class BossWalkState;
 class BossJumpState;
 class BossFallState;
 class BossDigState;
-class BossSpawnHandler : public EventHandler
-{
-public:
-	// Constructor
-	explicit BossSpawnHandler(Boss *bsh) : b(bsh) {}
-	// Methods
-	virtual void handleEvent(Event::Data e);
-private:
-	Boss *b;
-};
+
+
 namespace BossNS
 {
 	enum state
@@ -70,7 +62,6 @@ public:
 	Boss();
 	// Destructor
 	~Boss();
-	void spawn(sf::Vector2f pos, sf::Vector2i tile, float dir);
 
 	// Accessors
 	sf::Vector2f getPosition() const;
@@ -85,6 +76,7 @@ public:
 	void setState(BossNS::state s, float dir);
 	void setTexture(sf::Texture *t);
 	void setGraphics(BossNS::graphics g, float dir);
+	void activate(sf::Vector2f pos, sf::Vector2i tile, float dir);
 
 	// Methods
 	bool init();
@@ -104,8 +96,6 @@ private:
 	sf::Texture *texture;
 	TileMap *map;
 	sf::FloatRect hitbox;
-	EventHandler *spawnHandler;
-
 
 	// Boss states
 	BossState *state;

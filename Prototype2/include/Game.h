@@ -14,7 +14,7 @@ const char GAME_NAME[] = "Platform Demo 2";
 const int MAX_STATES = 8;
 
 const int NUM_TEXTURES = 5;
-const char TILE_TEXTURE[] = "tiles.png";
+const char TILE_TEXTURE[] = "tiles1.png";
 const char PLAYER_TEXTURE[] = "setsprite.png";
 const char ENEMY_TEXTURE[] = "set.png";
 const char LASER_TEXTURE[] = "laser.png";

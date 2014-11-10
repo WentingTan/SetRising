@@ -33,11 +33,11 @@ bool PlayState::init()
 	player.init();
 	player.setTileMap(&tmap);
 	
-	boss.setTexture(pGame->getTexture(BOSS));
+	/*boss.setTexture(pGame->getTexture(BOSS));
 	boss.init();
 	boss.setTileMap(&tmap);
-
-	enemies.init(pGame->getTexture(ENEMY));
+	*/
+	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(BOSS), &tmap);
 
     pProjectiles.init(pGame->getTexture(LASER));
 
@@ -57,7 +57,7 @@ void PlayState::update(float dt)
 	tmap.update(dt);
 	enemies.update(dt);
     pProjectiles.update(dt);
-	boss.update(dt);
+	//boss.update(dt);
 
 	pProjectiles.checkCollisions(&enemies);
 }
@@ -68,5 +68,5 @@ void PlayState::draw(sf::RenderWindow& window)
 	pProjectiles.draw(window);
 	player.draw(window);
 	enemies.draw(window);
-	boss.draw(window);
+	//boss.draw(window);
 }

@@ -289,6 +289,8 @@ void TileMap::update(float dt)
 	{
 		for (int y = newMin.y; y < newMax.y; y++)
 			if (tiles[tInfo.mapSize.x * y + newMax.x + 1].enemy == E_SOLDIER)
+				spawnEnemy(sf::Vector2i(newMax.x + 1, y), -1.0f);
+			else if (tiles[tInfo.mapSize.x * y + newMax.x + 1].enemy == E_BOSS)
 				spawnBoss(sf::Vector2i(newMax.x + 1, y), -1.0f);
 			
 	}
@@ -297,6 +299,8 @@ void TileMap::update(float dt)
 		for (int y = newMin.y; y < newMax.y; y++)
 			if (tiles[tInfo.mapSize.x * y + newMin.x - 1].enemy == E_SOLDIER)
 				spawnEnemy(sf::Vector2i(newMin.x - 1, y), 1.0f);
+			else if (tiles[tInfo.mapSize.x * y + newMax.x - 1].enemy == E_BOSS)
+				spawnBoss(sf::Vector2i(newMax.x - 1, y), -1.0f);
 				
 	}
 
