@@ -1,0 +1,1 @@
+/Users/wenting/Documents/CSci/GameDesign/GitHub/SetRising/MapEditor/CMakeFiles/main.dir
