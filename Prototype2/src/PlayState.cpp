@@ -27,39 +27,44 @@ bool PlayState::init()
 {
 	tmap.setTexture(pGame->getTexture(TILES));
 	tmap.loadFromFile("enemymap.txt");
-	tmap.setEnemyManager(&enemies);
+	tmap.init();
 
-	/*player.setTexture(pGame->getTexture(PLAYER));
+	player.setTexture(pGame->getTexture(PLAYER));
 	player.init();
 	player.setTileMap(&tmap);
-	*/
+	
 	boss.setTexture(pGame->getTexture(BOSS));
 	boss.init();
 	boss.setTileMap(&tmap);
-	
-	enemies.init();
+
+	enemies.init(pGame->getTexture(ENEMY));
+
+    pProjectiles.init(pGame->getTexture(LASER));
+
+    player.setProjectiles(&pProjectiles);
 
 	return true;
 }
 
 void PlayState::handleInput(Input *input)
 {
-	boss.handleInput(*input);
-	//player.handleInput(*input);
+	player.handleInput(*input);
 }
 
 void PlayState::update(float dt)
 {
-	//player.update(dt);
+	player.update(dt);
 	tmap.update(dt);
-	boss.update(dt);
 	enemies.update(dt);
+    pProjectiles.update(dt);
+
+	pProjectiles.checkCollisions(&enemies);
 }
 
 void PlayState::draw(sf::RenderWindow& window)
 {
 	tmap.draw(window);
-	//player.draw(window);
-	boss.draw(window);
+	pProjectiles.draw(window);
+	player.draw(window);
 	enemies.draw(window);
 }

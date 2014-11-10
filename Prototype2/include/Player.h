@@ -10,12 +10,14 @@
 #include "PlayerState.h"
 #include "Input.h"
 
+
 // Forward declarations
 class StandState;
 class WalkState;
 class JumpState;
 class FallState;
 class ClimbState;
+class PlayerProjectiles;
 
 namespace PlayerNS
 {
@@ -34,12 +36,17 @@ namespace PlayerNS
 		G_WALK1 = 2,
 		G_WALK2 = 3,
 		G_WALK3 = 4,
-		G_AIR = 5,
-		G_CLIMB0 = 6,
-		G_CLIMB1 = 7
+		G_WALK4 = 5,
+		G_WALK5 = 6,
+		G_WALK6 = 7,
+		G_WALK7 = 8,
+		G_WALK8 = 9,
+		G_CLIMB0 = 10,
+		G_CLIMB1 = 11,
+		G_AIR = 12
 	};
 	// Images per row in Player texture
-	const int IRP = 8;
+	const int IRP = 13;
 	// Image size
 	const sf::Vector2i IMG_SIZE = sf::Vector2i(128, 128);
 
@@ -68,6 +75,7 @@ public:
 	void setState(PlayerNS::state s, float dir);
 	void setTexture(sf::Texture *t);
 	void setGraphics(PlayerNS::graphics g, float dir);
+    void setProjectiles(PlayerProjectiles *p);
 
 	// Methods
 	bool init();
@@ -75,6 +83,7 @@ public:
 	void handleInput(Input& input);
 	void update(float dt);
 	void draw(sf::RenderWindow& backBuffer);
+    void shoot(float dir);
 
 	bool isOnGround();
 	bool isOnLadderTop(float& xCoord);
@@ -87,6 +96,7 @@ private:
 	sf::Texture *texture;
 	TileMap *map;
 	sf::FloatRect hitbox;
+    PlayerProjectiles *projectiles;
 
 	// Player states
 	PlayerState *state;

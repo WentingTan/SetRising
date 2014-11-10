@@ -21,8 +21,6 @@ namespace TileNS
 		LADDER_TOP = 4,
 		NUM_TYPES = 5
 	};
-
-	bool Solid[];
 }
 
 const int E_NONE = 0;

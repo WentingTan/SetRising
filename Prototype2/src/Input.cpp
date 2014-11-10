@@ -99,6 +99,22 @@ void Input::getInput()
 		current[button] = false;
 		pressed[button] = false;
 	}
+
+	// Handle SHOOT key
+	// Handle JUMP key
+	button = (int)InputNS::SHOOT;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		pressed[button] = !current[button];
+		current[button] = true;
+		released[button] = false;
+	}
+	else
+	{
+		released[button] = current[button];
+		current[button] = false;
+		pressed[button] = false;
+	}
 }
 
 bool Input::isPressed(InputNS::button b)

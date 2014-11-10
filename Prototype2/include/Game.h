@@ -13,14 +13,19 @@ class GameState;
 const char GAME_NAME[] = "Platform Demo 2";
 const int MAX_STATES = 8;
 
-const int NUM_TEXTURES = 3;
+const int NUM_TEXTURES = 5;
 const char TILE_TEXTURE[] = "tiles.png";
-const char PLAYER_TEXTURE[] = "mm.png";
+const char PLAYER_TEXTURE[] = "setsprite.png";
+const char ENEMY_TEXTURE[] = "set.png";
+const char LASER_TEXTURE[] = "laser.png";
 const char BOSS_TEXTURE[] = "enemy3cut.png";
 
+// Texture ID's
 const int TILES = 0;
 const int PLAYER = 1;
-const int BOSS = 2;
+const int ENEMY = 2;
+const int LASER = 3;
+const int BOSS = 5;
 
 class Game
 {

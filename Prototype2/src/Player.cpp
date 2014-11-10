@@ -8,6 +8,8 @@
 #include "JumpState.h"
 #include "FallState.h"
 #include "ClimbState.h"
+#include "PlayerProjectiles.h"
+#include "EventManager.h"
 
 //===============
 // Constructor()
@@ -138,6 +140,10 @@ void Player::setGraphics(PlayerNS::graphics g, float dir)
 	sprite.setScale(dir, 1.0f);
 }
 
+void Player::setProjectiles(PlayerProjectiles *p)
+{
+    projectiles = p;
+}
 
 //=========//
 // Methods //
@@ -160,7 +166,7 @@ bool Player::init()
 
 	// Allocate space for the Player's states
 	standing = new StandState(this);
-	walking = new WalkState(this, 0.175f);
+	walking = new WalkState(this, 0.095f);
 	jumping = new JumpState(this, 160.0f);
 	falling = new FallState(this);
 	climbing = new ClimbState(this, 0.175f);
@@ -235,6 +241,23 @@ void Player::update(float dt)
 	state->update(dt);
 }
 
+void Player::shoot(float dir)
+{
+	sf::FloatRect bounds = sprite.getGlobalBounds();
+	Event::Data e;
+
+	e.type = Event::PLAYER_SHOOT;
+	if (dir > 0.0f)
+		e.posX = bounds.left + 0.8f * bounds.width;
+	else
+		e.posX = bounds.left + 0.2f * bounds.width;
+    e.posY = bounds.top + 0.5f * bounds.height;
+	e.dir = dir;
+
+	EventManager::triggerEvent(e);
+
+    //projectiles->spawn(pos, dir);
+}
 
 //=======================================
 // draw(sf::RenderWindow&)

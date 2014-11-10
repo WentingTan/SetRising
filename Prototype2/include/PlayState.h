@@ -10,6 +10,7 @@
 #include "Boss.h"
 #include "Player.h"
 #include "EnemyManager.h"
+#include "PlayerProjectiles.h"
 
 class PlayState : public GameState
 {
@@ -30,6 +31,7 @@ protected:
 	Boss boss;
 	Player player;
 	EnemyManager enemies;
+    PlayerProjectiles pProjectiles;
 };
 
 #endif

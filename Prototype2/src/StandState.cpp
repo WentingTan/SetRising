@@ -61,7 +61,6 @@ void StandState::handleInput(Input& input)
 		//player->move(0.0f, -180.0f * dt);
 		player->setState(PlayerNS::S_JUMP, dir);
 	}
-
 	// Transition to walking state, direction = right
 	else if (input.isPressed(InputNS::RIGHT))
 	{
@@ -71,6 +70,12 @@ void StandState::handleInput(Input& input)
 	else if (input.isPressed(InputNS::LEFT))
 	{
 		player->setState(PlayerNS::S_WALK, PlayerNS::LEFT);
+	}
+
+    // Shooting
+    if (input.wasPressed(InputNS::SHOOT))
+	{
+		player->shoot(dir);
 	}
 }
 

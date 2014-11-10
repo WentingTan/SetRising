@@ -46,6 +46,10 @@ void FallState::handleInput(Input& input)
 		}
 	}
 
+	 // Shooting
+    if (input.wasPressed(InputNS::SHOOT))
+		player->shoot(dir);
+
 
 	move = false;
 	// Allow horizontal movement while falling
