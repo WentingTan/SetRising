@@ -25,7 +25,7 @@ const int TILES = 0;
 const int PLAYER = 1;
 const int ENEMY = 2;
 const int LASER = 3;
-const int BOSS = 4;
+const int BOSS = 5;
 
 class Game
 {

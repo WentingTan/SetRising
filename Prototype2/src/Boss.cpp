@@ -5,12 +5,9 @@
 #include "Boss.h"
 #include "BossStandState.h"
 #include "BossDigState.h"
-#include "EventManager.h"
 #include "BossFallState.h"
 #include "BossWalkState.h"
 #include "BossJumpState.h"
-
-
 
 
 
@@ -32,11 +29,6 @@ Boss::~Boss()
 		delete standing;
 	
 }
-void Boss::activate(sf::Vector2f pos, sf::Vector2i tile, float dir){
-	setState(BossNS::S_FALL, BossNS::RIGHT);
-	sprite.setPosition(500.0f, 158.0f);
-}
-
 
 
 //===========//
@@ -79,12 +71,8 @@ void Boss::setTileMap(TileMap *m)
 {
 	map = m;
 	// Set initial Boss state and position
-
-
 	setState(BossNS::S_FALL, BossNS::RIGHT);
-	sprite.setPosition(500.0f, 158.0f);
-
-	
+	sprite.setPosition(400.0f, 158.0f);
 }
 
 //============================================
@@ -184,9 +172,13 @@ bool Boss::init()
 	//jumping = new AirState(this, -400.0f);
 	//falling = new AirState(this, 250.0f);
 
+
 	// Set Boss's hitbox
 	hitbox.width = 90.0f;
 	hitbox.height = 90.0f;
+
+	
+
 	return true;
 }
 

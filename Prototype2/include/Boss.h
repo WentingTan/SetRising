@@ -8,7 +8,6 @@
 #include <SFML/Graphics.hpp>
 #include "TileMap.h"
 #include "BossState.h"
-#include "EventHandler.h"
 #include "Input.h"
 
 // Forward declarations
@@ -17,7 +16,6 @@ class BossWalkState;
 class BossJumpState;
 class BossFallState;
 class BossDigState;
-
 
 namespace BossNS
 {
@@ -76,7 +74,6 @@ public:
 	void setState(BossNS::state s, float dir);
 	void setTexture(sf::Texture *t);
 	void setGraphics(BossNS::graphics g, float dir);
-	void activate(sf::Vector2f pos, sf::Vector2i tile, float dir);
 
 	// Methods
 	bool init();

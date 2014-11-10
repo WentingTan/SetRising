@@ -71,24 +71,4 @@ void Enemy::copy(Enemy& e)
     spawnTile = e.spawnTile;
 	health = e.health;
 }
-void Enemy::setGraphics(EnemyNS::graphics g, float dir)
-{
-	// Calculate texture rect for the requested image
-	int row = (int)g / EnemyNS::IRP;
-	int col = (int)g % EnemyNS::IRP;
-
-	sf::IntRect rect;
-	rect.top = row * EnemyNS::IMG_SIZE.y;
-	rect.left = col * EnemyNS::IMG_SIZE.x;
-	rect.width = EnemyNS::IMG_SIZE.x;
-	rect.height = EnemyNS::IMG_SIZE.y;
-
-	// Now set the sprite texture rect
-	sprite.setTextureRect(rect);
-	sprite.setOrigin(64.0f, 64.0f);
-
-	// The images face right by default, set scale in x direction to flip if necessary
-	sprite.setScale(dir, 1.0f);
-}
-
 

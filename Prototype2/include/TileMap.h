@@ -98,8 +98,6 @@ private:
 	EventHandler *eDeathHandler;
 
 	// Helpers
-	void spawnBoss(sf::Vector2i tile, float dir);
-
 	void spawnEnemy(sf::Vector2i tile, float dir);
 };
 
