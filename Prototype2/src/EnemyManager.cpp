@@ -48,7 +48,7 @@ EnemyManager::~EnemyManager()
 
 }
 
-void EnemyManager::init(sf::Texture *t, sf::Texture *b, TileMap *tmap)
+void EnemyManager::init(sf::Texture *t, sf::Texture *b)
 {
 	bosses = new Boss[1];
 	enemies = new Enemy[10];
@@ -59,7 +59,7 @@ void EnemyManager::init(sf::Texture *t, sf::Texture *b, TileMap *tmap)
 	}
 	for (int i = 0; i < 1; i++){
 		bosses[i].setTexture(b);
-		bosses[i].setTileMap(tmap);
+	//	bosses[i].setTileMap(t);
 		bosses[i].init();
 	}
 	index = 0;
