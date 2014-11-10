@@ -31,13 +31,14 @@
 namespace Event
 {
 	const int SPAWN_ENEMY = 0;
+	const int SPAWN_BOSS = 7;
 	const int ENEMY_DEATH = 1;
 	const int SCROLL = 2;
 	const int PLAYER_SHOOT = 3;
 	const int ENEMY_SHOOT = 4;
 	const int ENEMY_HIT = 5;
 	const int PLAYER_HIT = 6;
-	const int NUM_TYPES = 7;
+	const int NUM_TYPES = 8;
 
 	typedef struct DataStruct
 	{

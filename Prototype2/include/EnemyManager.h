@@ -8,13 +8,12 @@
 #include <SFML/Graphics.hpp>
 #include "Enemy.h"
 #include "Boss.h"
-#include "TileMap.h"
 #include "EventHandler.h"
 
 // Forward Declarations
 class Laser;
 class EnemyManager;
-
+class Boss;
 //=============================================
 // EnemyManager EventHandler for Event::SCROLL
 //=============================================

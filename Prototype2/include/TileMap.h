@@ -12,6 +12,8 @@
 #include <fstream>
 #include "EventHandler.h"
 
+class EnemyManager;
+
 namespace TileMapNS
 {
 	// Tiles per row in the texture
