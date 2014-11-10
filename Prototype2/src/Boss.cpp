@@ -5,9 +5,26 @@
 #include "Boss.h"
 #include "BossStandState.h"
 #include "BossDigState.h"
+#include "EventManager.h"
 #include "BossFallState.h"
 #include "BossWalkState.h"
 #include "BossJumpState.h"
+
+
+void BossSpawnHandler::handleEvent(Event::Data e)
+{
+	// Ensure that this was triggered by the correct event type
+	if (e.type == Event::SPAWN_BOSS)
+		b->spawn(sf::Vector2f(e.posX, e.posY), e.tile, e.dir);
+}
+void Boss::spawn(sf::Vector2f pos, sf::Vector2i tile, float dir)
+{
+	init();
+	setState(BossNS::S_FALL, BossNS::RIGHT);
+
+	sprite.setPosition(pos.x, pos.y);
+}
+
 
 
 
@@ -71,8 +88,12 @@ void Boss::setTileMap(TileMap *m)
 {
 	map = m;
 	// Set initial Boss state and position
+
+
 	setState(BossNS::S_FALL, BossNS::RIGHT);
-	sprite.setPosition(400.0f, 158.0f);
+	sprite.setPosition(500.0f, 158.0f);
+
+	
 }
 
 //============================================
@@ -171,14 +192,12 @@ bool Boss::init()
 	falling = new BossFallState(this, 0.15f);
 	//jumping = new AirState(this, -400.0f);
 	//falling = new AirState(this, 250.0f);
-
+	spawnHandler = new BossSpawnHandler(this);
 
 	// Set Boss's hitbox
 	hitbox.width = 90.0f;
 	hitbox.height = 90.0f;
-
-	
-
+	EventManager::addHandler(Event::SPAWN_BOSS, spawnHandler);
 	return true;
 }
 

@@ -36,7 +36,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -83,13 +83,18 @@
     <ClCompile Include="src\ClimbState.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\EnemyManager.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\FallState.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\JumpState.cpp" />
+    <ClCompile Include="src\Laser.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\PlayerProjectiles.cpp" />
     <ClCompile Include="src\PlayState.cpp" />
+    <ClCompile Include="src\SoldierEnemy.cpp" />
     <ClCompile Include="src\StandState.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileMap.cpp" />
@@ -106,14 +111,21 @@
     <ClInclude Include="include\ClimbState.h" />
     <ClInclude Include="include\Enemy.h" />
     <ClInclude Include="include\EnemyManager.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\Event.h" />
+    <ClInclude Include="include\EventHandler.h" />
+    <ClInclude Include="include\EventManager.h" />
     <ClInclude Include="include\FallState.h" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\GameState.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\JumpState.h" />
+    <ClInclude Include="include\Laser.h" />
     <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\PlayerProjectiles.h" />
     <ClInclude Include="include\PlayerState.h" />
     <ClInclude Include="include\PlayState.h" />
+    <ClInclude Include="include\SoldierEnemy.h" />
     <ClInclude Include="include\StandState.h" />
     <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\TileMap.h" />
@@ -128,6 +140,7 @@
     <Image Include="assets\enemy3cut.png" />
     <Image Include="assets\mm.png" />
     <Image Include="assets\set.png" />
+    <Image Include="assets\SnakeEnemy.png" />
     <Image Include="assets\tiles.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

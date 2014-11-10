@@ -57,6 +57,7 @@ void PlayState::update(float dt)
 	tmap.update(dt);
 	enemies.update(dt);
     pProjectiles.update(dt);
+	boss.update(dt);
 
 	pProjectiles.checkCollisions(&enemies);
 }
@@ -67,4 +68,5 @@ void PlayState::draw(sf::RenderWindow& window)
 	pProjectiles.draw(window);
 	player.draw(window);
 	enemies.draw(window);
+	boss.draw(window);
 }

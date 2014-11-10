@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include "TileMap.h"
 #include "BossState.h"
+#include "EventHandler.h"
 #include "Input.h"
 
 // Forward declarations
@@ -16,7 +17,16 @@ class BossWalkState;
 class BossJumpState;
 class BossFallState;
 class BossDigState;
-
+class BossSpawnHandler : public EventHandler
+{
+public:
+	// Constructor
+	explicit BossSpawnHandler(Boss *bsh) : b(bsh) {}
+	// Methods
+	virtual void handleEvent(Event::Data e);
+private:
+	Boss *b;
+};
 namespace BossNS
 {
 	enum state
@@ -60,6 +70,7 @@ public:
 	Boss();
 	// Destructor
 	~Boss();
+	void spawn(sf::Vector2f pos, sf::Vector2i tile, float dir);
 
 	// Accessors
 	sf::Vector2f getPosition() const;
@@ -93,6 +104,8 @@ private:
 	sf::Texture *texture;
 	TileMap *map;
 	sf::FloatRect hitbox;
+	EventHandler *spawnHandler;
+
 
 	// Boss states
 	BossState *state;
