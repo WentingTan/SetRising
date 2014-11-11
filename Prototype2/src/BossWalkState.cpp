@@ -30,7 +30,7 @@ void BossWalkState::enter(float direction)
 {
 	time = 0.0f;
 	dir = direction;
-	boss->setHitboxWidth(138.0f);
+	boss->setHitboxWidth(64.0f);
 
 	currFrame = BossNS::G_WALK0;
 	nextFrame = BossNS::G_WALK1;

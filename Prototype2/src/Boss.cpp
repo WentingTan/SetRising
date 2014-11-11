@@ -71,8 +71,8 @@ void Boss::setTileMap(TileMap *m)
 {
 	map = m;
 	// Set initial Boss state and position
-	setState(BossNS::S_FALL, BossNS::RIGHT);
-	sprite.setPosition(400.0f, 158.0f);
+	setState(BossNS::S_FALL, BossNS::LEFT);
+	sprite.setPosition(600.0f, 158.0f);
 
 }
 

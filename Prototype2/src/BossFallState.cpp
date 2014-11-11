@@ -117,7 +117,7 @@ void BossFallState::update(float dt)
 	// Check for collision with floors
 	// If colliding with a floor, transition to standing state
 	if (boss->isOnGround())
-		boss->setState(BossNS::S_STAND, dir);
+		boss->setState(BossNS::S_DIG, dir);
 
 }
 

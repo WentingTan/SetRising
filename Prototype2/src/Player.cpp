@@ -176,7 +176,7 @@ bool Player::init()
 
 	// Set Player's hitbox
 	hitbox.width = 64.0f;
-	hitbox.height = 92.0f;
+	hitbox.height = 102.0f;
 
 	// Set initial Player state and position
 	setState(PlayerNS::S_FALL, PlayerNS::RIGHT);
@@ -209,6 +209,9 @@ void Player::move(float x, float y)
 		if ((x > 0.0f) || (sprite.getPosition().x > 400.0f))
 			moveSprite = true;
 	}
+	if (sprite.getPosition().y > 600){
+		moveSprite = false;
+	}
 	
 	if (moveSprite)
 		sprite.move(x, y);
@@ -216,6 +219,8 @@ void Player::move(float x, float y)
 	{
 		sprite.setPosition(400.0f, sprite.getPosition().y + y);
 		map->scroll(x, 0.0f);
+
+
 	}
 
 	// Update position of Player's hitbox
