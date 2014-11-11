@@ -28,6 +28,7 @@ const int E_SOLDIER = 1;
 const int E_GRENADIER = 2;
 const int E_SUP_SOLDIER = 3;
 const int E_TURRET = 4;
+const int E_BOSS = 5;
 
 class Tile
 {

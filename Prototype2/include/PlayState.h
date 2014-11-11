@@ -9,6 +9,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "EnemyManager.h"
+#include "Boss.h"
 #include "PlayerProjectiles.h"
 
 class PlayState : public GameState
@@ -27,6 +28,7 @@ public:
 
 protected:
 	TileMap tmap;
+	Boss boss;
 	Player player;
 	EnemyManager enemies;
     PlayerProjectiles pProjectiles;

@@ -5,6 +5,15 @@
 #include "EnemyManager.h"
 #include "EventManager.h"
 #include "Laser.h"
+#include "Boss.h"
+void BossSpawnHandler::handleEvent(Event::Data e)
+{
+	// Ensure that this was triggered by the correct event type
+	if (e.type == Event::SPAWN_BOSS)
+		pEM->spawnBoss(sf::Vector2f(e.posX, e.posY), e.tile, e.dir);
+}
+
+
 
 //==============================================================================
 // EMScrollHandler::handleEvent(Event::Data)
@@ -41,21 +50,34 @@ EnemyManager::~EnemyManager()
 
 }
 
-void EnemyManager::init(sf::Texture *t)
+void EnemyManager::init(sf::Texture *t, sf::Texture *b, TileMap *tmap)
 {
+	
 	enemies = new Enemy[10];
 	for (int i = 0; i < 10; i++)
 	{
 		enemies[i].setTexture(t);
 		enemies[i].init();
 	}
+
+		boss.setTexture(b);
+		boss.init();
+		boss.setTileMap(tmap);
+		
+	
 	index = 0;
+	
 
 	scrollHandler = new EMScrollHandler(this);
 	spawnHandler = new EMSpawnHandler(this);
-
+	bSpawnHandler = new BossSpawnHandler(this);
 	EventManager::addHandler(Event::SCROLL, scrollHandler);
 	EventManager::addHandler(Event::SPAWN_ENEMY, spawnHandler);
+	EventManager::addHandler(Event::SPAWN_BOSS, bSpawnHandler);
+}
+void EnemyManager::spawnBoss(sf::Vector2f pos, sf::Vector2i tile, float dir)
+{
+	boss.activate(pos, tile, dir);
 }
 	
 void EnemyManager::spawn(sf::Vector2f pos, sf::Vector2i tile, float dir)

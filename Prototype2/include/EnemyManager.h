@@ -8,11 +8,12 @@
 #include <SFML/Graphics.hpp>
 #include "Enemy.h"
 #include "EventHandler.h"
-
+#include "Boss.h"
 // Forward Declarations
 class Laser;
 class EnemyManager;
-
+class TileMap;
+//class Boss;
 //=============================================
 // EnemyManager EventHandler for Event::SCROLL
 //=============================================
@@ -41,6 +42,16 @@ private:
 	EnemyManager *pEM;
 };
 
+class BossSpawnHandler : public EventHandler
+{
+public:
+	// Constructor
+	explicit BossSpawnHandler(EnemyManager *em) : pEM(em) {}
+	// Methods
+	virtual void handleEvent(Event::Data e);
+private:
+	EnemyManager *pEM;
+};
 
 class EnemyManager
 {
@@ -50,7 +61,8 @@ public:
 	// Destructor
 	~EnemyManager();
 
-	void init(sf::Texture *t);
+	void init(sf::Texture *t, sf::Texture *b, TileMap *tmap);
+	void spawnBoss(sf::Vector2f pos, sf::Vector2i tile, float dir);
 
 	bool checkCollisions(Laser *laser);
 
@@ -62,9 +74,11 @@ public:
 
 private:
 	Enemy *enemies;
+	Boss boss;
 	int index;
 	EventHandler *scrollHandler;
 	EventHandler *spawnHandler;
+	EventHandler *bSpawnHandler;
 
 	// Helper
 	void remove(int ind);

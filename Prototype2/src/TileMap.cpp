@@ -286,12 +286,16 @@ void TileMap::update(float dt)
 		for (int y = newMin.y; y < newMax.y; y++)
 			if (tiles[tInfo.mapSize.x * y + newMax.x + 1].enemy == E_SOLDIER)
 				spawnEnemy(sf::Vector2i(newMax.x + 1, y), -1.0f);	
+		    else if (tiles[tInfo.mapSize.x * y + newMax.x + 1].enemy == E_BOSS)
+			    spawnBoss(sf::Vector2i(newMax.x + 1, y), -1.0f);
 	}
 	else if (newMin.x < minTiles.x && newMin.x > 0)
 	{
 		for (int y = newMin.y; y < newMax.y; y++)
 			if (tiles[tInfo.mapSize.x * y + newMin.x - 1].enemy == E_SOLDIER)
 				spawnEnemy(sf::Vector2i(newMin.x - 1, y), 1.0f);
+			else if (tiles[tInfo.mapSize.x * y + newMax.x - 1].enemy == E_BOSS)
+				spawnBoss(sf::Vector2i(newMax.x - 1, y), 1.0f);
 				
 	}
 
@@ -331,7 +335,28 @@ void TileMap::spawnEnemy(sf::Vector2i tile, float dir)
 	tiles[tInfo.mapSize.x * tile.y + tile.x].enemy = E_NONE;
 }
 
+void TileMap::spawnBoss(sf::Vector2i tile, float dir)
+{
+	// Calculate the position of the tile in screen corrdinates
+	sf::Vector2f pos;
+	// Use the center of the tile in the x direction
+	pos.x = ((float)tile.x + 0.5f) * (float)tInfo.tileSize - scrollX;
+	// Use the top of the tile in the y direction
+	pos.y = (float)tile.y * (float)tInfo.tileSize - scrollY;
 
+
+	// Trigger a SPAWN_ENEMY event
+	Event::Data e;
+	e.type = Event::SPAWN_BOSS;
+	e.posX = pos.x;
+	e.posY = pos.y;
+	e.tile = tile;
+	e.dir = dir;
+	EventManager::triggerEvent(e);
+
+	// Ensure the tile doesn't continue spawning enemies
+	tiles[tInfo.mapSize.x * tile.y + tile.x].enemy = E_NONE;
+}
 //===================================================================================
 // draw(sf::RenderWindow&)
 // Iterates through the tile array from the minimum to maximum visible index in each

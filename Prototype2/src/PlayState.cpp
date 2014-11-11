@@ -33,7 +33,11 @@ bool PlayState::init()
 	player.init();
 	player.setTileMap(&tmap);
 	
-	enemies.init(pGame->getTexture(ENEMY));
+	boss.setTexture(pGame->getTexture(BOSS));
+	boss.init();
+	boss.setTileMap(&tmap);
+
+	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(BOSS), &tmap);
 
     pProjectiles.init(pGame->getTexture(LASER));
 

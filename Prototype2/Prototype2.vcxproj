@@ -56,7 +56,8 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>C:\Users\Jinri\Pictures\SFML-2.1\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-main-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <EmbedManagedResourceFile> </EmbedManagedResourceFile>
+      <EmbedManagedResourceFile>
+      </EmbedManagedResourceFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,6 +76,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Boss.cpp" />
+    <ClCompile Include="src\BossDigState.cpp" />
+    <ClCompile Include="src\BossFallState.cpp" />
+    <ClCompile Include="src\BossJumpState.cpp" />
+    <ClCompile Include="src\BossStandState.cpp" />
+    <ClCompile Include="src\BossWalkState.cpp" />
     <ClCompile Include="src\ClimbState.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\EnemyManager.cpp" />
@@ -95,6 +102,13 @@
     <ClCompile Include="src\WalkState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Boss.h" />
+    <ClInclude Include="include\BossDigState.h" />
+    <ClInclude Include="include\BossFallState.h" />
+    <ClInclude Include="include\BossJumpState.h" />
+    <ClInclude Include="include\BossStandState.h" />
+    <ClInclude Include="include\BossState.h" />
+    <ClInclude Include="include\BossWalkState.h" />
     <ClInclude Include="include\ClimbState.h" />
     <ClInclude Include="include\Enemy.h" />
     <ClInclude Include="include\EnemyManager.h" />

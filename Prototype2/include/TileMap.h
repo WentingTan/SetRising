@@ -7,10 +7,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "Tile.h"
-#include "EnemyManager.h"
+//#include "EnemyManager.h"
 #include <string>
 #include <fstream>
 #include "EventHandler.h"
+class EnemyManager;
 
 namespace TileMapNS
 {
@@ -99,6 +100,8 @@ private:
 
 	// Helpers
 	void spawnEnemy(sf::Vector2i tile, float dir);
+	void spawnBoss(sf::Vector2i tile, float dir);
+
 };
 
 #endif
