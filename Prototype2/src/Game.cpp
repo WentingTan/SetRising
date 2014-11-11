@@ -5,6 +5,8 @@
 #include "Game.h"
 #include "GameState.h"
 #include "PlayState.h"
+#include <stdlib.h>
+#include <time.h>
 
 //==============================================================================
 // Constructor
@@ -40,6 +42,11 @@ void Game::init()
 	textures[PLAYER].loadFromFile(PLAYER_TEXTURE);
 	textures[ENEMY].loadFromFile(ENEMY_TEXTURE);
 	textures[LASER].loadFromFile(LASER_TEXTURE);
+	textures[HBAR].loadFromFile(HBAR_TEXTURE);
+	textures[HP].loadFromFile(HP_TEXTURE);
+
+	// Seed the random number generator with the current time
+	srand(time(NULL));
 
 	// Push the play state onto the stack and initialize it
 	states[n] = new PlayState(this);

@@ -11,6 +11,7 @@
 
 // Forward Declarations
 class Laser;
+class Player;
 class EnemyManager;
 
 //=============================================
@@ -53,6 +54,7 @@ public:
 	void init(sf::Texture *t);
 
 	bool checkCollisions(Laser *laser);
+	void checkCollisions(Player *player);
 
 	void scroll(sf::Vector2f ds);
 	

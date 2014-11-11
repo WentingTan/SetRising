@@ -10,6 +10,23 @@
 #include "ClimbState.h"
 #include "PlayerProjectiles.h"
 #include "EventManager.h"
+#include "AlphaOscillator.h"
+
+
+//============================================================================
+// PPlayerHitHandler::handleEvent(Event::Data)
+// Handles Event::PLAYER_HIT by calling Player::damage() through its internal
+// Player pointer.
+//============================================================================
+void PPlayerHitHandler::handleEvent(Event::Data e)
+{
+	// Ensure that this was triggered by the correct event type
+	if (e.type == Event::PLAYER_HIT)
+		pP->damage();
+}
+
+
+
 
 //===============
 // Constructor()
@@ -57,6 +74,17 @@ sf::FloatRect Player::getHitBox() const
 {
 	return hitbox;
 }
+
+//=================================================================================
+// Player::isDamaged()
+// Indicates whether the player is damaged.  The player is invulnerable to further
+// damage for a short period of time after taking damage.
+//=================================================================================
+bool Player::isDamaged() const
+{
+	return damaged;
+}
+
 
 void Player::setHitboxWidth(float w)
 {
@@ -145,6 +173,18 @@ void Player::setProjectiles(PlayerProjectiles *p)
     projectiles = p;
 }
 
+//=====================================================================================
+// Player::damage()
+// Sets the damaged flag to true, and sets the damageTimer to its initial value, which
+// is the duration for which the player will be invulnerable to further damage.
+//=====================================================================================
+void Player::damage()
+{
+	damaged = true;
+	damageTimer = PlayerNS::DAMAGE_TIME;
+}
+
+
 //=========//
 // Methods //
 //=========//
@@ -181,6 +221,16 @@ bool Player::init()
 	// Set initial Player state and position
 	setState(PlayerNS::S_FALL, PlayerNS::RIGHT);
 	sprite.setPosition(400.0f, 300.0f);
+
+	// Set the damaged flag to false
+	damaged = false;
+	damageTimer = 0.0f;
+
+	// Register EventHandlers
+	hitHandler = new PPlayerHitHandler(this);
+	EventManager::addHandler(Event::PLAYER_HIT, hitHandler);
+
+	damageFlash = new AlphaOscillator(PlayerNS::DMG_HI_ALPHA, PlayerNS::DMG_LO_ALPHA, PlayerNS::DMG_CYCLE);
 
 	return true;
 }
@@ -239,6 +289,20 @@ void Player::handleInput(Input& input)
 void Player::update(float dt)
 {
 	state->update(dt);
+
+	if (damaged)
+	{
+		damageTimer -= dt;
+
+		damageFlash->update(dt);
+		sprite.setColor(sf::Color(255, 255, 255, damageFlash->getAlpha()));
+
+		if (damageTimer < 0.0f)
+		{
+			damaged = false;
+			sprite.setColor(sf::Color::White);
+		}
+	}
 }
 
 void Player::shoot(float dir)

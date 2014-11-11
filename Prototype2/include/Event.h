@@ -37,7 +37,8 @@ namespace Event
 	const int ENEMY_SHOOT = 4;
 	const int ENEMY_HIT = 5;
 	const int PLAYER_HIT = 6;
-	const int NUM_TYPES = 7;
+	const int PLAYER_HEAL = 7;
+	const int NUM_TYPES = 8;
 
 	typedef struct DataStruct
 	{
@@ -48,6 +49,7 @@ namespace Event
 			int enemyType;
 			int weaponType;
 			int damage;
+			int health;
 		};
 
 		union

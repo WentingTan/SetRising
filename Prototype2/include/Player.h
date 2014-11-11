@@ -9,6 +9,7 @@
 #include "TileMap.h"
 #include "PlayerState.h"
 #include "Input.h"
+#include "EventHandler.h"
 
 
 // Forward declarations
@@ -18,6 +19,24 @@ class JumpState;
 class FallState;
 class ClimbState;
 class PlayerProjectiles;
+class Player;
+class AlphaOscillator;
+
+
+//===========================================
+// Player EventHandler for Event::PLAYER_HIT
+//===========================================
+class PPlayerHitHandler : public EventHandler
+{
+public:
+	// Constructor
+	explicit PPlayerHitHandler(Player *p): pP(p) {}
+	// Methods
+	virtual void handleEvent(Event::Data e);
+private:
+	Player *pP;
+};
+
 
 namespace PlayerNS
 {
@@ -52,7 +71,15 @@ namespace PlayerNS
 
 	const float LEFT = -1.0f;
 	const float RIGHT = 1.0f;
+
+	const float DAMAGE_TIME = 1.25f;
+	const float DMG_HI_ALPHA = 255.0f;
+	const float DMG_LO_ALPHA = 100.0f;
+	const float DMG_CYCLE = 0.1f;
 }
+
+
+
 
 class Player
 {
@@ -65,6 +92,7 @@ public:
 	// Accessors
 	sf::Vector2f getPosition() const;
 	sf::FloatRect getHitBox() const;
+	bool isDamaged() const;
 
 	void setHitboxWidth(float w);
 
@@ -76,6 +104,7 @@ public:
 	void setTexture(sf::Texture *t);
 	void setGraphics(PlayerNS::graphics g, float dir);
     void setProjectiles(PlayerProjectiles *p);
+	void damage();
 
 	// Methods
 	bool init();
@@ -97,6 +126,11 @@ private:
 	TileMap *map;
 	sf::FloatRect hitbox;
     PlayerProjectiles *projectiles;
+	bool damaged;
+	float damageTimer;
+	AlphaOscillator *damageFlash;
+
+	PPlayerHitHandler *hitHandler;
 
 	// Player states
 	PlayerState *state;

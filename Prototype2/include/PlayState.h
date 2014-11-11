@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "EnemyManager.h"
 #include "PlayerProjectiles.h"
+#include "Healthbar.h"
+#include "PickupManager.h"
 
 class PlayState : public GameState
 {
@@ -30,6 +32,8 @@ protected:
 	Player player;
 	EnemyManager enemies;
     PlayerProjectiles pProjectiles;
+	Healthbar healthbar;
+	PickupManager pickups;
 };
 
 #endif

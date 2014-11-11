@@ -9,7 +9,8 @@
 // Constructor
 //================================
 PlayState::PlayState(Game *game):
-	GameState(game)
+	GameState(game),
+	healthbar(Health::MAX_HEALTH, Health::MAX_HEALTH)
 {
 
 }
@@ -35,9 +36,14 @@ bool PlayState::init()
 	
 	enemies.init(pGame->getTexture(ENEMY));
 
+	pickups.init(pGame->getTexture(HP));
+
     pProjectiles.init(pGame->getTexture(LASER));
 
     player.setProjectiles(&pProjectiles);
+
+	healthbar.setTexture(pGame->getTexture(HBAR));
+	healthbar.init();
 
 	return true;
 }
@@ -53,8 +59,14 @@ void PlayState::update(float dt)
 	tmap.update(dt);
 	enemies.update(dt);
     pProjectiles.update(dt);
+	pickups.update(dt);
 
 	pProjectiles.checkCollisions(&enemies);
+
+	pickups.checkCollisions(&player);
+
+	if (!player.isDamaged())
+		enemies.checkCollisions(&player);
 }
 
 void PlayState::draw(sf::RenderWindow& window)
@@ -63,4 +75,6 @@ void PlayState::draw(sf::RenderWindow& window)
 	pProjectiles.draw(window);
 	player.draw(window);
 	enemies.draw(window);
+	pickups.draw(window);
+	healthbar.draw(window);
 }

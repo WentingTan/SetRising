@@ -5,6 +5,7 @@
 #include "EnemyManager.h"
 #include "EventManager.h"
 #include "Laser.h"
+#include "Player.h"
 
 //==============================================================================
 // EMScrollHandler::handleEvent(Event::Data)
@@ -84,6 +85,8 @@ bool EnemyManager::checkCollisions(Laser *laser)
 				Event::Data e;
 				e.type = Event::ENEMY_DEATH;
 				e.tile = enemies[i].getSpawnTile();
+				e.posX = enemies[i].getPosition().x;
+				e.posY = enemies[i].getPosition().y;
 				EventManager::triggerEvent(e);
 
 				remove(i);
@@ -94,6 +97,29 @@ bool EnemyManager::checkCollisions(Laser *laser)
 		i++;
 	}
     return false;
+}
+
+//==============================================================================
+// EnemyManager::checkCollisions(Player*)
+// Checks for collisions between active enemies and the player.  If a collision
+// is detected, a PLAYER_HIT event is generated.
+//==============================================================================
+void EnemyManager::checkCollisions(Player *player)
+{
+	Event::Data e;
+	e.type = Event::PLAYER_HIT;
+
+	int i = 0;
+	while (enemies[i].isActive())
+	{
+		if (enemies[i].getHitbox().intersects(player->getHitBox()))
+		{
+			e.damage = 5;
+			EventManager::triggerEvent(e);
+			return;
+		}
+		i++;
+	}
 }
 
 void EnemyManager::update(float dt)
