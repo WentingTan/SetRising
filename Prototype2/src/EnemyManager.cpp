@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "Laser.h"
 #include "Boss.h"
+#include "PlayState.h"
 void BossSpawnHandler::handleEvent(Event::Data e)
 {
 	// Ensure that this was triggered by the correct event type
@@ -50,7 +51,7 @@ EnemyManager::~EnemyManager()
 
 }
 
-void EnemyManager::init(sf::Texture *t, sf::Texture *b, TileMap *tmap)
+void EnemyManager::init(sf::Texture *t, sf::Texture *b, PlayState *pState)
 {
 	
 	enemies = new Enemy[10];
@@ -59,11 +60,12 @@ void EnemyManager::init(sf::Texture *t, sf::Texture *b, TileMap *tmap)
 		enemies[i].setTexture(t);
 		enemies[i].init();
 	}
-
+	/*
 		boss.setTexture(b);
 		boss.init();
 		boss.setTileMap(tmap);
-		
+		*/
+	state = pState;
 	
 	index = 0;
 	
@@ -77,7 +79,8 @@ void EnemyManager::init(sf::Texture *t, sf::Texture *b, TileMap *tmap)
 }
 void EnemyManager::spawnBoss(sf::Vector2f pos, sf::Vector2i tile, float dir)
 {
-	boss.activate(pos, tile, dir);
+	//boss.activate(pos, tile, dir);
+	state->spawnBoss();
 }
 	
 void EnemyManager::spawn(sf::Vector2f pos, sf::Vector2i tile, float dir)
@@ -128,6 +131,8 @@ void EnemyManager::draw(sf::RenderWindow& window)
 	int i = 0;
 	while (enemies[i].isActive())
 		enemies[i++].draw(window);
+	while (boss.isActive())
+		boss.draw(window);
 }
 
 void EnemyManager::remove(int ind)

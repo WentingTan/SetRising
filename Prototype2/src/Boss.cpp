@@ -71,13 +71,17 @@ void Boss::setTileMap(TileMap *m)
 {
 	map = m;
 	// Set initial Boss state and position
+	setState(BossNS::S_FALL, BossNS::RIGHT);
+	sprite.setPosition(400.0f, 158.0f);
 
 }
 
+bool Boss::isActive(){
+	return active;
+}
 void Boss::activate(sf::Vector2f pos, sf::Vector2i tile, float dir){
 	active = true;
-	setState(BossNS::S_FALL, BossNS::RIGHT);
-	sprite.setPosition(400.0f, 158.0f);
+
 	
 
 }

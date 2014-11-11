@@ -82,7 +82,7 @@ public:
 	void handleInput(Input& input);
 	void update(float dt);
 	void draw(sf::RenderWindow& backBuffer);
-
+	bool isActive();
 	bool isOnGround();
 	bool isOnLadderTop(float& xCoord);
 	bool hasHitWall(float direction);

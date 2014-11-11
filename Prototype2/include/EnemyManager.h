@@ -13,6 +13,7 @@
 class Laser;
 class EnemyManager;
 class TileMap;
+class PlayState;
 //class Boss;
 //=============================================
 // EnemyManager EventHandler for Event::SCROLL
@@ -61,7 +62,7 @@ public:
 	// Destructor
 	~EnemyManager();
 
-	void init(sf::Texture *t, sf::Texture *b, TileMap *tmap);
+	void init(sf::Texture *t, sf::Texture *b, PlayState *pState);
 	void spawnBoss(sf::Vector2f pos, sf::Vector2i tile, float dir);
 
 	bool checkCollisions(Laser *laser);
@@ -75,6 +76,7 @@ public:
 private:
 	Enemy *enemies;
 	Boss boss;
+	PlayState *state;
 	int index;
 	EventHandler *scrollHandler;
 	EventHandler *spawnHandler;

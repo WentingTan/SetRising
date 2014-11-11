@@ -21,6 +21,7 @@ public:
 	virtual ~PlayState();
 
 	// Methods
+	void spawnBoss();
 	virtual bool init();
 	virtual void handleInput(Input *input);
 	virtual void update(float dt);
@@ -29,6 +30,7 @@ public:
 protected:
 	TileMap tmap;
 	Boss boss;
+	bool bossSpawn = false;
 	Player player;
 	EnemyManager enemies;
     PlayerProjectiles pProjectiles;
