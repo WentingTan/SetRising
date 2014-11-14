@@ -4,6 +4,20 @@
 //==========================//
 #include "TileMap.h"
 #include <fstream>
+#include "EventManager.h"
+
+
+
+
+void TMEnemyDeathHandler::handleEvent(Event::Data e)
+{
+	if (e.type == Event::ENEMY_DEATH)
+		pTM->resetEnemySpawnPoint(e.tile);
+}
+
+
+
+
 
 //=========//
 // Methods //
@@ -209,7 +223,12 @@ void TileMap::scroll(float x, float y)
 	scrollX += x;
 	scrollY += y;
 
-	enemies->scroll(ds);
+	//enemies->scroll(ds);
+	Event::Data e;
+	e.type = Event::SCROLL;
+	e.scrollX = ds.x;
+	e.scrollY = ds.y;
+	EventManager::triggerEvent(e);
 
 	if (scrollX < 0.0f)
 	{
@@ -229,66 +248,89 @@ void TileMap::scroll(float x, float y)
 }
 
 
-void TileMap::setEnemyManager(EnemyManager *em)
+void TileMap::init()
 {
-	enemies = em;
+	eDeathHandler = new TMEnemyDeathHandler(this);
+	EventManager::addHandler(Event::ENEMY_DEATH, eDeathHandler);
 }
 
-//=========================================================================
-// update(float)
-// Updates the minimum and maxmum tile indices that are visible on screen.
-//=========================================================================
+void TileMap::resetEnemySpawnPoint(sf::Vector2i tile)
+{
+	tiles[tInfo.mapSize.x * tile.y + tile.x].enemy = E_SOLDIER;
+}
+
+
+
+//=========================================================================================
+// TileMap::update(float)
+// Updates the minimum and maxmum tile indices that are visible on screen. If these values
+// have changed since the last frame, then the perimeter tiles just offscreen are scanned.
+// If one of the perimeter tiles is a spawn point for the enemy, a SPAWN_ENEMY event is
+// generated.
+//=========================================================================================
 void TileMap::update(float dt)
 {
-	minTiles.y = (int)(scrollY / tInfo.tileSize);
-	maxTiles.y = (int)((scrollY + 600.0f) / tInfo.tileSize);
+	// Calculate the new minimum and maximum visible tiles
+	sf::Vector2i newMin;
+	sf::Vector2i newMax;
 
-	// Calculate the minimum and maximum visible tiles in the x direction
-	int newMinX = (int)(scrollX / tInfo.tileSize);
-	int newMaxX = (int)((scrollX + 800.0f) / tInfo.tileSize);
+	newMin.x = (int)(scrollX / tInfo.tileSize);
+	newMin.y = (int)(scrollY / tInfo.tileSize);
 
-	//minTiles.x = (int)(scrollX / tInfo.tileSize);
-	//maxTiles.x = (int)((scrollX + 800.0f) / tInfo.tileSize);   // 800 is screen width
-
-
+	newMax.x = (int)((scrollX + 800.0f) / tInfo.tileSize);
+	newMax.y = (int)((scrollY + 600.0f) / tInfo.tileSize);
 
 	// Scan for enemies to spawn based on the direction of scrolling in the current frame
-	if (newMaxX > maxTiles.x && newMaxX + 1 < tInfo.mapSize.x)
+	if (newMax.x > maxTiles.x && newMax.x + 1 < tInfo.mapSize.x)
 	{
-		for (int y = minTiles.y; y < maxTiles.y; y++)
-			if (tiles[tInfo.mapSize.x * y + newMaxX + 1].enemy == E_SOLDIER)
-			{
-				// Calculate position
-				float offsetX = scrollX - newMinX * (float)tInfo.tileSize;
-				sf::Vector2f spawnPos;
-				spawnPos.x = 800.0f + (tInfo.tileSize - offsetX) + 0.5f * tInfo.tileSize;
-				spawnPos.y = y * (float)tInfo.tileSize;
-
-				enemies->spawn(spawnPos);
-				// Ensure the tile doesn't continue spawning enemies
-				tiles[tInfo.mapSize.x * y + newMaxX + 1].enemy = E_NONE;
-			}
+		for (int y = newMin.y; y < newMax.y; y++)
+			if (tiles[tInfo.mapSize.x * y + newMax.x + 1].enemy == E_SOLDIER)
+				spawnEnemy(sf::Vector2i(newMax.x + 1, y), -1.0f);	
 	}
-	else if (ds.x < 0 && minTiles.x - 1 > -1)
+	else if (newMin.x < minTiles.x && newMin.x > 0)
 	{
-		for (int y = minTiles.y; y < maxTiles.y; y++)
-			if (tiles[tInfo.mapSize.x * y + minTiles.x - 1].enemy == E_SOLDIER)
-			{
-				// Calculate position
-				float offsetX = scrollX - minTiles.x * (float)tInfo.tileSize;
-				float offsetY = scrollY - minTiles.y * (float)tInfo.tileSize;
-				sf::Vector2f spawnPos;
-				spawnPos.x = 17 * (float)tInfo.tileSize - offsetX + 0.5f * tInfo.tileSize;
-				spawnPos.y = y * (float)tInfo.tileSize - offsetY;
-
-				enemies->spawn(spawnPos);
-				// Ensure the tile doesn't continue spawning enemies
-				tiles[tInfo.mapSize.x * y + minTiles.x - 1].enemy = E_NONE;
-			}
+		for (int y = newMin.y; y < newMax.y; y++)
+			if (tiles[tInfo.mapSize.x * y + newMin.x - 1].enemy == E_SOLDIER)
+				spawnEnemy(sf::Vector2i(newMin.x - 1, y), 1.0f);
+				
 	}
-	minTiles.x = newMinX;
-	maxTiles.x = newMaxX;
+
+	// Update the minimum and maximum visible tiles
+	minTiles = newMin;
+	maxTiles = newMax;
 }
+
+//================================================================================
+// TileMap::spawnEnemy(sf::Vector2i)
+// Helper method that calculates the screen coordinates of the given tile and
+// generates a SPAWN_ENEMY event. After the event is generated, the spawn enemy
+// flag is removed from the tile, so that enemies don't continually spawn if the
+// player were to walk back and forth causing the tile to alternate between on
+// screen and off screen. The spawn enemy flag is reset when the enemy is killed.
+//================================================================================
+void TileMap::spawnEnemy(sf::Vector2i tile, float dir)
+{
+	// Calculate the position of the tile in screen corrdinates
+	sf::Vector2f pos;
+	// Use the center of the tile in the x direction
+	pos.x = ((float)tile.x + 0.5f) * (float)tInfo.tileSize - scrollX;
+	// Use the top of the tile in the y direction
+	pos.y = (float)tile.y * (float)tInfo.tileSize - scrollY;
+	
+
+	// Trigger a SPAWN_ENEMY event
+	Event::Data e;
+	e.type = Event::SPAWN_ENEMY;
+	e.posX = pos.x;
+	e.posY = pos.y;
+	e.tile = tile;
+	e.dir = dir;
+	EventManager::triggerEvent(e);
+
+	// Ensure the tile doesn't continue spawning enemies
+	tiles[tInfo.mapSize.x * tile.y + tile.x].enemy = E_NONE;
+}
+
 
 //===================================================================================
 // draw(sf::RenderWindow&)

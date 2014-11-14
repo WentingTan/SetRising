@@ -9,6 +9,9 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "EnemyManager.h"
+#include "PlayerProjectiles.h"
+#include "Healthbar.h"
+#include "PickupManager.h"
 
 class PlayState : public GameState
 {
@@ -28,6 +31,9 @@ protected:
 	TileMap tmap;
 	Player player;
 	EnemyManager enemies;
+    PlayerProjectiles pProjectiles;
+	Healthbar healthbar;
+	PickupManager pickups;
 };
 
 #endif

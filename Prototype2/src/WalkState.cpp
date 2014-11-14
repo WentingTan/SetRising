@@ -69,7 +69,11 @@ void WalkState::handleInput(Input& input)
 	}
 
 
-
+     // Shooting
+    if (input.wasPressed(InputNS::SHOOT))
+	{
+		player->shoot(dir);
+	}
 
 
 

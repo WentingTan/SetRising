@@ -7,6 +7,41 @@
 
 #include <SFML/Graphics.hpp>
 #include "Enemy.h"
+#include "EventHandler.h"
+
+// Forward Declarations
+class Laser;
+class Player;
+class EnemyManager;
+
+//=============================================
+// EnemyManager EventHandler for Event::SCROLL
+//=============================================
+class EMScrollHandler : public EventHandler
+{
+public:
+	// Constructor
+	explicit EMScrollHandler(EnemyManager *em): pEM(em) {}
+	// Methods
+	virtual void handleEvent(Event::Data e);
+private:
+	EnemyManager *pEM;
+};
+
+//==================================================
+// EnemyManager EventHandler for Event::SPAWN_ENEMY
+//==================================================
+class EMSpawnHandler : public EventHandler
+{
+public:
+	// Constructor
+	explicit EMSpawnHandler(EnemyManager *em): pEM(em) {}
+	// Methods
+	virtual void handleEvent(Event::Data e);
+private:
+	EnemyManager *pEM;
+};
+
 
 class EnemyManager
 {
@@ -16,17 +51,25 @@ public:
 	// Destructor
 	~EnemyManager();
 
-	void init();
+	void init(sf::Texture *t);
+
+	bool checkCollisions(Laser *laser);
+	void checkCollisions(Player *player);
 
 	void scroll(sf::Vector2f ds);
 	
-	void spawn(sf::Vector2f pos);
+	void spawn(sf::Vector2f pos, sf::Vector2i tile, float dir);
 	void update(float dt);
 	void draw(sf::RenderWindow& window);
 
 private:
 	Enemy *enemies;
 	int index;
+	EventHandler *scrollHandler;
+	EventHandler *spawnHandler;
+
+	// Helper
+	void remove(int ind);
 };
 
 #endif
