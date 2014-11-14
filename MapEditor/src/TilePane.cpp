@@ -4,6 +4,8 @@
 //==========================//
 #include "TilePane.h"
 
+#include <fstream>
+
 TilePane::TilePane(sf::Texture *texture, int nTiles, int tileSize):
 	texture(texture),
 	nTiles(nTiles),
@@ -74,9 +76,13 @@ void TilePane::init(int tpr)
 		// Position the sprite
 		tiles[i].setPosition(hPadding, vPadding + (i + 2) * (vPadding + tileSize));
 	}
+	//std::ofstream log ("log.txt", std::ios::app);
+	//log << "VScroll Max scoll = " << (vPadding + nTiles * (vPadding + tileSize)) << std::endl;
+	//log.close();
+	//float vMaxScroll = pointer.getGlobalBounds().height + eraser.getGlobalBounds
 
 	// Set up the vertical scroll bar
-	vscroll = new VScrollBar(600.0f, 600.0f, vPadding + nTiles * (vPadding + tileSize), sf::Vector2f(100.0f, 0.0f));
+	vscroll = new VScrollBar(600.0f, 600.0f, vPadding + (2.0f + nTiles) * (vPadding + tileSize), sf::Vector2f(100.0f, 0.0f));
 }
 
 int TilePane::getSelected() const
@@ -126,6 +132,9 @@ void TilePane::update(float dt)
 
 	vscroll->update(dt);
 	float scroll = -1.0f * vscroll->getScroll();
+
+	pointer.move(0.0f, scroll);
+	eraser.move(0.0f, scroll);
 
 	for (int i = 0; i < nTiles; i++)
 		tiles[i].move(0.0f, scroll);

@@ -10,7 +10,7 @@
 
 namespace TileNS
 {
-	const int SIZE = 50;
+	const int SIZE = 32;
 
 	enum Type
 	{
