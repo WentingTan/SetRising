@@ -25,6 +25,7 @@ public:
 private:
 	float maxHeight;
 	float initialHeight;
+	float distance;
 
 	bool move;
 };

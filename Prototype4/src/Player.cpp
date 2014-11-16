@@ -305,85 +305,19 @@ void Player::move(float x, float y)
 
 	if (topEdge && bottomEdge)
 		moveY = true;
-	else if (topEdge && (y < 0.0f || pos.y < 0.5f * SCREEN_HEIGHT))
+	//else if (topEdge && (y < 0.0f || pos.y < 0.667f * SCREEN_HEIGHT))
+	else if (topEdge && (y < 0.0f || pos.y < 0.6f * SCREEN_HEIGHT))
 		moveY = true;
-	else if (bottomEdge && (y > 0.0f || pos.y > 0.5f * SCREEN_HEIGHT))
+	//else if (bottomEdge && (y > 0.0f || pos.y > 0.333f * SCREEN_HEIGHT))
+	else if (bottomEdge && (y > 0.0f || pos.y > 0.4f * SCREEN_HEIGHT))
 		moveY = true;
 
-
-
-	//if (x == 0.0f)
-		//moveSprite = true;
-	//else if (map->isAtLeftEdge())
-	/*
-	if (map->isAtBoundary(LEFT_EDGE))
-	{
-		//log << "At LEft edge\n";
-		//if ((x < 0.0f) || (sprite.getPosition().x < 0.5f * SCREEN_WIDTH))
-		if (sprite.getPosition().x < 0.5f * SCREEN_WIDTH)
-			moveX = true;
-	}
-	//else if (map->isAtRightEdge())
-	if (map->isAtBoundary(RIGHT_EDGE))
-	{
-		//log << "At Right edge\n";
-		if (sprite.getPosition().x > 0.5f * SCREEN_WIDTH)
-			moveX = true;
-	}
-	
-	if (map->isAtBoundary(BOTTOM_EDGE))
-	{
-		//log << "At Bottom edge\n";
-		if (sprite.getPosition().y > 0.5f * SCREEN_HEIGHT)
-			moveY = true;
-	}
-
-	if (map->isAtBoundary(TOP_EDGE))
-	{
-		if (sprite.getPosition().y < 0.5f * SCREEN_HEIGHT)
-			moveY = true;
-	}
-	*/
-
-	//if (moveX)
-	//{
-		//newPos.x = sprite.getPosition().x + x;
-		//scroll.x = 0.0f;
-	//}
-	//else
-	//{
-		//newPos.x = 0.5f * SCREEN_WIDTH;
-		//scroll.x = x;
-	//}
-
-
-	//if (moveY)
-	//{
-		//newPos.y = sprite.getPosition().y + y;
-		//scroll.y = 0.0f;
-	//}
-	//else
-	//{
-		//newPos.y = 0.5f * SCREEN_HEIGHT;
-		//scroll.y = y;
-	//}
-
-	//if (moveX)
-		//log << "moveX = true" << std::endl;
-	//else
-		//log << "moveX = false" << std::endl;
-	
-	//if (moveY)
-		//log << "moveY = true" << std::endl;
-	//else
-		//log << "moveY = false" << std::endl;
-
-	//log << "Current Pos: (" << sprite.getPosition().x << ", " << sprite.getPosition().y << ")\n";
-	//log << "New Pos: (" << newPos.x << ", " << newPos.y << ")\n";
-	//log << "Scroll: (" << scroll.x << ", " << scroll.y << ")\n";
-
-	//log << std::endl;
-	//log.close();
+	//else if (y > 0.0f && pos.y < 0.667f * SCREEN_HEIGHT)
+	else if (y > 0.0f && pos.y < 0.6f * SCREEN_HEIGHT)
+		moveY = true;
+	//else if (y < 0.0f && pos.y + y < 0.667f * SCREEN_HEIGHT && pos.y + y > 0.333f * SCREEN_HEIGHT)
+	else if (y < 0.0f && pos.y + y < 0.6f * SCREEN_HEIGHT && pos.y + y > 0.4f * SCREEN_HEIGHT)
+		moveY = true;
 
 
 	if (moveX)
@@ -398,7 +332,7 @@ void Player::move(float x, float y)
 		sprite.move(0.0f, y);
 	else
 	{
-		sprite.setPosition(sprite.getPosition().x, 0.5f * SCREEN_HEIGHT);
+		//sprite.setPosition(sprite.getPosition().x, 0.5f * SCREEN_HEIGHT);
 		map->scroll(0.0f, y);
 	}
 
@@ -651,7 +585,7 @@ bool Player::isOnLadderTop(float& xCoord)
 		{
 			box = map->getTileHitBox(x, y);
 
-			if (hitbox.intersects(box, overlap) && overlap.width > 0.7f * hitbox.width)
+			if (hitbox.intersects(box, overlap) && overlap.width > 0.6f * hitbox.width)
 			{
 				xCoord = box.left + 0.5f * box.width;
 				move(0.0f, -overlap.height + 1.0f);
@@ -679,7 +613,7 @@ bool Player::isTouchingLadder(float& xCoord)
 			{
 				box = map->getTileHitBox(x, y);
 
-				if (hitbox.intersects(box, overlap) && overlap.width > 0.7f * hitbox.width)
+				if (hitbox.intersects(box, overlap) && overlap.width > 0.6f * hitbox.width)
 				{
 					xCoord = box.left + 0.5f * box.width;
 					return true;

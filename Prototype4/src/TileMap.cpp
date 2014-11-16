@@ -311,6 +311,20 @@ void TileMap::update(float dt)
 				
 	}
 
+	if (newMax.y > maxTiles.y && newMax.y + 1 < tInfo.mapSize.y)
+	{
+		for (int x = newMin.x; x < newMax.x; x++)
+			if (tiles[tInfo.mapSize.x * (newMax.y + 1) + x].enemy == E_SOLDIER)
+				spawnEnemy(sf::Vector2i(x, newMax.y + 1), 1.0f);	
+	}
+	else if (newMin.y < minTiles.y && newMin.y > 0)
+	{
+		for (int x = newMin.x; x < newMax.x; x++)
+			if (tiles[tInfo.mapSize.x * (newMin.y - 1) + x].enemy == E_SOLDIER)
+				spawnEnemy(sf::Vector2i(x, newMin.y - 1), 1.0f);
+				
+	}
+
 	// Update the minimum and maximum visible tiles
 	minTiles = newMin;
 	maxTiles = newMax;

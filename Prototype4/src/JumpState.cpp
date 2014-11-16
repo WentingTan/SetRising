@@ -26,6 +26,7 @@ JumpState::JumpState(Player *p, float maxHeight):
 void JumpState::enter(float direction)
 {
 	dir = direction;
+	distance = 0.0f;
 	//player->setHitboxWidth(64.0f);
 	initialHeight = player->getPosition().y;
 	player->setGraphics(PlayerNS::G_AIR, dir);
@@ -55,16 +56,7 @@ void JumpState::handleInput(Input& input)
 			player->setState(PlayerNS::S_CLIMB, dir);
 		}
 	}
-
-
-	 // Shooting
-    if (input.wasPressed(InputNS::SHOOT))
-	{
-		player->shoot(dir);
-	}
-
-	// Transition back to standing state if the arrow key corresponding to the current
-	// direction is no longer being pressed
+	// Move horizontally
 	else if (input.isPressed(InputNS::RIGHT))
 	{
 		dir = PlayerNS::RIGHT;
@@ -77,6 +69,12 @@ void JumpState::handleInput(Input& input)
 		player->setGraphics(PlayerNS::G_AIR, dir);
 		move = true;
 	}
+
+	 // Shooting
+    if (input.wasPressed(InputNS::SHOOT))
+	{
+		player->shoot(dir);
+	}
 }
 
 //===============
@@ -87,6 +85,7 @@ void JumpState::update(float dt)
 	if (move)
 		player->move(dir * 200.0f * dt, 0.0f);
 
+	/*
 	float jumpedHeight = initialHeight - player->getPosition().y;
 
 	if (player->hasHitCeiling())
@@ -110,6 +109,38 @@ void JumpState::update(float dt)
 		}
 		else
 			player->move(0.0f, -400.0f * dt);
+	}
+	*/
+
+
+	float jumpedHeight = initialHeight - player->getPosition().y;
+
+	if (player->hasHitCeiling())
+	{
+		player->setState(PlayerNS::S_FALL, dir);
+	}
+	else if (distance > maxHeight)
+	{
+		player->move(0.0f, distance - maxHeight);
+		player->setState(PlayerNS::S_FALL, dir);
+	}
+	else
+	{
+		if (distance > 0.85 * maxHeight)
+		{
+			player->move(0.0f, -150.0f * dt);
+			distance += 150.0f * dt;
+		}
+		else if (distance > 0.60 * maxHeight)
+		{
+			player->move(0.0f, -275.0f * dt);
+			distance += 275.0f * dt;
+		}
+		else
+		{
+			player->move(0.0f, -400.0f * dt);
+			distance += 400.0f * dt;
+		}
 	}
 
 	// Check for collision with walls
