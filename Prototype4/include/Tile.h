@@ -39,9 +39,9 @@ public:
 
 	sf::FloatRect hitbox;
 	bool solid;
-	bool scrollXBarrier;
-	bool scrollYBarrier;
 	TileNS::Type type;
+	int entrance;
+	int exit;
 	int enemy;
 	short tileNum;
 };

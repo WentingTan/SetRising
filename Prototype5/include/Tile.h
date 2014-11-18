@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include "Constants.h"
 
 namespace TileNS
 {
@@ -23,7 +24,6 @@ namespace TileNS
 	};
 }
 
-const int E_NONE = 0;
 const int E_SOLDIER = 1;
 const int E_GRENADIER = 2;
 const int E_SUP_SOLDIER = 3;
@@ -39,9 +39,9 @@ public:
 
 	sf::FloatRect hitbox;
 	bool solid;
-	bool scrollXBarrier;
-	bool scrollYBarrier;
 	TileNS::Type type;
+	int entrance;
+	int exit;
 	int enemy;
 	short tileNum;
 };
