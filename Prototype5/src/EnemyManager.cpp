@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "Laser.h"
 #include "FreezeRay.h"
+#include "Flame.h"
 #include "Player.h"
 
 
@@ -264,6 +265,57 @@ bool EnemyManager::checkCollisions(FreezeRay *fRay)
 
     return false;
 }
+
+bool EnemyManager::checkCollisions(Flame *flame)
+{
+	Event::Data e;
+	e.type = Event::ENEMY_DEATH;
+
+	// Check for collisions with active patrolling snakes
+	for (int i = 0; i < psInd; i++)
+		if (pSnakes[i].collidesWith((Entity*)flame))
+		{
+			if (pSnakes[i].flameDamage())
+			{
+				if (pSnakes[i].damage(flame->getDamage()))
+				{
+					e.enemyType = E_PATROLLING_SNAKE;
+					e.tile = pSnakes[i].getSpawnTile();
+					e.posX = pSnakes[i].getPosition().x;
+					e.posY = pSnakes[i].getPosition().y;
+					EventManager::triggerEvent(e);
+
+					remove(i, E_PATROLLING_SNAKE);
+				}
+			}
+            return true;
+		}
+
+	// Check for collisions with active stationary snakes
+	for (int i = 0; i < ssInd; i++)
+		if (sSnakes[i].collidesWith((Entity*)flame))
+		{
+			if (sSnakes[i].flameDamage())
+			{
+				if (sSnakes[i].damage(flame->getDamage()))
+				{
+					e.enemyType = E_STATIONARY_SNAKE;
+					e.tile = sSnakes[i].getSpawnTile();
+					e.posX = sSnakes[i].getPosition().x;
+					e.posY = sSnakes[i].getPosition().y;
+					EventManager::triggerEvent(e);
+
+					remove(i, E_STATIONARY_SNAKE);
+				}
+			}
+			return true;
+		}
+
+    return false;
+}
+
+
+
 
 //==============================================================================
 // EnemyManager::checkFrozenCollisions(Player*, sf::FloatRect&)

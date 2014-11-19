@@ -71,10 +71,10 @@ void JumpState::handleInput(Input& input)
 	}
 
 	 // Shooting
-    if (input.wasPressed(InputNS::SHOOT))
-	{
-		player->shoot(dir);
-	}
+   // if (input.wasPressed(InputNS::SHOOT))
+	//{
+		//player->shoot(dir);
+	//}
 }
 
 //===============

@@ -16,6 +16,11 @@ const int RIGHT_EDGE = 1;
 const int TOP_EDGE = 3;
 const int BOTTOM_EDGE = 4;
 
+// Background Scaling
+const int NO_SCALE = 0;
+const int SCALE_TO_HEIGHT = 1;
+const int SCALE_TO_WIDTH = 2;
+
 // Player Reposition Upon Entering New Tile Map
 const int MAINTAIN_X = 0;
 const int MAINTAIN_Y = 1;
@@ -24,6 +29,17 @@ const int CENTER_TILE = 2;
 // Player Weapon Types
 const int W_LASER = 0;
 const int W_FREEZE_RAY = 1;
+const int W_FLAMETHROWER = 2;
+
+// FLamethrower Animation
+const int FLAME_FRAMES = 3;
+const float FLAME_FRAME_TIME = 0.125f;
+const int FLAME_IMG_WIDTH = 64;
+const int FLAME_IMG_HEIGHT = 32;
+
+const float FLAME_HB_WIDTH = 48.0f;
+const float FLAME_DAMAGE = 30.0f;
+
 
 const int MAX_LASERS = 8;
 const int MAX_FREEZE_RAYS = 6;
@@ -41,7 +57,7 @@ const int E_PATROLLING_SNAKE = 1;
 const int E_STATIONARY_SNAKE = 2;
 
 const float SNAKE_SPEED = 125.0f;
-const int SNAKE_HEALTH = 35;
+const float SNAKE_HEALTH = 35.0f;
 
 const int SNAKE_DAMAGE = 5;
 const int SNAKE_FRAMES = 4;

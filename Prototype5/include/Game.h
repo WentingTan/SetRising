@@ -16,7 +16,7 @@ const int MAX_STATES = 8;
 
 // NOTE: Before completion, we will consolidate all textures into as few textures
 // as possible.
-const int NUM_TEXTURES = 10;
+const int NUM_TEXTURES = 12;
 const char TILE_TEXTURE[] = "tiles.png";
 const char PLAYER_TEXTURE[] = "setsprite.png";
 const char ENEMY_TEXTURE[] = "SnakeEnemy.png";
@@ -27,6 +27,8 @@ const char BKGD_TEXTURE[] = "bkgd.png";
 const char DEATH_TEXTURE[] = "death.png";
 const char FREEZE_TEXTURE[] = "freeze_ray.png";
 const char SPIT_TEXTURE[] = "spit.png";
+const char FLAME_TEXTURE[] = "flame.png";
+const char CAVE_BKGD_TEXTURE[] = "cave_bkgd.png";
 
 // Texture ID's
 const int TILES = 0;
@@ -37,8 +39,10 @@ const int HBAR = 4;
 const int HP = 5;
 const int BKGD = 6;
 const int DEATH = 7;
-const char FREEZE = 8;
-const char SPIT = 9;
+const int FREEZE = 8;
+const int SPIT = 9;
+const int FLAME = 10;
+const int CAVE_BKGD = 11;
 
 class Game
 {

@@ -46,9 +46,9 @@ bool PlayState::init()
 
 	pickups.init(pGame->getTexture(HP));
 
-    pProjectiles.init(pGame->getTexture(LASER), pGame->getTexture(FREEZE));
+    pProjectiles.init(pGame->getTexture(LASER), pGame->getTexture(FREEZE), pGame->getTexture(FLAME));
 	player.setEnemyManager(&enemies);
-    player.setProjectiles(&pProjectiles);
+    //player.setProjectiles(&pProjectiles);
 
 	healthbar.setTexture(pGame->getTexture(HBAR));
 	healthbar.init();
@@ -105,8 +105,9 @@ void PlayState::draw(sf::RenderWindow& window)
 	//tmap.draw(window);
 	world.draw(window);
 	//eProjectiles.draw(window);
-	pProjectiles.draw(window);
+	//pProjectiles.draw(window);
 	enemies.draw(window);
+	pProjectiles.draw(window);
 	eProjectiles.draw(window);
 	player.draw(window);
 	pickups.draw(window);

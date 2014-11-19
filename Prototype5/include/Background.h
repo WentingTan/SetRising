@@ -22,6 +22,7 @@ public:
 	
 	// Methods
 	void init();
+	void setScale(int type);
 	void scroll(sf::Vector2f ds);
 	void draw(sf::RenderWindow& window);
 

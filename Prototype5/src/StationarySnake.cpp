@@ -29,6 +29,9 @@ void StationarySnake::update(float dt, sf::Vector2f pPos)
 	{
 		animate(dt);
 
+		if (doFlameDamage)
+			updateFlame(dt);
+
 		shootTimer += dt;
 		if (shootTimer > nextShootTime)
 		{

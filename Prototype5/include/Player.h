@@ -119,7 +119,7 @@ public:
 	void setState(PlayerNS::state s, float dir);
 	void setTexture(sf::Texture *t);
 	void setGraphics(PlayerNS::graphics g, float dir);
-    void setProjectiles(PlayerProjectiles *p);
+   // void setProjectiles(PlayerProjectiles *p);
 	void setEnemyManager(EnemyManager *e);
 	void damage();
 	bool isOffscreen(float x, float y);

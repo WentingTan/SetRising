@@ -54,10 +54,26 @@ void SnakeEnemy::deactivate()
 	active = false;
 }
 
+bool SnakeEnemy::flameDamage()
+{
+	if (doFlameDamage)
+		return false;
+
+	doFlameDamage = true;
+	frozen = false;
+	sprite.setColor(sf::Color::Red);
+	return true;
+}
+
 void SnakeEnemy::freeze()
 {
+	if (frozen)
+		return;
+
 	frozen = true;
 	sprite.setColor(sf::Color::Blue);
+
+	freezeTimer = 0.0f;
 
 	sf::Vector2f pos = sprite.getPosition();
 
@@ -126,6 +142,18 @@ void SnakeEnemy::updateFreeze(float dt)
 	}
 }
 
+void SnakeEnemy::updateFlame(float dt)
+{
+	flameTimer += dt;
+
+	if (flameTimer > 0.75f)
+	{
+		doFlameDamage = false;
+		flameTimer = 0.0f;
+		sprite.setColor(sf::Color::White);
+	}
+}
+
 //==================================
 // SnakeEnemy::animate(float)
 // Animates the Snake Enemy sprite.
@@ -169,8 +197,8 @@ void SnakeEnemy::shoot()
 
 bool SnakeEnemy::damage(int amount)
 {
-	health -= amount;
-	if (health <= 0)
+	health -= (float)amount;
+	if (health <= 0.0f)
 		return true;
 	else
 		return false;
@@ -182,7 +210,9 @@ void SnakeEnemy::commonActivate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2
 	animTimer = 0.0f;
 	shootTimer = 0.0f;
 	frozen = false;
+	doFlameDamage = false;
 	freezeTimer = 0.0f;
+	flameTimer = 0.0f;
 	sprite.setColor(sf::Color::White);
 
 	// Determine the direction the enemy should face

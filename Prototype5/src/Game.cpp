@@ -48,6 +48,8 @@ void Game::init()
 	textures[DEATH].loadFromFile(DEATH_TEXTURE);
 	textures[FREEZE].loadFromFile(FREEZE_TEXTURE);
 	textures[SPIT].loadFromFile(SPIT_TEXTURE);
+	textures[FLAME].loadFromFile(FLAME_TEXTURE);
+	textures[CAVE_BKGD].loadFromFile(CAVE_BKGD_TEXTURE);
 
 	// Seed the random number generator with the current time
 	srand(time(NULL));

@@ -25,7 +25,7 @@ public:
 	void deactivate();
 	void freeze();
 	bool isFrozen() const;
-	bool isStationary();
+	bool flameDamage();
 	sf::FloatRect getFrozenBodyHB() const;
 	sf::FloatRect getFrozenTailHB() const;
 	bool damage(int amount);
@@ -34,7 +34,7 @@ public:
 
 protected:
 	sf::Vector2i spawnTile;
-	int health;
+	float health;
 	float dir;
 	float animTimer;
 	float shootTimer;
@@ -45,10 +45,13 @@ protected:
 	sf::FloatRect frozenTail;	
 	AlphaOscillator *freezeBlinker;
 	float nextShootTime;
+	bool doFlameDamage;
+	float flameTimer;
 
 	// Helpers
 	void animate(float dt);
 	void updateFreeze(float dt);
+	void updateFlame(float dt);
 	void commonActivate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos);
 	float getNextShootTime(float low, float high);
 };

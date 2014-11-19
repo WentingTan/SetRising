@@ -42,9 +42,10 @@ void PatrollingSnake::update(float dt, TileMap *map)
 	else
 	{
 		animate(dt);
-
 		updatePatrol(dt, map);
 
+		if (doFlameDamage)
+			updateFlame(dt);
 
 		shootTimer += dt;
 		if (shootTimer > nextShootTime)
@@ -53,11 +54,7 @@ void PatrollingSnake::update(float dt, TileMap *map)
 			shootTimer = 0.0f;
 			nextShootTime = getNextShootTime(PS_SHOOT_TIME_LO, PS_SHOOT_TIME_HI);
 		}
-	
-	
 	}
-
-
 }
 
 //====================================================================================
@@ -102,6 +99,8 @@ void PatrollingSnake::copy(PatrollingSnake& e)
 	shootTimer = e.shootTimer;
 	nextShootTime = e.nextShootTime;
 	patrolDist = e.patrolDist;
+	flameTimer = e.flameTimer;
+	doFlameDamage = e.doFlameDamage;
 }
 
 /*

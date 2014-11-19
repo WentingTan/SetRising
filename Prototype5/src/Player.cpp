@@ -210,10 +210,10 @@ void Player::setGraphics(PlayerNS::graphics g, float dir)
 	sprite.setScale(dir, 1.0f);
 }
 
-void Player::setProjectiles(PlayerProjectiles *p)
-{
-    projectiles = p;
-}
+//void Player::setProjectiles(PlayerProjectiles *p)
+//{
+  //  projectiles = p;
+//}
 
 //=====================================================================================
 // Player::damage()
@@ -401,6 +401,24 @@ void Player::handleInput(Input& input)
 		selectedWeapon = W_LASER;
 	else if (input.isPressed(InputNS::SEL_FREEZE))
 		selectedWeapon = W_FREEZE_RAY;
+	else if (input.isPressed(InputNS::SEL_FLAME))
+		selectedWeapon = W_FLAMETHROWER;
+
+	// Handle shooting
+	if (state != climbing)
+	{
+		if (selectedWeapon == W_FLAMETHROWER)
+		{
+			if (input.isPressed(InputNS::SHOOT))
+				shoot(state->getDir());
+		}
+		else
+		{
+			if (input.wasPressed(InputNS::SHOOT))
+				shoot(state->getDir());
+		}
+	}
+
 }
 
 //=========================================
@@ -442,6 +460,11 @@ bool Player::isOffscreen(float x, float y)
 	return false;
 }
 
+//===============================================================================
+// Player::shoot(float)
+// Generates a PLAYER_SHOOT event with the coordinates and direction at which to
+// spawn the projectile.
+//===============================================================================
 void Player::shoot(float dir)
 {
 	sf::FloatRect bounds = sprite.getGlobalBounds();
@@ -457,8 +480,6 @@ void Player::shoot(float dir)
 	e.dir = dir;
 
 	EventManager::triggerEvent(e);
-
-    //projectiles->spawn(pos, dir);
 }
 
 //=======================================

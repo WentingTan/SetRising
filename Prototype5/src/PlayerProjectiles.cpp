@@ -8,6 +8,7 @@
 #include "EventManager.h"
 #include "Constants.h"
 #include "FreezeRay.h"
+#include "Flame.h"
 	
 void PPScrollHandler::handleEvent(Event::Data e)
 {
@@ -53,9 +54,11 @@ PlayerProjectiles::~PlayerProjectiles()
 		delete [] lasers;
 	if (freezeRays)
 		delete [] freezeRays;
+	if (flame)
+		delete flame;
 }
 
-void PlayerProjectiles::init(sf::Texture *l, sf::Texture *fr)
+void PlayerProjectiles::init(sf::Texture *l, sf::Texture *fr, sf::Texture *f)
 {
 	lasers = new Laser[MAX_LASERS];
 	for (int i = 0; i < MAX_LASERS; i++)
@@ -72,6 +75,10 @@ void PlayerProjectiles::init(sf::Texture *l, sf::Texture *fr)
 		freezeRays[i].init();
 	}
 	frInd = 0;
+
+	flame = new Flame();
+	flame->setTexture(f);
+	flame->init();
 
 
 	// Register event handlers
@@ -100,6 +107,9 @@ void PlayerProjectiles::spawn(sf::Vector2f pos, float dir, int type)
 		freezeRays[frInd].activate(pos, dir);
 		frInd++;
 		break;
+	case W_FLAMETHROWER:
+		flame->activate(pos, dir);
+		break;
 	default:
 		break;
 	}
@@ -121,6 +131,8 @@ void PlayerProjectiles::checkCollisions(EnemyManager *enemies)
 		else
             i++;
 
+	if (flame->isActive())
+		enemies->checkCollisions(flame);
 }
 
 void PlayerProjectiles::clear()
@@ -190,16 +202,25 @@ void PlayerProjectiles::update(float dt)
 		}
 	}
 
+	flame->update(dt);
+
 }
 
 void PlayerProjectiles::draw(sf::RenderWindow& window)
 {
-	int i = 0;
-	while (lasers[i].isActive())
-		lasers[i++].draw(window);
-	i = 0;
-	while (freezeRays[i].isActive())
-		freezeRays[i++].draw(window);
+	//int i = 0;
+	//while (lasers[i].isActive())
+	for (int i = 0; i < lInd; i++)
+		lasers[i].draw(window);
+	
+	//i = 0;
+	//while (freezeRays[i].isActive())
+	for (int i = 0; i < frInd; i++)
+		freezeRays[i].draw(window);
+
+	if (flame->isActive())
+		flame->draw(window);
+
 }
 
 void PlayerProjectiles::remove(int ind, int type)

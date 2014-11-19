@@ -13,6 +13,7 @@
 // Forward Declarations
 class Laser;
 class FreezeRay;
+class Flame;
 class Player;
 class EnemyManager;
 class TileMap;
@@ -120,6 +121,7 @@ public:
 
 	bool checkCollisions(Laser *laser);
 	bool checkCollisions(FreezeRay *fRay);
+	bool checkCollisions(Flame *flame);
 	void checkCollisions(Player *player);
 
 	void clear();
