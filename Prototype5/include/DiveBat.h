@@ -1,26 +1,27 @@
 //==========================//
-// StationarySnake.h        //
+// DiveBat.h                //
 // Author: Matthew Stephens //
 //==========================//
-#ifndef _STATIONARY_SNAKE_H_
-#define _STATIONARY_SNAKE_H_
+#ifndef _DIVE_BAT_H_
+#define _DIVE_BAT_H_
 
-#include "SnakeEnemy.h"
+#include "BatEnemy.h"
 
-class StationarySnake : public SnakeEnemy
+class DiveBat : public BatEnemy
 {
 public:
 	// Constructor
-	StationarySnake();
+	DiveBat();
 	// Destructor
-	virtual ~StationarySnake();
+	virtual ~DiveBat();
 
 	void activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos);
 	bool update(float dt, sf::Vector2f pPos);
-    void copy(StationarySnake& e);
+    void copy(DiveBat& e);
 
 protected:
-	int shots;
+	bool dive;
+	sf::Vector2f diveDir;
 };
 
 #endif

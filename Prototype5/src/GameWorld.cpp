@@ -57,11 +57,26 @@ void GameWorld::loadFromFile(std::string filename, Game *pGame)
 	std::string mapFile;
 	int textureID;
 
+	// Read in the number of backgrounds
+	file >> nBkgds;
+
+	// Allocate space for the background array
+	backgrounds = new Background[nBkgds];
+
+	for (int i = 0; i < nBkgds; i++)
+	{
+		// Read in the textureID and set the texture
+		file >> textureID;
+		backgrounds[i].setTexture(pGame->getTexture(textureID));
+		backgrounds[i].init();
+		backgrounds[i].setScrollRatio(0.4f);
+	}
+
 	//Read in the number of tile maps
 	file >> nMaps;
 
-	// Allocate space for tile map array
-	maps = new TileMap[nMaps];
+	// Allocate space for map section array
+	maps = new MapSection[nMaps];
 
 	// Load tile maps
 	for (int i = 0; i < nMaps; i++)
@@ -70,10 +85,14 @@ void GameWorld::loadFromFile(std::string filename, Game *pGame)
 		file >> mapFile;
 		// Read in the texture ID
 		file >> textureID;
+		// Read in the background ID
+		file >> maps[i].bkgdID;
+		// Read int the background scale type
+		file >> maps[i].bkgdScale;
 
-		maps[i].setTexture(pGame->getTexture(textureID));
+		maps[i].map.setTexture(pGame->getTexture(textureID));
 		// Load in the map from file
-		maps[i].loadFromFile(mapFile);
+		maps[i].map.loadFromFile(mapFile);
 	}
 
 	// Read in the number of transition entries
@@ -94,7 +113,7 @@ void GameWorld::loadFromFile(std::string filename, Game *pGame)
 	}
 
 
-	background.setTexture(pGame->getTexture(BKGD));
+	//background.setTexture(pGame->getTexture(BKGD));
 
 
 	// Close the file
@@ -104,10 +123,12 @@ void GameWorld::loadFromFile(std::string filename, Game *pGame)
 
 void GameWorld::init()
 {
-	activeMap = &maps[0];
+	activeMap = &maps[0].map;
+	activeBkgd = &backgrounds[maps[0].bkgdID];
+	activeBkgd->setScale(maps[0].bkgdScale);
 
-	background.init();
-	background.setScrollRatio(0.4f);
+	//background.init();
+	//background.setScrollRatio(0.4f);
 
 	eDeathHandler = new GWEnemyDeathHandler(this);
 	transitionHandler = new GWTransitionHandler(this);
@@ -119,12 +140,17 @@ void GameWorld::init()
 	EventManager::addHandler(Event::TM_TRANSITION, transitionHandler);
 	EventManager::addHandler(Event::SCROLL, scrollHandler);
 	EventManager::addHandler(Event::INITIAL_ENEMY_SPAWN, initialSpawnHandler);
+
+
+
 }
 
 void GameWorld::transition(int ent)
 {
 	int mapID = transitions[ent].tileMapID;
-	activeMap = &maps[mapID];
+	activeMap = &maps[mapID].map;
+	activeBkgd = &backgrounds[maps[mapID].bkgdID];
+	activeBkgd->setScale(maps[mapID].bkgdScale);
 
 	//activeMap->setReferenceTile(transitions[ent].referenceTile);
 	activeMap->enter(transitions[ent].referenceTile);
@@ -133,7 +159,7 @@ void GameWorld::transition(int ent)
 	sf::Vector2f setScroll;
 	setScroll.x = transitions[ent].referenceTile.x * TILE_SIZE;
 	setScroll.y = transitions[ent].referenceTile.y * TILE_SIZE;
-	background.setScroll(setScroll);
+	activeBkgd->setScroll(setScroll);
 
 	// Generate a NEW_MAP event
 	sf::Vector2i entry = transitions[ent].entryTile; 
@@ -154,11 +180,11 @@ void GameWorld::update(float dt)
 
 void GameWorld::scrollBackground(sf::Vector2f ds)
 {
-	background.scroll(ds);
+	activeBkgd->scroll(ds);
 }
 
 void GameWorld::draw(sf::RenderWindow& window)
 {
-	background.draw(window);
+	activeBkgd->draw(window);
 	activeMap->draw(window);
 }

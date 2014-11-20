@@ -18,10 +18,12 @@ namespace InputNS
 		JUMP = 4,
 		SHOOT = 5,
 		SEL_LASER = 6,
-		SEL_FREEZE = 7
+		SEL_FREEZE = 7,
+		SEL_FLAME = 8,
+		SEL_GRAV = 9
 	};
 
-	const int NUM_BUTTONS = 8;
+	const int NUM_BUTTONS = 10;
 };
 
 class Input

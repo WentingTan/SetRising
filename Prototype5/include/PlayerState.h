@@ -19,6 +19,7 @@ public:
 	virtual ~PlayerState() {}
 
 	// Methods
+	float getDir() { return dir; }
 	virtual void enter(float direction) = 0;
 	virtual void handleInput(Input& input) = 0;
 	virtual void update(float dt) = 0;

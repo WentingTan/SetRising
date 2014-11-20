@@ -19,7 +19,7 @@ public:
 	~PatrollingSnake();
 
 	void activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos);
-	void update(float dt, TileMap *map);
+	bool update(float dt, TileMap *map);
     void copy(PatrollingSnake& e);
 	void move(float x);
 

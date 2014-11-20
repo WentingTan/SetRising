@@ -43,7 +43,9 @@ namespace Event
 	const int DESPAWN_ENEMY = 10;
 	const int PLAYER_MOVED = 11;
 	const int INITIAL_ENEMY_SPAWN = 12;
-	const int NUM_TYPES = 13;
+	const int GRAV_BOMB_IMPLODE = 13;
+	const int RESET_GRAV_BOMB = 14;
+	const int NUM_TYPES = 15;
 
 	typedef struct DataStruct
 	{

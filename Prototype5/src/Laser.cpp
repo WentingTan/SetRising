@@ -15,7 +15,7 @@ Laser::~Laser()
 
 }
 
-int Laser::getDamage() const
+float Laser::getDamage() const
 {
 	return damage;
 }
@@ -37,7 +37,7 @@ void Laser::init()
 
 	//damage = Weapons::LASER_DAMAGE;
 	//speed = Weapons::LASER_SPEED;
-	damage = 10;
+	damage = 5.0f;
     speed = 500.0f;
 	dir = 0.0f;
 

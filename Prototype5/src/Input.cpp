@@ -144,6 +144,36 @@ void Input::getInput()
 		current[button] = false;
 		pressed[button] = false;
 	}
+
+	// Handle SEL_FLAME key
+	button = (int)InputNS::SEL_FLAME;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+	{
+		pressed[button] = !current[button];
+		current[button] = true;
+		released[button] = false;
+	}
+	else
+	{
+		released[button] = current[button];
+		current[button] = false;
+		pressed[button] = false;
+	}
+
+	// Handle SEL_GRAV key
+	button = (int)InputNS::SEL_GRAV;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+	{
+		pressed[button] = !current[button];
+		current[button] = true;
+		released[button] = false;
+	}
+	else
+	{
+		released[button] = current[button];
+		current[button] = false;
+		pressed[button] = false;
+	}
 }
 
 bool Input::isPressed(InputNS::button b)

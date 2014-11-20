@@ -17,7 +17,7 @@ public:
 	~FreezeRay();
 
 	// Accessors
-	int getDamage() const;
+	float getDamage() const;
 	float getDir() const;
     float getSpeed() const;
 
@@ -29,7 +29,7 @@ public:
     void copy(FreezeRay& f);
 
 private:
-	int damage;
+	float damage;
 	float speed;
 	float dir;
 	float distance;

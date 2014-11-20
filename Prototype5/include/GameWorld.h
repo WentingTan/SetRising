@@ -27,8 +27,15 @@ public:
 	int reposition;
 };
 
+class MapSection
+{
+public:
+	MapSection() {}
 
-// Move TileMap EventHandlers here
+	TileMap map;
+	int bkgdID;
+	int bkgdScale;
+};
 
 
 //=================================================
@@ -107,12 +114,15 @@ public:
 	void draw(sf::RenderWindow& window);
 
 private:
-	TileMap *maps;
+	MapSection *maps;
 	TileMap *activeMap;
+	Background *backgrounds;
+	Background *activeBkgd;
+	int nBkgds;
 	int nMaps;
 	int nTransitions;
 	Transition *transitions;
-	Background background;
+	//Background background;
 	EventHandler *eDeathHandler;
 	EventHandler *transitionHandler;
 	EventHandler *scrollHandler;

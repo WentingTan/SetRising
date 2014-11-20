@@ -11,6 +11,8 @@
 class EnemyManager;
 class Laser;
 class FreezeRay;
+class Flame;
+class GravityBomb;
 class PlayerProjectiles;
 
 //==================================================
@@ -61,6 +63,7 @@ private:
 	PlayerProjectiles *pPP;
 };
 
+
 class PlayerProjectiles
 {
 public:
@@ -69,7 +72,7 @@ public:
 	// Destructor
 	~PlayerProjectiles();
 
-	void init(sf::Texture *l, sf::Texture *fr);
+	void init(sf::Texture *l, sf::Texture *fr, sf::Texture *f, sf::Texture *g);
 	void clear();
 	void scroll(sf::Vector2f ds);
 
@@ -82,6 +85,8 @@ public:
 private:
 	Laser *lasers;
 	FreezeRay *freezeRays;
+	Flame *flame;
+	GravityBomb *gBomb;
 	int lInd;
 	int frInd;
 	EventHandler *scrollHandler;

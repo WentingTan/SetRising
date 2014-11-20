@@ -1,37 +1,36 @@
 //==========================//
-// Laser.h                  //
+// Flame.h                  //
 // Author: Matthew Stephens //
 //==========================//
-#ifndef _LASER_H_
-#define _LASER_H_
+#ifndef _FLAME_H_
+#define _FLAME_H_
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 
-class Laser : public Entity
+class Flame : public Entity
 {
 public:
 	// Constructor
-	Laser();
+	Flame();
 	// Destructor
-	~Laser();
+	~Flame();
 
 	// Accessors
-	float getDamage() const;
-	float getDir() const;
-    float getSpeed() const;
+	int getDamage() const;
 
 	// Methods
 	void init();
 	void activate(sf::Vector2f pos, float dir);
     void deactivate();
 	void update(float dt);
-    void copy(Laser& l);
 
 private:
-	float damage;
-	float speed;
-	float dir;
+	int damage;
+	int frame;
+	float animTimer;
+
+	bool setInactive;
 };
 
 #endif

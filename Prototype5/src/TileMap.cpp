@@ -104,22 +104,6 @@ void TileMap::create(sf::Texture *t, TileMapInfo i)
 	maxTiles.x = (int)((scrollX + 670.0f) / tInfo.tileSize);   // 800 is screen width
 }
 
-/*
-void TileMap::setReferenceTile(sf::Vector2i ref)
-{
-	scrollX = (float)ref.x * (float)TileNS::SIZE;
-	scrollY = (float)ref.y * (float)TileNS::SIZE;
-
-	checkBoundaries();
-
-	// Calculate the minimum and maximum visible tiles
-	minTiles.y = (int)(scrollY / tInfo.tileSize);
-	maxTiles.y = (int)((scrollY + SCREEN_HEIGHT) / tInfo.tileSize);
-
-	minTiles.x = (int)(scrollX / tInfo.tileSize);
-	maxTiles.x = (int)((scrollX + SCREEN_WIDTH) / tInfo.tileSize);
-}
-*/
 
 //=====================================================================
 // TileMap::indexIsWithinBounds(int,int)
@@ -390,12 +374,10 @@ void TileMap::spawnEnemy(sf::Vector2i tile)
 //===================================================================================
 void TileMap::draw(sf::RenderWindow& backBuffer)
 {
-	sf::RectangleShape hb;
-	hb.setFillColor(sf::Color(0, 0, 255, 175));
+	//sf::RectangleShape hb;
+	//hb.setFillColor(sf::Color(0, 0, 255, 175));
 
-
-
-
+	//sprite.setColor(sf::Color(255,155,155));
 
 	float offsetX = scrollX - minTiles.x * (float)tInfo.tileSize;
 	float offsetY = scrollY - minTiles.y * (float)tInfo.tileSize;
