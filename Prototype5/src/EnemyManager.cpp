@@ -8,7 +8,7 @@
 #include "FreezeRay.h"
 #include "Flame.h"
 #include "Player.h"
-
+#include "Blackhole.h"
 
 #include <fstream>
 
@@ -69,6 +69,10 @@ EnemyManager::~EnemyManager()
 		delete [] pSnakes;
 	if (sSnakes)
 		delete [] sSnakes;
+	if (wBats)
+		delete [] wBats;
+	if (dBats)
+		delete [] dBats;
 	if (scrollHandler)
 		delete scrollHandler;
 	if (spawnHandler)
@@ -93,10 +97,13 @@ void EnemyManager::startDeathAnim(float x, float y)
 	death.setTextureRect(sf::IntRect(0,0,128,128));
 }
 
-void EnemyManager::init(sf::Texture *et, sf::Texture *dt)
+void EnemyManager::init(sf::Texture *et, sf::Texture *dt, sf::Texture *bt)
 {
 	pSnakes = new PatrollingSnake[MAX_PATROLLING_SNAKES];
 	sSnakes = new StationarySnake[MAX_STATIONARY_SNAKES];
+	wBats = new WaitBat[MAX_WAIT_BATS];
+	dBats = new DiveBat[MAX_DIVE_BATS];
+
 	for (int i = 0; i < MAX_PATROLLING_SNAKES; i++)
 	{
 		pSnakes[i].setTexture(et);
@@ -110,6 +117,20 @@ void EnemyManager::init(sf::Texture *et, sf::Texture *dt)
 		sSnakes[i].init();
 	}
 	ssInd = 0;
+
+	for (int i = 0; i < MAX_WAIT_BATS; i++)
+	{
+		wBats[i].setTexture(bt);
+		wBats[i].init();
+	}
+	wbInd = 0;
+
+	for (int i = 0; i < MAX_DIVE_BATS; i++)
+	{
+		dBats[i].setTexture(bt);
+		dBats[i].init();
+	}
+	dbInd = 0;
 
 	death.setTexture(*dt);
 	deathAnim = false;
@@ -148,6 +169,14 @@ void EnemyManager::spawn(sf::Vector2f pos, sf::Vector2i tile, int type)
 		sSnakes[ssInd].activate(pos, tile, playerPos);
 		ssInd++;
 		break;
+	case E_WAIT_BAT:
+		wBats[wbInd].activate(pos, tile, playerPos);
+		wbInd++;
+		break;
+	case E_DIVE_BAT:
+		dBats[dbInd].activate(pos, tile, playerPos);
+		dbInd++;
+		break;
 	default:
 		break;
 	}
@@ -162,6 +191,14 @@ void EnemyManager::scroll(sf::Vector2f ds)
 	// Scroll active stationary snakes
 	for (int i = 0; i < ssInd; i++)
 		sSnakes[i].scroll(ds);
+
+	// Scroll active wait bats
+	for (int i = 0; i < wbInd; i++)
+		wBats[i].scroll(ds);
+
+	// Scroll active dive bats
+	for (int i = 0; i < dbInd; i++)
+		dBats[i].scroll(ds);
 
 	if (deathAnim)
 		death.move(-1.0f * ds);
@@ -212,9 +249,200 @@ bool EnemyManager::checkCollisions(Laser *laser)
 		}
 	}
 
+	// Check for collisions with active wait bats
+	for (int i = 0; i < wbInd; i++)
+	{
+		if (wBats[i].collidesWith((Entity*)laser))
+		{
+			// Enemy::damage() returns true if enemy is killed
+			if (wBats[i].damage(laser->getDamage()))
+			{
+				e.enemyType = E_WAIT_BAT;
+				e.tile = wBats[i].getSpawnTile();
+				e.posX = wBats[i].getPosition().x;
+				e.posY = wBats[i].getPosition().y;
+				EventManager::triggerEvent(e);
+
+				remove(i, E_WAIT_BAT);
+			}
+            return true;
+		}
+	}
+
     return false;
 }
 
+bool EnemyManager::checkCollisions(Entity *weapon, int wType)
+{
+	Event::Data e;
+	e.type = Event::ENEMY_DEATH;
+
+	float amount = 0.0f;
+
+	// Check for collisions with active patrolling snakes
+	for (int i = 0; i < psInd; i++)
+	{
+		if (pSnakes[i].collidesWith(weapon))
+		{
+			switch (wType)
+			{
+			case W_LASER:
+				amount = LASER_DAMAGE;
+				break;
+			case W_FREEZE_RAY:
+				if (pSnakes[i].isFrozen())
+					amount = FREEZE_DAMAGE;
+				else
+					pSnakes[i].freeze();
+				break;
+			case W_FLAMETHROWER:
+				pSnakes[i].flameDamage();
+				break;
+			default:
+				break;
+			}
+
+			if (pSnakes[i].damage(amount))
+			{
+				e.enemyType = E_PATROLLING_SNAKE;
+				e.tile = pSnakes[i].getSpawnTile();
+				e.posX = pSnakes[i].getPosition().x;
+				e.posY = pSnakes[i].getPosition().y;
+				EventManager::triggerEvent(e);
+
+				remove(i, E_PATROLLING_SNAKE);
+			}
+			return true;
+		}
+	}
+
+	// Check for collisions with active stationary snakes
+	for (int i = 0; i < ssInd; i++)
+	{
+		if (sSnakes[i].collidesWith(weapon))
+		{
+			switch (wType)
+			{
+			case W_LASER:
+				amount = LASER_DAMAGE;
+				break;
+			case W_FREEZE_RAY:
+				if (sSnakes[i].isFrozen())
+					amount = FREEZE_DAMAGE;
+				else
+					sSnakes[i].freeze();
+				break;
+			case W_FLAMETHROWER:
+				sSnakes[i].flameDamage();
+				break;
+			default:
+				break;
+			}
+
+			if (sSnakes[i].damage(amount))
+			{
+				e.enemyType = E_STATIONARY_SNAKE;
+				e.tile = sSnakes[i].getSpawnTile();
+				e.posX = sSnakes[i].getPosition().x;
+				e.posY = sSnakes[i].getPosition().y;
+				EventManager::triggerEvent(e);
+
+				remove(i, E_STATIONARY_SNAKE);
+			}
+			return true;
+		}
+	}
+
+	// Check for collisions with active wait bats
+	for (int i = 0; i < wbInd; i++)
+	{
+		if (wBats[i].collidesWith(weapon))
+		{
+			switch (wType)
+			{
+			case W_LASER:
+				amount = LASER_DAMAGE;
+				break;
+			case W_FREEZE_RAY:
+				if (wBats[i].isFrozen())
+					amount = FREEZE_DAMAGE;
+				else
+					wBats[i].freeze();
+				break;
+			case W_FLAMETHROWER:
+				wBats[i].flameDamage();
+				break;
+			default:
+				break;
+			}
+
+			if (wBats[i].damage(amount))
+			{
+				e.enemyType = E_WAIT_BAT;
+				e.tile = wBats[i].getSpawnTile();
+				e.posX = wBats[i].getPosition().x;
+				e.posY = wBats[i].getPosition().y;
+				EventManager::triggerEvent(e);
+
+				remove(i, E_WAIT_BAT);
+			}
+			return true;
+		}
+	}
+
+	// Check for collisions with active dive bats
+	for (int i = 0; i < dbInd; i++)
+	{
+		if (dBats[i].collidesWith(weapon))
+		{
+			switch (wType)
+			{
+			case W_LASER:
+				amount = LASER_DAMAGE;
+				break;
+			case W_FREEZE_RAY:
+				if (dBats[i].isFrozen())
+					amount = FREEZE_DAMAGE;
+				else
+					dBats[i].freeze();
+				break;
+			case W_FLAMETHROWER:
+				dBats[i].flameDamage();
+				break;
+			default:
+				break;
+			}
+
+			if (dBats[i].damage(amount))
+			{
+				e.enemyType = E_DIVE_BAT;
+				e.tile = dBats[i].getSpawnTile();
+				e.posX = dBats[i].getPosition().x;
+				e.posY = dBats[i].getPosition().y;
+				EventManager::triggerEvent(e);
+
+				remove(i, E_DIVE_BAT);
+			}
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void EnemyManager::checkCollisions(Blackhole *bh)
+{
+	sf::Vector2f pos = bh->getPosition();
+	float r = bh->getFieldRadius();
+
+	for (int i = 0; i < psInd; i++)
+		if (!pSnakes[i].isInGravField())
+			pSnakes[i].checkGravField(pos, r);
+
+	for (int i = 0; i < ssInd; i++)
+		if (!sSnakes[i].isInGravField())
+			sSnakes[i].checkGravField(pos, r);
+}
 
 bool EnemyManager::checkCollisions(FreezeRay *fRay)
 {
@@ -227,57 +455,9 @@ bool EnemyManager::checkCollisions(FreezeRay *fRay)
 		if (pSnakes[i].collidesWith((Entity*)fRay))
 		{
 			// Enemy::damage() returns true if enemy is killed
-			pSnakes[i].freeze();
-			if (pSnakes[i].damage(fRay->getDamage()))
+			if (pSnakes[i].isFrozen())
 			{
-				e.enemyType = E_PATROLLING_SNAKE;
-				e.tile = pSnakes[i].getSpawnTile();
-				e.posX = pSnakes[i].getPosition().x;
-				e.posY = pSnakes[i].getPosition().y;
-				EventManager::triggerEvent(e);
-
-				remove(i, E_PATROLLING_SNAKE);
-			}
-            return true;
-		}
-	}
-
-	// Check for collisions with active stationary snakes
-	for (int i = 0; i < ssInd; i++)
-	{
-		if (sSnakes[i].collidesWith((Entity*)fRay))
-		{
-			// Enemy::damage() returns true if enemy is killed
-			sSnakes[i].freeze();
-			if (sSnakes[i].damage(fRay->getDamage()))
-			{
-				e.enemyType = E_STATIONARY_SNAKE;
-				e.tile = sSnakes[i].getSpawnTile();
-				e.posX = sSnakes[i].getPosition().x;
-				e.posY = sSnakes[i].getPosition().y;
-				EventManager::triggerEvent(e);
-
-				remove(i, E_STATIONARY_SNAKE);
-			}
-            return true;
-		}
-	}
-
-    return false;
-}
-
-bool EnemyManager::checkCollisions(Flame *flame)
-{
-	Event::Data e;
-	e.type = Event::ENEMY_DEATH;
-
-	// Check for collisions with active patrolling snakes
-	for (int i = 0; i < psInd; i++)
-		if (pSnakes[i].collidesWith((Entity*)flame))
-		{
-			if (pSnakes[i].flameDamage())
-			{
-				if (pSnakes[i].damage(flame->getDamage()))
+				if (pSnakes[i].damage(fRay->getDamage()))
 				{
 					e.enemyType = E_PATROLLING_SNAKE;
 					e.tile = pSnakes[i].getSpawnTile();
@@ -288,16 +468,21 @@ bool EnemyManager::checkCollisions(Flame *flame)
 					remove(i, E_PATROLLING_SNAKE);
 				}
 			}
-            return true;
+			else
+				pSnakes[i].freeze();
+			return true;
 		}
+	}
 
 	// Check for collisions with active stationary snakes
 	for (int i = 0; i < ssInd; i++)
-		if (sSnakes[i].collidesWith((Entity*)flame))
+	{
+		if (sSnakes[i].collidesWith((Entity*)fRay))
 		{
-			if (sSnakes[i].flameDamage())
+			// Enemy::damage() returns true if enemy is killed
+			if (sSnakes[i].isFrozen())
 			{
-				if (sSnakes[i].damage(flame->getDamage()))
+				if (sSnakes[i].damage(fRay->getDamage()))
 				{
 					e.enemyType = E_STATIONARY_SNAKE;
 					e.tile = sSnakes[i].getSpawnTile();
@@ -308,10 +493,56 @@ bool EnemyManager::checkCollisions(Flame *flame)
 					remove(i, E_STATIONARY_SNAKE);
 				}
 			}
+			else
+				sSnakes[i].freeze();
 			return true;
 		}
+	}
 
+	// Check for collisions with active wait bats
+	for (int i = 0; i < wbInd; i++)
+	{
+		if (wBats[i].collidesWith((Entity*)fRay))
+		{
+			// Enemy::damage() returns true if enemy is killed
+			if (wBats[i].isFrozen())
+			{
+				if (wBats[i].damage(fRay->getDamage()))
+				{
+					e.enemyType = E_WAIT_BAT;
+					e.tile = wBats[i].getSpawnTile();
+					e.posX = wBats[i].getPosition().x;
+					e.posY = wBats[i].getPosition().y;
+					EventManager::triggerEvent(e);
+
+					remove(i, E_WAIT_BAT);
+				}
+			}
+			else
+				wBats[i].freeze();
+			return true;
+		}
+	}
     return false;
+}
+
+void EnemyManager::checkCollisions(Flame *flame)
+{
+	// Check for collisions with active patrolling snakes
+	for (int i = 0; i < psInd; i++)
+		if (pSnakes[i].collidesWith((Entity*)flame))
+			pSnakes[i].flameDamage();
+
+
+	// Check for collisions with active stationary snakes
+	for (int i = 0; i < ssInd; i++)
+		if (sSnakes[i].collidesWith((Entity*)flame))
+			sSnakes[i].flameDamage();
+
+	// Check for collisions with active wait bats
+	for (int i = 0; i < wbInd; i++)
+		if (wBats[i].collidesWith((Entity*)flame))
+			wBats[i].flameDamage();
 }
 
 
@@ -345,6 +576,26 @@ bool EnemyManager::checkFrozenCollisions(Player *p, sf::FloatRect& intersection)
 			if (sSnakes[i].getFrozenBodyHB().intersects(p->getHitBox(), intersection))
 				return true;
 			if (sSnakes[i].getFrozenTailHB().intersects(p->getHitBox(), intersection))
+				return true;
+		}
+	}
+
+	// Check for collisions with frozen wait bats
+	for (int i = 0; i < wbInd; i++)
+	{
+		if (wBats[i].isFrozen())
+		{
+			if (wBats[i].getHitbox().intersects(p->getHitBox(), intersection))
+				return true;
+		}
+	}
+
+	// Check for collisions with frozen dive bats
+	for (int i = 0; i < dbInd; i++)
+	{
+		if (dBats[i].isFrozen())
+		{
+			if (dBats[i].getHitbox().intersects(p->getHitBox(), intersection))
 				return true;
 		}
 	}
@@ -384,6 +635,28 @@ void EnemyManager::checkCollisions(Player *player)
 			return;
 		}
 	}
+
+	// Check for collisions with wait bats
+	for (int i = 0; i < wbInd; i++)
+	{
+		if (!wBats[i].isFrozen() && wBats[i].getHitbox().intersects(player->getHitBox()))
+		{
+			e.damage = BAT_DAMAGE;
+			EventManager::triggerEvent(e);
+			return;
+		}
+	}
+
+	// Check for collisions with dive bats
+	for (int i = 0; i < dbInd; i++)
+	{
+		if (!dBats[i].isFrozen() && dBats[i].getHitbox().intersects(player->getHitBox()))
+		{
+			e.damage = BAT_DAMAGE;
+			EventManager::triggerEvent(e);
+			return;
+		}
+	}
 }
 
 //===============================================
@@ -397,13 +670,73 @@ void EnemyManager::setPlayerPosition(sf::Vector2f pPos)
 
 void EnemyManager::update(float dt)
 {
+	Event::Data e;
+	e.type = Event::ENEMY_DEATH;
+
 	// Update active patrolling snakes
-	for (int i = 0; i < psInd; i++)
-		pSnakes[i].update(dt, map);
+	int i = 0;
+	while (pSnakes[i].isActive() && i < MAX_PATROLLING_SNAKES)
+		if (pSnakes[i].update(dt, map))
+		{
+			e.enemyType = E_PATROLLING_SNAKE;
+			e.tile = pSnakes[i].getSpawnTile();
+			e.posX = pSnakes[i].getPosition().x;
+			e.posY = pSnakes[i].getPosition().y;
+			EventManager::triggerEvent(e);
+
+			remove(i, E_PATROLLING_SNAKE);
+		}
+		else
+			i++;
 
 	// Update active stationary snakes
-	for (int i = 0; i < ssInd; i++)
-		sSnakes[i].update(dt, playerPos);
+	i = 0;
+	while (sSnakes[i].isActive() && i < MAX_STATIONARY_SNAKES)
+		if (sSnakes[i].update(dt, playerPos))
+		{
+			e.enemyType = E_STATIONARY_SNAKE;
+			e.tile = sSnakes[i].getSpawnTile();
+			e.posX = sSnakes[i].getPosition().x;
+			e.posY = sSnakes[i].getPosition().y;
+			EventManager::triggerEvent(e);
+
+			remove(i, E_STATIONARY_SNAKE);
+		}
+		else
+			i++;
+
+	// Update active wait bats
+	i = 0;
+	while (wBats[i].isActive() && i < MAX_WAIT_BATS)
+		if (wBats[i].update(dt, playerPos))
+		{
+			e.enemyType = E_WAIT_BAT;
+			e.tile = wBats[i].getSpawnTile();
+			e.posX = wBats[i].getPosition().x;
+			e.posY = wBats[i].getPosition().y;
+			EventManager::triggerEvent(e);
+
+			remove(i, E_WAIT_BAT);
+		}
+		else
+			i++;
+
+	// Update active dive bats
+	i = 0;
+	while (dBats[i].isActive() && i < MAX_DIVE_BATS)
+		if (dBats[i].update(dt, playerPos))
+		{
+			e.enemyType = E_DIVE_BAT;
+			e.tile = dBats[i].getSpawnTile();
+			e.posX = dBats[i].getPosition().x;
+			e.posY = dBats[i].getPosition().y;
+			EventManager::triggerEvent(e);
+
+			remove(i, E_DIVE_BAT);
+		}
+		else
+			i++;
+
 
 	if (deathAnim)
 	{
@@ -435,6 +768,14 @@ void EnemyManager::draw(sf::RenderWindow& window)
 	// Draw active stationary snakes to the screen
 	for (int i = 0; i < ssInd; i++)
 		sSnakes[i].draw(window);
+
+	// Draw active wait bats to the screen
+	for (int i = 0; i < wbInd; i++)
+		wBats[i].draw(window);
+
+	// Draw active dive bats to the screen
+	for (int i = 0; i < dbInd; i++)
+		dBats[i].draw(window);
 
 	if (deathAnim)
 		window.draw(death);
@@ -468,6 +809,26 @@ void EnemyManager::clear()
 		EventManager::triggerEvent(e);
 	}
 	ssInd = 0;
+
+	// De-spawn active wait bats
+	e.enemyType = E_WAIT_BAT;
+	for (int i = 0; i < wbInd; i++)
+	{
+		wBats[i].deactivate();
+		e.tile = wBats[i].getSpawnTile();
+		EventManager::triggerEvent(e);
+	}
+	wbInd = 0;
+
+	// De-spawn active dive bats
+	e.enemyType = E_DIVE_BAT;
+	for (int i = 0; i < dbInd; i++)
+	{
+		dBats[i].deactivate();
+		e.tile = dBats[i].getSpawnTile();
+		EventManager::triggerEvent(e);
+	}
+	dbInd = 0;
 }
 
 
@@ -492,6 +853,22 @@ void EnemyManager::remove(int ind, int type)
 		sSnakes[ind].copy(sSnakes[j]);
 		sSnakes[j].deactivate();
 		ssInd--;
+		break;
+	case E_WAIT_BAT:
+		j = MAX_WAIT_BATS - 1;
+		while (j > ind && !wBats[j].isActive())
+			j--;
+		wBats[ind].copy(wBats[j]);
+		wBats[j].deactivate();
+		wbInd--;
+		break;
+	case E_DIVE_BAT:
+		j = MAX_DIVE_BATS - 1;
+		while (j > ind && !dBats[j].isActive())
+			j--;
+		dBats[ind].copy(dBats[j]);
+		dBats[j].deactivate();
+		dbInd--;
 		break;
 	default:
 		break;

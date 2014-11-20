@@ -54,15 +54,12 @@ void SnakeEnemy::deactivate()
 	active = false;
 }
 
-bool SnakeEnemy::flameDamage()
+void SnakeEnemy::flameDamage()
 {
-	if (doFlameDamage)
-		return false;
-
+	flameTimer = 0.0f;
 	doFlameDamage = true;
 	frozen = false;
 	sprite.setColor(sf::Color::Red);
-	return true;
 }
 
 void SnakeEnemy::freeze()
@@ -129,7 +126,7 @@ void SnakeEnemy::updateFreeze(float dt)
 {
 	freezeTimer += dt;
 		
-	if (freezeTimer > 3.5f)
+	if (freezeTimer > FREEZE_TIME)
 	{
 		frozen = false;
 		freezeTimer = 0.0f;
@@ -142,16 +139,69 @@ void SnakeEnemy::updateFreeze(float dt)
 	}
 }
 
-void SnakeEnemy::updateFlame(float dt)
+bool SnakeEnemy::updateFlame(float dt)
 {
+	float amount = flameTimer > 0.0f ? 0.3f * FLAME_DAMAGE * dt : FLAME_DAMAGE * dt;
+	
 	flameTimer += dt;
 
-	if (flameTimer > 0.75f)
+	if (flameTimer > FLAME_TIME)
 	{
 		doFlameDamage = false;
-		flameTimer = 0.0f;
 		sprite.setColor(sf::Color::White);
 	}
+
+	if (damage(amount))
+		return true;
+	else
+		return false;
+}
+
+bool SnakeEnemy::isInGravField() const
+{
+	return inGravField;
+}
+
+void SnakeEnemy::checkGravField(sf::Vector2f pos, float r)
+{
+	// Calculate distance to blackhole
+	sf::Vector2f diff = pos - sprite.getPosition();
+	distToBH = sqrt(diff.x * diff.x + diff.y * diff.y);
+
+	if (distToBH < r)
+	{
+		// Enemy is in the grav field of the blackhole
+		inGravField = true;
+
+		// Calculate the normalized vector to the blakchole
+		dirToBH = diff / distToBH;
+		distMoved = 0.0f;
+	}
+}
+
+//==================================
+// SnakeEnemy::updateGravity(float)
+//==================================
+bool SnakeEnemy::updateGravity(float dt)
+{
+	float r = distToBH - distMoved;
+
+	if (r > 0.15f * distToBH)
+	{
+		float speed = 0.5f * GRAV_CONST / (r);
+		sf::Vector2f ds = speed * dt * dirToBH;
+		move(sf::Vector2f(ds.x, ds.y));
+
+		distMoved +=  sqrt(ds.x * ds.x + ds.y * ds.y);
+
+		float scale = 1.0f - ((1.0f / distToBH) * distMoved);
+		sprite.setScale(scale, scale);
+	}
+	else
+	// Return true when the enemy has been killed
+		return true;
+
+	return false;
 }
 
 //==================================
@@ -195,9 +245,9 @@ void SnakeEnemy::shoot()
 }
 
 
-bool SnakeEnemy::damage(int amount)
+bool SnakeEnemy::damage(float amount)
 {
-	health -= (float)amount;
+	health -= amount;
 	if (health <= 0.0f)
 		return true;
 	else
@@ -211,6 +261,7 @@ void SnakeEnemy::commonActivate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2
 	shootTimer = 0.0f;
 	frozen = false;
 	doFlameDamage = false;
+	inGravField = false;
 	freezeTimer = 0.0f;
 	flameTimer = 0.0f;
 	sprite.setColor(sf::Color::White);

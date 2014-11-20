@@ -15,6 +15,9 @@
 #include "PickupManager.h"
 #include "GameWorld.h"
 
+
+#include "Blackhole.h"
+
 class PlayState : public GameState
 {
 public:
@@ -30,7 +33,12 @@ public:
 	virtual void draw(sf::RenderWindow& window);
 
 protected:
-	//TileMap tmap;
+	
+
+
+	Blackhole blackhole;
+
+
 	GameWorld world;
 	Player player;
 	EnemyManager enemies;

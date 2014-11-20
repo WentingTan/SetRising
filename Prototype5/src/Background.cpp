@@ -43,10 +43,6 @@ void Background::setScroll(sf::Vector2f s)
 	s.y *= scrollRatio;
 	scrollX = s.x;
 	scrollY = s.y;
-
-	std::ofstream log("log.txt", std::ios::app);
-	log << "In Background::setScroll(): scroll = " << s.x << ", " << s.y << std::endl;
-	log.close();
 }
 
 void Background::init()

@@ -403,6 +403,8 @@ void Player::handleInput(Input& input)
 		selectedWeapon = W_FREEZE_RAY;
 	else if (input.isPressed(InputNS::SEL_FLAME))
 		selectedWeapon = W_FLAMETHROWER;
+	else if (input.isPressed(InputNS::SEL_GRAV))
+		selectedWeapon = W_GRAVITY_BOMB;
 
 	// Handle shooting
 	if (state != climbing)

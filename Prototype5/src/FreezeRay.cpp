@@ -16,7 +16,7 @@ FreezeRay::~FreezeRay()
 
 }
 
-int FreezeRay::getDamage() const
+float FreezeRay::getDamage() const
 {
 	return damage;
 }
@@ -44,12 +44,8 @@ bool FreezeRay::update(float dt)
 void FreezeRay::init()
 {
 	sprite.setTexture(*texture);
-	//sprite.setTextureRect(Weapons::LASER_TEXT_RECT);
-
-	//damage = Weapons::LASER_DAMAGE;
-	//speed = Weapons::LASER_SPEED;
-	damage = 10;
-    speed = 500.0f;
+	damage = 7.5f;
+    speed = 450.0f;
 	dir = 0.0f;
 
 	sf::FloatRect bounds = sprite.getLocalBounds();

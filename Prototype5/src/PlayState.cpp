@@ -33,7 +33,13 @@ bool PlayState::init()
 	//player.setTexture(pGame->getTexture(PLAYER));
 	//player.init();
 
-	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(DEATH));
+	blackhole.setTexture(pGame->getTexture(BLACK_HOLE));
+	blackhole.init();
+	//blackhole.activate(sf::Vector2f(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f));
+
+
+
+	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(DEATH), pGame->getTexture(BAT));
 	eProjectiles.init(pGame->getTexture(SPIT));
 
 	world.loadFromFile("world.txt", pGame);
@@ -46,7 +52,7 @@ bool PlayState::init()
 
 	pickups.init(pGame->getTexture(HP));
 
-    pProjectiles.init(pGame->getTexture(LASER), pGame->getTexture(FREEZE), pGame->getTexture(FLAME));
+    pProjectiles.init(pGame->getTexture(LASER), pGame->getTexture(FREEZE), pGame->getTexture(FLAME), pGame->getTexture(GRAVITY));
 	player.setEnemyManager(&enemies);
     //player.setProjectiles(&pProjectiles);
 
@@ -70,6 +76,11 @@ void PlayState::handleInput(Input *input)
 
 void PlayState::update(float dt)
 {
+	if (blackhole.isActive())
+		blackhole.update(dt);
+
+
+
 	player.update(dt);
 	//tmap.update(dt);
 	world.update(dt);
@@ -80,7 +91,8 @@ void PlayState::update(float dt)
 	pickups.update(dt);
 
 	pProjectiles.checkCollisions(&enemies);
-
+	if (blackhole.isActive())
+		enemies.checkCollisions(&blackhole);
 	pickups.checkCollisions(&player);
 
 	if (!player.isDamaged())
@@ -104,6 +116,8 @@ void PlayState::draw(sf::RenderWindow& window)
 
 	//tmap.draw(window);
 	world.draw(window);
+	if (blackhole.isActive())
+		blackhole.draw(window);
 	//eProjectiles.draw(window);
 	//pProjectiles.draw(window);
 	enemies.draw(window);

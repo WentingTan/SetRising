@@ -35,17 +35,19 @@ void PatrollingSnake::updatePatrol(float dt, TileMap *map)
 	}
 }
 
-void PatrollingSnake::update(float dt, TileMap *map)
+bool PatrollingSnake::update(float dt, TileMap *map)
 {
-	if (frozen)
+	if (inGravField)
+	{
+		animate(dt);
+		return updateGravity(dt);
+	}
+	else if (frozen)
 		updateFreeze(dt);
 	else
 	{
 		animate(dt);
 		updatePatrol(dt, map);
-
-		if (doFlameDamage)
-			updateFlame(dt);
 
 		shootTimer += dt;
 		if (shootTimer > nextShootTime)
@@ -54,7 +56,12 @@ void PatrollingSnake::update(float dt, TileMap *map)
 			shootTimer = 0.0f;
 			nextShootTime = getNextShootTime(PS_SHOOT_TIME_LO, PS_SHOOT_TIME_HI);
 		}
+
+		if (doFlameDamage)
+			return updateFlame(dt);
 	}
+
+	return false;
 }
 
 //====================================================================================
@@ -101,6 +108,10 @@ void PatrollingSnake::copy(PatrollingSnake& e)
 	patrolDist = e.patrolDist;
 	flameTimer = e.flameTimer;
 	doFlameDamage = e.doFlameDamage;
+	inGravField = e.inGravField;
+	distToBH = e.distToBH;
+	dirToBH = e.dirToBH;
+	distMoved = e.distMoved;
 }
 
 /*

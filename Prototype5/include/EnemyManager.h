@@ -8,12 +8,15 @@
 #include <SFML/Graphics.hpp>
 #include "PatrollingSnake.h"
 #include "StationarySnake.h"
+#include "WaitBat.h"
+#include "DiveBat.h"
 #include "EventHandler.h"
 
 // Forward Declarations
 class Laser;
 class FreezeRay;
 class Flame;
+class Blackhole;
 class Player;
 class EnemyManager;
 class TileMap;
@@ -111,7 +114,7 @@ public:
 	// Destructor
 	~EnemyManager();
 
-	void init(sf::Texture *et, sf::Texture *dt);
+	void init(sf::Texture *et, sf::Texture *dt, sf::Texture *bt);
 	void setTileMap(TileMap *tm);
 
 	bool checkFrozenCollisions(Player *p, sf::FloatRect& intersection);
@@ -119,9 +122,11 @@ public:
 
 	void setPlayerPosition(sf::Vector2f pPos);
 
+	bool checkCollisions(Entity *weapon, int wType);
+	void checkCollisions(Blackhole *bh);
 	bool checkCollisions(Laser *laser);
 	bool checkCollisions(FreezeRay *fRay);
-	bool checkCollisions(Flame *flame);
+	void checkCollisions(Flame *flame);
 	void checkCollisions(Player *player);
 
 	void clear();
@@ -134,12 +139,16 @@ public:
 private:
 	PatrollingSnake *pSnakes;
 	StationarySnake *sSnakes;
+	WaitBat *wBats;
+	DiveBat *dBats;
 	sf::Sprite death;
 	bool deathAnim;
 	float timer;
 	int frame;
 	int psInd;
 	int ssInd;
+	int wbInd;
+	int dbInd;
 	TileMap *map;
 
 	sf::Vector2f playerPos;

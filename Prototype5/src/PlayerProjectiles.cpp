@@ -9,6 +9,7 @@
 #include "Constants.h"
 #include "FreezeRay.h"
 #include "Flame.h"
+#include "GravityBomb.h"
 	
 void PPScrollHandler::handleEvent(Event::Data e)
 {
@@ -29,8 +30,6 @@ void PPTransitionHandler::handleEvent(Event::Data e)
 		pPP->clear();
 }
 
-
-
 // Constructor
 PlayerProjectiles::PlayerProjectiles()
 {
@@ -39,6 +38,8 @@ PlayerProjectiles::PlayerProjectiles()
 	transitionHandler = NULL;
 	lasers = NULL;
 	freezeRays = NULL;
+	flame = NULL;
+	gBomb = NULL;
 }
 // Destructor
 PlayerProjectiles::~PlayerProjectiles()
@@ -56,9 +57,11 @@ PlayerProjectiles::~PlayerProjectiles()
 		delete [] freezeRays;
 	if (flame)
 		delete flame;
+	if (gBomb)
+		delete gBomb;
 }
 
-void PlayerProjectiles::init(sf::Texture *l, sf::Texture *fr, sf::Texture *f)
+void PlayerProjectiles::init(sf::Texture *l, sf::Texture *fr, sf::Texture *f, sf::Texture *g)
 {
 	lasers = new Laser[MAX_LASERS];
 	for (int i = 0; i < MAX_LASERS; i++)
@@ -80,6 +83,9 @@ void PlayerProjectiles::init(sf::Texture *l, sf::Texture *fr, sf::Texture *f)
 	flame->setTexture(f);
 	flame->init();
 
+	gBomb = new GravityBomb();
+	gBomb->setTexture(g);
+	gBomb->init();
 
 	// Register event handlers
 	scrollHandler = new PPScrollHandler(this);
@@ -110,6 +116,10 @@ void PlayerProjectiles::spawn(sf::Vector2f pos, float dir, int type)
 	case W_FLAMETHROWER:
 		flame->activate(pos, dir);
 		break;
+	case W_GRAVITY_BOMB:
+		if (gBomb->isReady())
+			gBomb->activate(pos, dir);
+		break;
 	default:
 		break;
 	}
@@ -117,22 +127,28 @@ void PlayerProjectiles::spawn(sf::Vector2f pos, float dir, int type)
 
 void PlayerProjectiles::checkCollisions(EnemyManager *enemies)
 {
+	//std::ofstream log("log.txt", std::ios::app);
+
+
 	int i = 0;
 	while (lasers[i].isActive() && i < MAX_LASERS)
-		if (enemies->checkCollisions(&lasers[i]))
+		//if (enemies->checkCollisions(&lasers[i]))
+		if (enemies->checkCollisions((Entity*)&lasers[i], W_LASER))
             remove(i, W_LASER);
 		else
             i++;
 
 	i = 0;
 	while (freezeRays[i].isActive() && i < MAX_FREEZE_RAYS)
-		if (enemies->checkCollisions(&freezeRays[i]))
+		//if (enemies->checkCollisions(&freezeRays[i]))
+		if (enemies->checkCollisions((Entity*)&freezeRays[i], W_FREEZE_RAY))
             remove(i, W_FREEZE_RAY);
 		else
             i++;
 
 	if (flame->isActive())
-		enemies->checkCollisions(flame);
+		//enemies->checkCollisions(flame);
+		enemies->checkCollisions((Entity*)flame, W_FLAMETHROWER);
 }
 
 void PlayerProjectiles::clear()
@@ -146,6 +162,9 @@ void PlayerProjectiles::clear()
 	for (int i = 0; i < frInd; i++)
 		freezeRays[i].deactivate();
 	frInd = 0;
+
+	if (gBomb->isActive())
+		gBomb->deactivate();
 }
 
 void PlayerProjectiles::scroll(sf::Vector2f ds)
@@ -159,6 +178,9 @@ void PlayerProjectiles::scroll(sf::Vector2f ds)
 	i = 0;
 	while (freezeRays[i].isActive() && i < MAX_FREEZE_RAYS)
 		freezeRays[i++].scroll(ds);
+
+	if (gBomb->isActive())
+		gBomb->scroll(ds);
 }
 
 void PlayerProjectiles::update(float dt)
@@ -202,7 +224,12 @@ void PlayerProjectiles::update(float dt)
 		}
 	}
 
-	flame->update(dt);
+	if (flame->isActive())
+		flame->update(dt);
+
+	if (gBomb->isActive())
+		gBomb->update(dt);
+
 
 }
 
@@ -220,6 +247,9 @@ void PlayerProjectiles::draw(sf::RenderWindow& window)
 
 	if (flame->isActive())
 		flame->draw(window);
+
+	if (gBomb->isActive())
+		gBomb->draw(window);
 
 }
 

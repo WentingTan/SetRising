@@ -50,6 +50,9 @@ void Game::init()
 	textures[SPIT].loadFromFile(SPIT_TEXTURE);
 	textures[FLAME].loadFromFile(FLAME_TEXTURE);
 	textures[CAVE_BKGD].loadFromFile(CAVE_BKGD_TEXTURE);
+	textures[BAT].loadFromFile(BAT_TEXTURE);
+	textures[BLACK_HOLE].loadFromFile(BLACKHOLE_TEXTURE);
+	textures[GRAVITY].loadFromFile(GRAVITY_TEXTURE);
 
 	// Seed the random number generator with the current time
 	srand(time(NULL));

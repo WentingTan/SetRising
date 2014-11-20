@@ -21,16 +21,18 @@ StationarySnake::~StationarySnake()
 }
 
 
-void StationarySnake::update(float dt, sf::Vector2f pPos)
+bool StationarySnake::update(float dt, sf::Vector2f pPos)
 {
-	if (frozen)
+	if (inGravField)
+	{
+		animate(dt);
+		return updateGravity(dt);
+	}
+	else if (frozen)
 		updateFreeze(dt);
 	else
 	{
 		animate(dt);
-
-		if (doFlameDamage)
-			updateFlame(dt);
 
 		shootTimer += dt;
 		if (shootTimer > nextShootTime)
@@ -48,11 +50,13 @@ void StationarySnake::update(float dt, sf::Vector2f pPos)
 			}
 		}
 
-
 		dir = sprite.getPosition().x - pPos.x > 0.0f ? D_LEFT : D_RIGHT;
 		sprite.setScale(dir, 1.0f);
-	}
 
+		if (doFlameDamage)
+			return updateFlame(dt);
+	}
+	return false;
 
 }
 
@@ -85,9 +89,15 @@ void StationarySnake::copy(StationarySnake& e)
 	frame = e.frame;
 	animTimer = e.animTimer;
 	frozen = e.frozen;
+	doFlameDamage = e.doFlameDamage;
+	flameTimer = e.flameTimer;
 	freezeTimer = e.freezeTimer;
 	shootTimer = e.shootTimer;
 	shots = e.shots;
+	inGravField = e.inGravField;
+	distToBH = e.distToBH;
+	dirToBH = e.dirToBH;
+	distMoved = e.distMoved;
 }
 
 /*

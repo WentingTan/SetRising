@@ -17,7 +17,7 @@ public:
 	~Laser();
 
 	// Accessors
-	int getDamage() const;
+	float getDamage() const;
 	float getDir() const;
     float getSpeed() const;
 
@@ -29,7 +29,7 @@ public:
     void copy(Laser& l);
 
 private:
-	int damage;
+	float damage;
 	float speed;
 	float dir;
 };

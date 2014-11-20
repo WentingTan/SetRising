@@ -1,26 +1,26 @@
 //==========================//
-// StationarySnake.h        //
+// WaitBat.h                //
 // Author: Matthew Stephens //
 //==========================//
-#ifndef _STATIONARY_SNAKE_H_
-#define _STATIONARY_SNAKE_H_
+#ifndef _WAIT_BAT_H_
+#define _WAIT_BAT_H_
 
-#include "SnakeEnemy.h"
+#include "BatEnemy.h"
 
-class StationarySnake : public SnakeEnemy
+class WaitBat : public BatEnemy
 {
 public:
 	// Constructor
-	StationarySnake();
+	WaitBat();
 	// Destructor
-	virtual ~StationarySnake();
+	virtual ~WaitBat();
 
 	void activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos);
 	bool update(float dt, sf::Vector2f pPos);
-    void copy(StationarySnake& e);
+    void copy(WaitBat& e);
 
 protected:
-	int shots;
+	bool go;
 };
 
 #endif
