@@ -5,9 +5,9 @@
 #ifndef _DIVE_BAT_H_
 #define _DIVE_BAT_H_
 
-#include "BatEnemy.h"
+#include "Bat.h"
 
-class DiveBat : public BatEnemy
+class DiveBat : public Bat
 {
 public:
 	// Constructor

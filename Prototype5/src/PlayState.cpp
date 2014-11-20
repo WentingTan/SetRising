@@ -50,7 +50,7 @@ bool PlayState::init()
 	player.setTileMap(world.getActiveMap());
 	enemies.setTileMap(world.getActiveMap());
 
-	pickups.init(pGame->getTexture(HP));
+	pickups.init(pGame->getTexture(HP), pGame->getTexture(GRAVITY));
 
     pProjectiles.init(pGame->getTexture(LASER), pGame->getTexture(FREEZE), pGame->getTexture(FLAME), pGame->getTexture(GRAVITY));
 	player.setEnemyManager(&enemies);

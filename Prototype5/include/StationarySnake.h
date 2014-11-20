@@ -5,9 +5,9 @@
 #ifndef _STATIONARY_SNAKE_H_
 #define _STATIONARY_SNAKE_H_
 
-#include "SnakeEnemy.h"
+#include "Snake.h"
 
-class StationarySnake : public SnakeEnemy
+class StationarySnake : public Snake
 {
 public:
 	// Constructor

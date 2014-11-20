@@ -24,11 +24,18 @@ void BHTransitionHandler::handleEvent(Event::Data e)
 		pBH->deactivate();
 }
 
+void BHDeathHandler::handleEvent(Event::Data e)
+{
+	if (e.type == Event::ENEMY_DEATH && e.weaponType == W_GRAVITY_BOMB)
+		pBH->decInField();
+}
+
 Blackhole::Blackhole():
 	Entity()
 {
 	scrollHandler = NULL;
 	implodeHandler = NULL;
+	deathHandler = NULL;
 	transitionHandler = NULL;
 }
 
@@ -38,6 +45,8 @@ Blackhole::~Blackhole()
 		delete scrollHandler;
 	if (implodeHandler)
 		delete implodeHandler;
+	if (deathHandler)
+		delete deathHandler;
 	if (transitionHandler)
 		delete transitionHandler;
 }
@@ -56,13 +65,24 @@ float Blackhole::getFieldRadius() const
 	return 0.7f * sprite.getGlobalBounds().width;
 }
 
+void Blackhole::incInField()
+{
+	nInField++;
+}
+
+void Blackhole::decInField()
+{
+	nInField--;
+}
+
 void Blackhole::update(float dt)
 {
 	hole.setPosition(sprite.getPosition());
 	sprite.rotate(dt * BH_ANG_VEL);
 
 	timer += dt;
-	if (timer > BH_TIME)
+	if (timer > BH_TIME && nInField == 0)
+	//if (timer > BH_TIME)
 		deactivate();
 	else if (timer < BH_EXPAND_TIME)
 	{
@@ -100,9 +120,11 @@ void Blackhole::init()
 
 	scrollHandler = new BHScrollHandler(this);
 	implodeHandler = new BHImplodeHHandler(this);
+	deathHandler = new BHDeathHandler(this);
 	transitionHandler = new BHTransitionHandler(this);
 	EventManager::addHandler(Event::SCROLL, scrollHandler);
 	EventManager::addHandler(Event::GRAV_BOMB_IMPLODE, implodeHandler);
+	EventManager::addHandler(Event::ENEMY_DEATH, deathHandler);
 	EventManager::addHandler(Event::TM_TRANSITION, transitionHandler);
 
 	//sprite.scale(2.0f, 2.0f);
@@ -112,6 +134,7 @@ void Blackhole::activate(sf::Vector2f pos)
 {
 	sf::FloatRect bounds = sprite.getLocalBounds();
 	timer = 0.0f;
+	nInField = 0;
 	sprite.setPosition(pos);
 	hole.setPosition(pos);
 	active = true;

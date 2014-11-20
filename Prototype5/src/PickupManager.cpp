@@ -5,6 +5,7 @@
 #include "PickupManager.h"
 #include "EventManager.h"
 #include "Player.h"
+#include "GravPickup.h"
 
 //===============================================================================
 // PMScrollHandler::handleEvent(Event::Data)
@@ -39,7 +40,7 @@ void PMTransitionHandler::handleEvent(Event::Data e)
 void PMEDeathHandler::handleEvent(Event::Data e)
 {
 	float r;
-	int size;
+	int type;
 	// Ensure that this was triggered by the correct event type
 	if (e.type == Event::ENEMY_DEATH)
 	{
@@ -52,21 +53,21 @@ void PMEDeathHandler::handleEvent(Event::Data e)
 			// Get another random number to determine pickup type
 			r = (float)rand() / (float)RAND_MAX;
 
-			// 70% chance small pickup
-			if (r < 0.7f)
-				size = 0;
-			// 30% chance large pickup
+			// 50% chance small pickup
+			if (r < 0.5f)
+				type = SM_HEALTH;
+			// 25% chance large pickup
+			else if (r < 0.75f)
+				type = LG_HEALTH;
+			// 25% chance of gravity bomb
 			else
-				size = 1;
+				type = GRAV_BOMB;
 
 			// Spawn the pickup
-			pPM->spawn(sf::Vector2f(e.posX, e.posY), size, sf::Vector2i(0,0));
+			pPM->spawn(sf::Vector2f(e.posX, e.posY), type);
 		}
 	}
 }
-
-
-
 
 
 // Constructor
@@ -86,15 +87,23 @@ PickupManager::~PickupManager()
 // initializes each pickup in the array.  Initializes and registers event
 // handlers.
 //========================================================================
-void PickupManager::init(sf::Texture *t)
+void PickupManager::init(sf::Texture *hp, sf::Texture *gp)
 {
-	healthPickups = new HealthPickup[10];
-	for (int i = 0; i < 10; i++)
+	healthPickups = new HealthPickup[MAX_HEALTH_PICKUPS];
+	for (int i = 0; i < MAX_HEALTH_PICKUPS; i++)
 	{
-		healthPickups[i].setTexture(t);
+		healthPickups[i].setTexture(hp);
 		healthPickups[i].init();
 	}
-	index = 0;
+	hpInd = 0;
+
+	gravPickups = new GravPickup[MAX_GRAV_PICKUPS];
+	for (int i = 0; i < MAX_GRAV_PICKUPS; i++)
+	{
+		gravPickups[i].setTexture(gp);
+		gravPickups[i].init();
+	}
+	gpInd = 0;
 
 	scrollHandler = new PMScrollHandler(this);
 	eDeathHandler = new PMEDeathHandler(this);
@@ -106,26 +115,43 @@ void PickupManager::init(sf::Texture *t)
 }
 
 //================================================================================
-// PickupManager::spawn(sf::Vector2f,int,sf::Vector2i)
-// Spawns a HealthPickup of the given 'size' at the given position. If this was
-// spawned by the TileMap, 'tile' will contain the tile index of the spawn point,
-// otherwise, the pickup was spawned by an enemy death and 'tile' will be (0,0).
+// PickupManager::spawn(sf::Vector2f,int)
+//
 //================================================================================
-void PickupManager::spawn(sf::Vector2f pos, int size, sf::Vector2i tile)
+void PickupManager::spawn(sf::Vector2f pos, int type)
 {
-	healthPickups[index].activate(pos, size, tile);
-	index++;
+	switch (type)
+	{
+	case SM_HEALTH:
+	case LG_HEALTH:
+		if (hpInd == MAX_HEALTH_PICKUPS)
+			return;
+		healthPickups[hpInd].activate(pos, type);
+		hpInd++;
+		break;
+	case GRAV_BOMB:
+		if (gpInd == MAX_GRAV_PICKUPS)
+			return;
+		gravPickups[gpInd].activate(pos);
+		gpInd++;
+		break;
+	default:
+		break;
+	}
 }
 
-//=======================================================
+//=====================================
 // PickupManager::scroll(sf::Vector2f)
-// Scrolls all of the active HealthPickups in the array.
-//=======================================================
+// Scrolls all of the active pickups
+//=====================================
 void PickupManager::scroll(sf::Vector2f ds)
 {
-	int i = 0;
-	while (healthPickups[i].isActive())
+	for (int i = 0; i < hpInd; i++)
 		healthPickups[i++].scroll(ds);
+
+	for (int i= 0; i < gpInd; i++)
+		gravPickups[i].scroll(ds);
+
 }
 
 //==============================================================================
@@ -137,8 +163,8 @@ void PickupManager::scroll(sf::Vector2f ds)
 void PickupManager::checkCollisions(Player *player)
 {
 	Event::Data e;
-	e.type = Event::PLAYER_HEAL;
 
+	e.type = Event::PLAYER_HEAL;
 	int i = 0;
 	while (healthPickups[i].isActive())
 	{
@@ -146,24 +172,46 @@ void PickupManager::checkCollisions(Player *player)
 		{
 			e.health = healthPickups[i].getHealth();
 			EventManager::triggerEvent(e);
-			remove(i);
+			remove(i, SM_HEALTH);
+		}
+		else
+			i++;
+	}
+
+	e.type = Event::GRAV_PICKUP;
+	i = 0;
+	while (gravPickups[i].isActive())
+	{
+		if (gravPickups[i].getHitbox().intersects(player->getHitBox()))
+		{
+			EventManager::triggerEvent(e);
+			remove(i, GRAV_BOMB);
 		}
 		else
 			i++;
 	}
 }
 
-//=======================================================
+//====================================
 // PickupManager::update(float)
-// Updates all of the active HealthPickups in the array.
-//=======================================================
+// Updates all of the active pickups.
+//====================================
 void PickupManager::update(float dt)
 {
 	int i = 0;
-	while (healthPickups[i].isActive())
+	while (healthPickups[i].isActive() && i < MAX_HEALTH_PICKUPS)
 	{
 		if (healthPickups[i].update(dt))
-			remove(i);
+			remove(i, SM_HEALTH);
+		else
+			i++;
+	}
+
+	i = 0;
+	while (gravPickups[i].isActive() && i < MAX_GRAV_PICKUPS)
+	{
+		if (gravPickups[i].update(dt))
+			remove(i, GRAV_BOMB);
 		else
 			i++;
 	}
@@ -175,9 +223,13 @@ void PickupManager::update(float dt)
 //===================================================
 void PickupManager::clear()
 {
-	for (int i = 0; i < index; i++)
+	for (int i = 0; i < hpInd; i++)
 		healthPickups[i].deactivate();
-	index = 0;
+	hpInd = 0;
+
+	for (int i = 0; i < gpInd; i++)
+		gravPickups[i].deactivate();
+	gpInd = 0;
 }
 
 //===================================================================
@@ -185,31 +237,46 @@ void PickupManager::clear()
 // Draws all of the active HealthPickups in the array to the window.
 //===================================================================
 void PickupManager::draw(sf::RenderWindow& window)
-{
-	int i = 0;
-	while (healthPickups[i].isActive())
-		healthPickups[i++].draw(window);
+{	
+	for (int i = 0; i < hpInd; i++)
+		healthPickups[i].draw(window);
+
+	for (int i = 0; i < gpInd; i++)
+		gravPickups[i].draw(window);
 }
 
 //============================================================================
-// PickupManager::remove(int)
+// PickupManager::remove(int, int)
 // Helper method that "removes" the pickup at the given index.  The object is
 // not actually removed from the array but it is removed from action as it is
 // deactivated and moved to a higher index in the array to allow all active
 // pickups to be at lower indices, thereby maintaining a semi-sorted order.
 //============================================================================
-void PickupManager::remove(int ind)
+void PickupManager::remove(int ind, int type)
 {
-    healthPickups[ind].deactivate();
-    int j = 9;
+    //healthPickups[ind].deactivate();
+    int j;
 
-    // Maintain "sorted" order, i.e. all active pickups are before inactive ones
-	// Find the last active pickup in the array and swap places with the one being
-	// deactivated
-    while (j > ind && !healthPickups[j].isActive())
-		j--;
-	healthPickups[ind].swap(healthPickups[j]);
-
-	// Decrement the count of active pickups
-	index--;
+	switch (type)
+	{
+	case SM_HEALTH:
+	case LG_HEALTH:
+		j = MAX_HEALTH_PICKUPS - 1;
+		while (j > ind && !healthPickups[j].isActive())
+			j--;
+		healthPickups[ind].copy(healthPickups[j]);
+		healthPickups[j].deactivate();
+		hpInd--;
+		break;
+	case GRAV_BOMB:
+		j = MAX_GRAV_PICKUPS - 1;
+		while (j > ind && !gravPickups[j].isActive())
+			j--;
+		gravPickups[ind].copy(gravPickups[j]);
+		gravPickups[j].deactivate();
+		gpInd--;
+		break;
+	default:
+		break;
+	}
 }

@@ -36,6 +36,7 @@ public:
 	bool collidesWith(Entity *other, sf::FloatRect& overlap) const;
 
 protected:
+	sf::Vector2i imgDim;
 	sf::Texture *texture;
 	sf::Sprite sprite;
 	sf::FloatRect hitbox;

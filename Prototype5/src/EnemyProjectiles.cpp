@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "EventManager.h"
 #include "Constants.h"
-	
+#include <fstream>
 void EPScrollHandler::handleEvent(Event::Data e)
 {
 	if (e.type == Event::SCROLL)

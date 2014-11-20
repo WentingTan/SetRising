@@ -45,7 +45,8 @@ namespace Event
 	const int INITIAL_ENEMY_SPAWN = 12;
 	const int GRAV_BOMB_IMPLODE = 13;
 	const int RESET_GRAV_BOMB = 14;
-	const int NUM_TYPES = 15;
+	const int GRAV_PICKUP = 15;
+	const int NUM_TYPES = 16;
 
 	typedef struct DataStruct
 	{
@@ -54,9 +55,6 @@ namespace Event
 		union
 		{
 			int enemyType;
-			int weaponType;
-			int damage;
-			int health;
 			int entrance;
 		};
 
@@ -75,8 +73,16 @@ namespace Event
 		union
 		{
 			float dir;
-			int reposition;
+			float health;
+			float damage;
 		};
+
+		union
+		{
+			int reposition;
+			int weaponType;
+		};
+		
 
 		void *map;
 

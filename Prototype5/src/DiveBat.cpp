@@ -8,9 +8,10 @@
 #include "EventManager.h"
 #include "Constants.h"
 #include <fstream>
+#include <math.h>
 
 DiveBat::DiveBat():
-	BatEnemy()
+	Bat(E_DIVE_BAT)
 {
 	// Do nothing
 }
@@ -23,28 +24,35 @@ DiveBat::~DiveBat()
 
 bool DiveBat::update(float dt, sf::Vector2f pPos)
 {
-	if (frozen)
+	if (inGravField)
+	{
+		animate(dt);
+		return updateGravity(dt);
+	}
+	else if (frozen)
 		updateFreeze(dt);
 	else
 	{
 		animate(dt);
 
 		if (dive)
-			move(sf::Vector2f(diveDir.x * BAT_SPEED * dt, diveDir.y * BAT_SPEED * dt));
+			move(sf::Vector2f(diveDir.x * speed * dt, diveDir.y * speed * dt));
 		else
 		{
-			move(sf::Vector2f(dir * BAT_SPEED * dt, 0.0f));
+			move(sf::Vector2f(dir * speed * dt, 0.0f));
 
 			sf::Vector2f dist = pPos - sprite.getPosition();
 			if (dist.x < DB_TRIGGER_DIST && dist.x > -DB_TRIGGER_DIST)
 			{
 				// Normalize and set the dive direction
-				diveDir = dist / sqrt(dist.x * dist.x + dist.y *dist.y);
+				float len = sqrt(dist.x * dist.x + dist.y *dist.y);
+				diveDir.x = dist.x / len;
+				diveDir.y = dist.y / len;
 				dive = true;
 			}
 		}
 
-		if (doFlameDamage)
+		if (onFire)
 			return updateFlame(dt);
 	}
 	return false;
@@ -53,7 +61,7 @@ bool DiveBat::update(float dt, sf::Vector2f pPos)
 
 void DiveBat::activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos)
 {
-	// Do activation steps common to both types of bat enemies
+	// Do activation steps common to all types of enemies
 	commonActivate(pos, tile, playerPos);
 
 	dive = false;
@@ -72,7 +80,7 @@ void DiveBat::copy(DiveBat& e)
 	animTimer = e.animTimer;
 	frozen = e.frozen;
 	freezeTimer = e.freezeTimer;
-	doFlameDamage = e.doFlameDamage;
+	onFire = e.onFire;
 	flameTimer = e.flameTimer;
 	dive = e.dive;
 	diveDir = e.diveDir;

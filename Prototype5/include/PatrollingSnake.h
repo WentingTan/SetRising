@@ -5,23 +5,23 @@
 #ifndef _PATROLLING_SNAKE_H_
 #define _PATROLLING_SNAKE_H_
 
-#include "SnakeEnemy.h"
+#include "Snake.h"
 
 // Forward declarations
 class TileMap;
 
-class PatrollingSnake : public SnakeEnemy
+class PatrollingSnake : public Snake
 {
 public:
 	// Constructor
 	PatrollingSnake();
 	// Destructor
-	~PatrollingSnake();
+	virtual ~PatrollingSnake();
 
 	void activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos);
 	bool update(float dt, TileMap *map);
     void copy(PatrollingSnake& e);
-	void move(float x);
+	//void move(float x);
 
 protected:
 	float maxPatrolDist;

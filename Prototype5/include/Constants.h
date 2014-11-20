@@ -26,6 +26,24 @@ const int MAINTAIN_X = 0;
 const int MAINTAIN_Y = 1;
 const int CENTER_TILE = 2;
 
+// Pickup Constants
+const float TIME_TILL_FADE = 3.0f;
+const float FADE_TIME = 1.5f;
+const float FD_ALPHA_HI = 255.0f;
+const float FD_ALPHA_LO = 100.0f;
+const float FD_CYCLE = 0.1f;
+// Pickup types
+const int SM_HEALTH = 0;
+const int LG_HEALTH = 1;
+const int GRAV_BOMB = 2;
+
+const float LG_HEALTH_VAL = 7.5f;
+const float SM_HEALTH_VAL = 3.0f;
+
+const int MAX_HEALTH_PICKUPS = 8;
+const int MAX_GRAV_PICKUPS = 8;
+
+
 // Player Weapon Types
 const int W_LASER = 0;
 const int W_FREEZE_RAY = 1;
@@ -42,7 +60,7 @@ const float GB_MAX_SCALE = 0.75f;
 const float BH_EXPAND_TIME = 0.25f;
 const float BH_MIN_SCALE = 0.1f;
 const float BH_MAX_SCALE = 2.5f;
-const float GRAV_CONST = 10000.0f;
+const float GRAV_CONST = 5000.0f;
 
 // FLamethrower Animation
 const int FLAME_FRAMES = 3;
@@ -77,6 +95,10 @@ const int E_PATROLLING_SNAKE = 1;
 const int E_STATIONARY_SNAKE = 2;
 const int E_WAIT_BAT = 3;
 const int E_DIVE_BAT = 4;
+
+
+const char SNAKE_FILE[] = "snake.txt";
+const char BAT_FILE[] = "bat.txt";
 
 const float SNAKE_SPEED = 125.0f;
 const float SNAKE_HEALTH = 35.0f;
