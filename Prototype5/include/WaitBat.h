@@ -5,9 +5,9 @@
 #ifndef _WAIT_BAT_H_
 #define _WAIT_BAT_H_
 
-#include "BatEnemy.h"
+#include "Bat.h"
 
-class WaitBat : public BatEnemy
+class WaitBat : public Bat
 {
 public:
 	// Constructor

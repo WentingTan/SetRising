@@ -133,7 +133,7 @@ void PlayerProjectiles::checkCollisions(EnemyManager *enemies)
 	int i = 0;
 	while (lasers[i].isActive() && i < MAX_LASERS)
 		//if (enemies->checkCollisions(&lasers[i]))
-		if (enemies->checkCollisions((Entity*)&lasers[i], W_LASER))
+		if (enemies->checkCollisions(&lasers[i]))
             remove(i, W_LASER);
 		else
             i++;
@@ -141,14 +141,14 @@ void PlayerProjectiles::checkCollisions(EnemyManager *enemies)
 	i = 0;
 	while (freezeRays[i].isActive() && i < MAX_FREEZE_RAYS)
 		//if (enemies->checkCollisions(&freezeRays[i]))
-		if (enemies->checkCollisions((Entity*)&freezeRays[i], W_FREEZE_RAY))
+		if (enemies->checkCollisions(&freezeRays[i]))
             remove(i, W_FREEZE_RAY);
 		else
             i++;
 
 	if (flame->isActive())
 		//enemies->checkCollisions(flame);
-		enemies->checkCollisions((Entity*)flame, W_FLAMETHROWER);
+		enemies->checkCollisions(flame);
 }
 
 void PlayerProjectiles::clear()

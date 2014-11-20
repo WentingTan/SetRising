@@ -10,6 +10,7 @@
 #include "EventHandler.h"
 
 // Forward Declarations
+class GravPickup;
 class Player;
 class PickupManager;
 
@@ -64,23 +65,25 @@ public:
 	~PickupManager();
 
 	// Methods
-	void init(sf::Texture *t);
+	void init(sf::Texture *hp, sf::Texture *gp);
 	void checkCollisions(Player *player);
 	void scroll(sf::Vector2f ds);
-	void spawn(sf::Vector2f pos, int size, sf::Vector2i tile);
+	void spawn(sf::Vector2f pos, int type);
 	void update(float dt);
 	void clear();
 	void draw(sf::RenderWindow& window);
 
 private:
 	HealthPickup *healthPickups;
-	int index;
+	GravPickup *gravPickups;
+	int hpInd;
+	int gpInd;
 	EventHandler *scrollHandler;
 	EventHandler *eDeathHandler;
 	EventHandler *transitionHandler;
 
 	// Helper
-	void remove(int ind);
+	void remove(int ind, int type);
 };
 
 #endif

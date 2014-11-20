@@ -7,12 +7,12 @@
 #include "Event.h"
 #include "EventManager.h"
 #include "Constants.h"
-
+#include <fstream>
 
 StationarySnake::StationarySnake():
-	SnakeEnemy()
+	Snake(E_STATIONARY_SNAKE)
 {
-	// Do nothing
+	speed = 0.0f;
 }
 
 StationarySnake::~StationarySnake()
@@ -53,7 +53,7 @@ bool StationarySnake::update(float dt, sf::Vector2f pPos)
 		dir = sprite.getPosition().x - pPos.x > 0.0f ? D_LEFT : D_RIGHT;
 		sprite.setScale(dir, 1.0f);
 
-		if (doFlameDamage)
+		if (onFire)
 			return updateFlame(dt);
 	}
 	return false;
@@ -71,8 +71,9 @@ bool StationarySnake::update(float dt, sf::Vector2f pPos)
 void StationarySnake::activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos)
 {
 	// Do activation steps common to both types of snake enemies
-	commonActivate(pos, tile, playerPos);
+	Snake::activate(pos, tile, playerPos);
 
+	shootTimer = 0.0f;
 	shots = 0;
 	nextShootTime = getNextShootTime(SS_SHOOT_TIME_LO, SS_SHOOT_TIME_HI);
 }
@@ -89,7 +90,7 @@ void StationarySnake::copy(StationarySnake& e)
 	frame = e.frame;
 	animTimer = e.animTimer;
 	frozen = e.frozen;
-	doFlameDamage = e.doFlameDamage;
+	onFire = e.onFire;
 	flameTimer = e.flameTimer;
 	freezeTimer = e.freezeTimer;
 	shootTimer = e.shootTimer;

@@ -11,8 +11,9 @@
 
 
 PatrollingSnake::PatrollingSnake():
-	SnakeEnemy()
+	Snake(E_PATROLLING_SNAKE)
 {
+	speed = SNAKE_SPEED;
 	// Set the maximum patrol distance to a third of the screen width
 	maxPatrolDist = 0.333f * SCREEN_WIDTH;
 }
@@ -24,8 +25,8 @@ PatrollingSnake::~PatrollingSnake()
 
 void PatrollingSnake::updatePatrol(float dt, TileMap *map)
 {
-	move(dir * SNAKE_SPEED * dt);
-	patrolDist += SNAKE_SPEED * dt;
+	move(sf::Vector2f(dir * speed * dt, 0.0f));
+	patrolDist += speed * dt;
 
 	if (!checkFloorEdge(map) || patrolDist >= maxPatrolDist)
 	{
@@ -35,6 +36,7 @@ void PatrollingSnake::updatePatrol(float dt, TileMap *map)
 	}
 }
 
+// returns true if the patrolling snake has been killed
 bool PatrollingSnake::update(float dt, TileMap *map)
 {
 	if (inGravField)
@@ -50,6 +52,9 @@ bool PatrollingSnake::update(float dt, TileMap *map)
 		updatePatrol(dt, map);
 
 		shootTimer += dt;
+		//std::ofstream log("log.txt", std::ios::app);
+		//log << "Patrolling Snake update: shootTmer = " << shootTimer << "\n";
+			//log.close();
 		if (shootTimer > nextShootTime)
 		{
 			shoot();
@@ -57,21 +62,11 @@ bool PatrollingSnake::update(float dt, TileMap *map)
 			nextShootTime = getNextShootTime(PS_SHOOT_TIME_LO, PS_SHOOT_TIME_HI);
 		}
 
-		if (doFlameDamage)
+		if (onFire)
 			return updateFlame(dt);
 	}
 
 	return false;
-}
-
-//====================================================================================
-// PatrollingSnake::move(float)
-// Moves the patrolling snake in the x direction by moving its sprite and its hitbox.
-//====================================================================================
-void PatrollingSnake::move(float x)
-{
-	sprite.move(x, 0.0f);
-	hitbox.left += x;
 }
 
 //=================================================================================
@@ -84,8 +79,9 @@ void PatrollingSnake::move(float x)
 void PatrollingSnake::activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos)
 {
 	// Do activation steps common to both types of snake enemies
-	commonActivate(pos, tile, playerPos);
+	Snake::activate(pos, tile, playerPos);
 
+	shootTimer = 0.0f;
 	patrolDist = 0.0f;
 	nextShootTime = getNextShootTime(0.8f * PS_SHOOT_TIME_LO, 0.8f * PS_SHOOT_TIME_HI);
 }
@@ -107,7 +103,7 @@ void PatrollingSnake::copy(PatrollingSnake& e)
 	nextShootTime = e.nextShootTime;
 	patrolDist = e.patrolDist;
 	flameTimer = e.flameTimer;
-	doFlameDamage = e.doFlameDamage;
+	onFire = e.onFire;
 	inGravField = e.inGravField;
 	distToBH = e.distToBH;
 	dirToBH = e.dirToBH;

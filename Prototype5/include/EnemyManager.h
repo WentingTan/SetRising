@@ -122,7 +122,7 @@ public:
 
 	void setPlayerPosition(sf::Vector2f pPos);
 
-	bool checkCollisions(Entity *weapon, int wType);
+	//bool checkCollisions(Entity *weapon, int wType);
 	void checkCollisions(Blackhole *bh);
 	bool checkCollisions(Laser *laser);
 	bool checkCollisions(FreezeRay *fRay);

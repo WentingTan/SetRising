@@ -10,7 +10,7 @@
 
 
 WaitBat::WaitBat():
-	BatEnemy()
+	Bat(E_WAIT_BAT)
 {
 	// Do nothing
 }
@@ -23,14 +23,19 @@ WaitBat::~WaitBat()
 
 bool WaitBat::update(float dt, sf::Vector2f pPos)
 {
-	if (frozen)
+	if (inGravField)
+	{
+		animate(dt);
+		return updateGravity(dt);
+	}
+	else if (frozen)
 		updateFreeze(dt);
 	else
 	{
 		animate(dt);
 
 		if (go)
-			move(sf::Vector2f(dir * BAT_SPEED * dt, 0.0f));
+			move(sf::Vector2f(dir * speed * dt, 0.0f));
 		else
 		{
 			float dist = sprite.getPosition().y - pPos.y;
@@ -38,7 +43,7 @@ bool WaitBat::update(float dt, sf::Vector2f pPos)
 				go = true;
 		}
 
-		if (doFlameDamage)
+		if (onFire)
 			return updateFlame(dt);
 	}
 	return false;
@@ -47,7 +52,7 @@ bool WaitBat::update(float dt, sf::Vector2f pPos)
 
 void WaitBat::activate(sf::Vector2f pos, sf::Vector2i tile, sf::Vector2f playerPos)
 {
-	// Do activation steps common to both types of bat enemies
+	// Do activation steps common to all types of enemies
 	commonActivate(pos, tile, playerPos);
 
 	go = false;
@@ -66,7 +71,7 @@ void WaitBat::copy(WaitBat& e)
 	animTimer = e.animTimer;
 	frozen = e.frozen;
 	freezeTimer = e.freezeTimer;
-	doFlameDamage = e.doFlameDamage;
+	onFire = e.onFire;
 	flameTimer = e.flameTimer;
 	go = e.go;
 }
