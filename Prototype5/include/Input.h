@@ -20,10 +20,14 @@ namespace InputNS
 		SEL_LASER = 6,
 		SEL_FREEZE = 7,
 		SEL_FLAME = 8,
-		SEL_GRAV = 9
+		SEL_GRAV = 9,
+		NEWGAME = 10,
+		QUIT = 11,
+		PAUSE = 12,
+		CONTINUE = 13
 	};
 
-	const int NUM_BUTTONS = 10;
+	const int NUM_BUTTONS = 14;
 };
 
 class Input
