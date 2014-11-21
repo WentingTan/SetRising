@@ -10,6 +10,8 @@
 #include "Constants.h"
 
 class GameState;
+class MainMenuState;
+
 
 const char GAME_NAME[] = "Platform Demo 2";
 const int MAX_STATES = 8;
@@ -72,6 +74,9 @@ private:
 	GameState *states[MAX_STATES];
 	int n;
 	bool hasFocus;
+	bool isMenu;
+	bool isPaused;
+
 	
 	// Input
 	Input *input;

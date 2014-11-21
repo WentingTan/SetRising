@@ -5,6 +5,8 @@
 #include "Game.h"
 #include "GameState.h"
 #include "PlayState.h"
+#include "MainMenuState.h"
+#include "PauseMenuState.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -58,9 +60,11 @@ void Game::init()
 	srand(time(NULL));
 
 	// Push the play state onto the stack and initialize it
-	states[n] = new PlayState(this);
-	n++;
-	states[n-1]->init();
+	//Push the Main menu state onto the stack and initializes it
+	states[n] = new MainMenuState(this);
+	states[n]->init();
+	isMenu = true;
+	isPaused = false;
 }
 
 
@@ -91,20 +95,75 @@ void Game::run()
 
 		if (hasFocus)
 		{
-			// Get input
-			input->getInput();
+			//Case to handle MainMenuState
+			if (isMenu)
+			{
+				//Display menu Screen
+				window.clear();
+				states[n]->draw(window);
+				window.display();
 
-			// Handle Input for the active state only
-			states[n-1]->handleInput(input);
+				// Get input from menu
+				input->getInput();
 
-			// Update the active state only
-			states[n-1]->update(dt.asSeconds());
+				if (input->wasPressed(InputNS::NEWGAME)){
 
-			// Render all states in order from bottom to top
-			window.clear();
-			for (int i = 0; i < n; i++)
-				states[i]->draw(window);
-			window.display();
+					//Clear the MainMenuState
+					window.clear();
+
+					//Replace MainMenuState with PlayState 
+					states[n] = new PlayState(this);
+					n++;
+					states[n - 1]->init();
+					isMenu = false;
+
+				}
+				else if (input->wasPressed(InputNS::QUIT)){
+					window.close();
+				}
+
+			}
+			else
+			{
+				// Get input
+				input->getInput();
+
+				//Not already paused
+				if (!(isPaused) && input->wasPressed(InputNS::PAUSE)){
+					states[n] = new PauseMenuState(this);
+					n++;
+					states[n - 1]->init();
+					isPaused = true;
+					states[n - 1]->draw(window);
+					window.display();
+
+				}
+				//Already Paused
+				else if (isPaused){
+
+					if (input->wasPressed(InputNS::CONTINUE)){
+						isPaused = false;
+						n--;
+					}
+					else if (input->wasPressed(InputNS::QUIT)){
+						window.close();
+					}
+
+				}
+				else{
+					// Handle Input for the active state only
+					states[n - 1]->handleInput(input);
+
+					// Update the active state only
+					states[n - 1]->update(dt.asSeconds());
+
+					// Render all states in order from bottom to top
+					window.clear();
+					for (int i = 0; i < n; i++)
+						states[i]->draw(window);
+					window.display();
+				}
+			}
 		}
     }
 }

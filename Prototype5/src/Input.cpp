@@ -174,6 +174,64 @@ void Input::getInput()
 		current[button] = false;
 		pressed[button] = false;
 	}
+
+	// Handle START key (In menu state)
+	button = (int)InputNS::NEWGAME;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
+	{
+		pressed[button] = !current[button];
+		current[button] = true;
+		released[button] = false;
+	}
+	else
+	{
+		released[button] = current[button];
+		current[button] = false;
+		pressed[button] = false;
+	}
+	// Handle Pause key
+	button = (int)InputNS::PAUSE;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+	{
+		pressed[button] = !current[button];
+		current[button] = true;
+		released[button] = false;
+	}
+	else
+	{
+		released[button] = current[button];
+		current[button] = false;
+		pressed[button] = false;
+	}
+
+	// Handle Quit key (In menu state & pause state)
+	button = (int)InputNS::QUIT;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	{
+		pressed[button] = !current[button];
+		current[button] = true;
+		released[button] = false;
+	}
+	else
+	{
+		released[button] = current[button];
+		current[button] = false;
+		pressed[button] = false;
+	}
+	// Handle Continue key (In pase state)
+	button = (int)InputNS::CONTINUE;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+	{
+		pressed[button] = !current[button];
+		current[button] = true;
+		released[button] = false;
+	}
+	else
+	{
+		released[button] = current[button];
+		current[button] = false;
+		pressed[button] = false;
+	}
 }
 
 bool Input::isPressed(InputNS::button b)
