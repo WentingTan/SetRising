@@ -39,7 +39,6 @@ std::istream& operator>>(std::istream& stream, Tile& tile)
 	stream >> tile.hitbox.width;
 	stream >> tile.hitbox.height;
 	
-	stream >> tile.entrance;
 	stream >> tile.exit;
 
 	// Read in enemy to spawn
@@ -92,7 +91,6 @@ void Tile::setDefault()
 	tileNum = -1;
 	type = TileNS::BACKGROUND;
 	solid = false;
-	entrance = -1;
 	exit = -1;
 	enemy = E_NONE;
 	hitbox.top = 0.0f;
