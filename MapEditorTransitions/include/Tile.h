@@ -40,7 +40,6 @@ public:
 	sf::FloatRect hitbox;
 	bool solid;
 	TileNS::Type type;
-	int entrance;
 	int exit;
 	int enemy;
 	short tileNum;

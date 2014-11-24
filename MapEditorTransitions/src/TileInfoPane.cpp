@@ -8,7 +8,7 @@
 TileInfoPane::TileInfoPane(const sf::Font& f):
 	font(f),
 	tileType(f, 5),
-	enemySpawn(f, 6),
+	enemySpawn(f, 9),
 	top(f, "Top", 16, 5),
 	left(f, "Left", 16, 5),
 	width(f, "Width", 16, 5),
@@ -89,7 +89,10 @@ void TileInfoPane::init()
 	enemySpawn.setOption(std::string("Wait Bat"), 16, 3);
 	enemySpawn.setOption(std::string("Dive Bat"), 16, 4);
 	enemySpawn.setOption(std::string("Crawler"), 16, 5);
-	enemySpawn.setPosition(sf::Vector2f(815.0f, 410.0f));
+	enemySpawn.setOption(std::string("Flamethrower"), 16, 6);
+	enemySpawn.setOption(std::string("Freeze Ray"), 16, 7);
+	enemySpawn.setOption(std::string("Ice Block"), 16, 8);
+	enemySpawn.setPosition(sf::Vector2f(815.0f, 370.0f));
 
 	// Initialize the apply button
 	sf::Vector2f size;

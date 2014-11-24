@@ -10,7 +10,7 @@
 
 const float WIDTH = 15.0f;
 const sf::Color LIGHT_GRAY(sf::Color(190,190,190));
-const float SCROLL_RATE = 150.0f;
+const float SCROLL_RATE = 450.0f;
 
 class VScrollBar
 {

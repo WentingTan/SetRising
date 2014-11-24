@@ -11,7 +11,7 @@
 namespace Scroll
 {
 	const float WIDTH = 15.0f;
-	const float SPEED = 250.0f;
+	const float SPEED = 500.0f;
 
 	const sf::Color BAR(sf::Color(190, 190, 190));
 	const sf::Color OUTLINE(sf::Color(50, 50, 50));
