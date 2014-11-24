@@ -18,7 +18,7 @@ const int MAX_STATES = 8;
 
 // NOTE: Before completion, we will consolidate all textures into as few textures
 // as possible.
-const int NUM_TEXTURES = 15;
+const int NUM_TEXTURES = 16;
 const char TILE_TEXTURE[] = "tiles.png";
 const char PLAYER_TEXTURE[] = "setsprite.png";
 const char ENEMY_TEXTURE[] = "SnakeEnemy.png";
@@ -34,6 +34,7 @@ const char CAVE_BKGD_TEXTURE[] = "cave_bkgd.png";
 const char BAT_TEXTURE[] = "bat.png";
 const char BLACKHOLE_TEXTURE[] = "blackhole.png";
 const char GRAVITY_TEXTURE[] = "gravity.png";
+const char BOSS_TEXTURE[] = "metroid_boss.png";
 
 // Texture ID's
 const int TILES = 0;
@@ -51,7 +52,7 @@ const int CAVE_BKGD = 11;
 const int BAT = 12;
 const int BLACK_HOLE = 13;
 const int GRAVITY = 14;
-
+const int BOSS = 15;
 class Game
 {
 public:

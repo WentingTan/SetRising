@@ -55,6 +55,7 @@ void Game::init()
 	textures[BAT].loadFromFile(BAT_TEXTURE);
 	textures[BLACK_HOLE].loadFromFile(BLACKHOLE_TEXTURE);
 	textures[GRAVITY].loadFromFile(GRAVITY_TEXTURE);
+	textures[BOSS].loadFromFile(BOSS_TEXTURE);
 
 	// Seed the random number generator with the current time
 	srand(time(NULL));

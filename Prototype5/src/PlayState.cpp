@@ -39,7 +39,7 @@ bool PlayState::init()
 
 
 
-	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(DEATH), pGame->getTexture(BAT));
+	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(DEATH), pGame->getTexture(BAT), pGame->getTexture(BOSS));
 	eProjectiles.init(pGame->getTexture(SPIT));
 
 	world.loadFromFile("world.txt", pGame);

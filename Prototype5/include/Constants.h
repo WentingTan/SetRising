@@ -89,16 +89,19 @@ const int MAX_PATROLLING_SNAKES = 16;
 const int MAX_STATIONARY_SNAKES = 16;
 const int MAX_WAIT_BATS = 8;
 const int MAX_DIVE_BATS = 8;
-
+const int MAX_BOSS = 2;
 const int E_NONE = 0;
 const int E_PATROLLING_SNAKE = 1;
 const int E_STATIONARY_SNAKE = 2;
 const int E_WAIT_BAT = 3;
 const int E_DIVE_BAT = 4;
+const int E_BOSS = 5;
 
 
 const char SNAKE_FILE[] = "snake.txt";
 const char BAT_FILE[] = "bat.txt";
+const char BOSS_FILE[] = "boss.txt";
+
 
 const float SNAKE_SPEED = 125.0f;
 const float SNAKE_HEALTH = 35.0f;

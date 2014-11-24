@@ -73,6 +73,8 @@ EnemyManager::~EnemyManager()
 		delete [] wBats;
 	if (dBats)
 		delete [] dBats;
+	if (boss)
+		delete [] boss;
 	if (scrollHandler)
 		delete scrollHandler;
 	if (spawnHandler)
@@ -97,12 +99,13 @@ void EnemyManager::startDeathAnim(float x, float y)
 	death.setTextureRect(sf::IntRect(0,0,128,128));
 }
 
-void EnemyManager::init(sf::Texture *et, sf::Texture *dt, sf::Texture *bt)
+void EnemyManager::init(sf::Texture *et, sf::Texture *dt, sf::Texture *bt, sf::Texture *b)
 {
 	pSnakes = new PatrollingSnake[MAX_PATROLLING_SNAKES];
 	sSnakes = new StationarySnake[MAX_STATIONARY_SNAKES];
 	wBats = new WaitBat[MAX_WAIT_BATS];
 	dBats = new DiveBat[MAX_DIVE_BATS];
+	boss = new Boss[MAX_BOSS];
 
 	for (int i = 0; i < MAX_PATROLLING_SNAKES; i++)
 	{
@@ -131,6 +134,13 @@ void EnemyManager::init(sf::Texture *et, sf::Texture *dt, sf::Texture *bt)
 		dBats[i].init();
 	}
 	dbInd = 0;
+
+	for (int i = 0; i < MAX_BOSS; i++)
+	{
+		boss[i].setTexture(b);
+		boss[i].init();
+	}
+	bInd = 0;
 
 	death.setTexture(*dt);
 	deathAnim = false;
@@ -177,6 +187,9 @@ void EnemyManager::spawn(sf::Vector2f pos, sf::Vector2i tile, int type)
 		dBats[dbInd].activate(pos, tile, playerPos);
 		dbInd++;
 		break;
+	case E_BOSS:
+		boss[bInd].activate(pos, tile, playerPos);
+		bInd++;
 	default:
 		break;
 	}
@@ -199,6 +212,9 @@ void EnemyManager::scroll(sf::Vector2f ds)
 	// Scroll active dive bats
 	for (int i = 0; i < dbInd; i++)
 		dBats[i].scroll(ds);
+
+	for (int i = 0; i < bInd; i++)
+		boss[0].scroll(ds);
 
 	if (deathAnim)
 		death.move(-1.0f * ds);
@@ -244,6 +260,13 @@ bool EnemyManager::checkCollisions(Laser *laser)
 			return true;
 	}
 
+	for (int i = 0; i < bInd; i++)
+	{
+		if (boss[i].checkCollision(laser, collided))
+			remove(i, E_BOSS);
+		if (collided)
+			return true;
+	}
     return false;
 }
 
@@ -307,6 +330,12 @@ void EnemyManager::checkCollisions(Flame *flame)
 	// Check for collisions with active dive bats
 	for (int i = 0; i < dbInd; i++)
 		dBats[i].checkCollision(flame);
+
+	/*
+	//CHECK BOSS COLLISION
+	for (int i = 0; i < bInd; i++)
+		boss[i].checkCollision(flame);
+		*/
 }
 
 void EnemyManager::checkCollisions(Blackhole *bh)
@@ -443,6 +472,19 @@ void EnemyManager::checkCollisions(Player *player)
 				return;
 			}
 	}
+
+
+	//BOSS COLLISION
+	for (int i = 0; i < bInd; i++)
+	{
+		if (!boss[i].isFrozen() && !boss[i].isInGravField())
+			if (boss[i].checkCollision(player, overlap))
+			{
+			e.damage = BAT_DAMAGE;
+			EventManager::triggerEvent(e);
+			return;
+			}
+	}
 }
 
 //===============================================
@@ -491,6 +533,15 @@ void EnemyManager::update(float dt)
 		else
 			i++;
 
+	
+	i = 0;
+	while (boss[0].isActive() && i < MAX_BOSS)
+		if (boss[0].update(dt, playerPos))
+			remove(0, E_BOSS);
+		else
+			i++;
+			
+
 
 	if (deathAnim)
 	{
@@ -530,6 +581,9 @@ void EnemyManager::draw(sf::RenderWindow& window)
 	// Draw active dive bats to the screen
 	for (int i = 0; i < dbInd; i++)
 		dBats[i].draw(window);
+
+	for (int i = 0; i < bInd; i++)
+		boss[i].draw(window);
 
 	if (deathAnim)
 		window.draw(death);
@@ -583,6 +637,15 @@ void EnemyManager::clear()
 		EventManager::triggerEvent(e);
 	}
 	dbInd = 0;
+
+	e.enemyType = E_BOSS;
+	for (int i = 0; i < bInd; i++)
+	{
+		boss[i].deactivate();
+		e.tile = boss[i].getSpawnTile();
+		EventManager::triggerEvent(e);
+	}
+	bInd = 0;
 }
 
 
@@ -623,6 +686,14 @@ void EnemyManager::remove(int ind, int type)
 		dBats[ind].copy(dBats[j]);
 		dBats[j].deactivate();
 		dbInd--;
+		break;
+	case E_BOSS:
+		j = MAX_BOSS - 1;
+		while (j > ind && !boss[j].isActive())
+			j--;
+		boss[ind].copy(boss[j]);
+		boss[j].deactivate();
+		boss--;
 		break;
 	default:
 		break;
