@@ -10,6 +10,7 @@
 #include "StationarySnake.h"
 #include "WaitBat.h"
 #include "DiveBat.h"
+#include "Boss.h"
 #include "Crawler.h"
 #include "EventHandler.h"
 
@@ -29,7 +30,7 @@ class EMScrollHandler : public EventHandler
 {
 public:
 	// Constructor
-	explicit EMScrollHandler(EnemyManager *em): pEM(em) {}
+	explicit EMScrollHandler(EnemyManager *em) : pEM(em) {}
 	// Methods
 	virtual void handleEvent(Event::Data e);
 private:
@@ -43,7 +44,7 @@ class EMSpawnHandler : public EventHandler
 {
 public:
 	// Constructor
-	explicit EMSpawnHandler(EnemyManager *em): pEM(em) {}
+	explicit EMSpawnHandler(EnemyManager *em) : pEM(em) {}
 	// Methods
 	virtual void handleEvent(Event::Data e);
 private:
@@ -57,7 +58,7 @@ class EMTransitionHandler : public EventHandler
 {
 public:
 	// Constructor
-	explicit EMTransitionHandler(EnemyManager *em): pEM(em) {}
+	explicit EMTransitionHandler(EnemyManager *em) : pEM(em) {}
 	// Methods
 	virtual void handleEvent(Event::Data e);
 private:
@@ -71,7 +72,7 @@ class EMNewMapHandler : public EventHandler
 {
 public:
 	// Constructor
-	explicit EMNewMapHandler(EnemyManager *em): pEM(em) {}
+	explicit EMNewMapHandler(EnemyManager *em) : pEM(em) {}
 	// Methods
 	virtual void handleEvent(Event::Data e);
 private:
@@ -85,7 +86,7 @@ class EMPlayerMovedHandler : public EventHandler
 {
 public:
 	// Constructor
-	explicit EMPlayerMovedHandler(EnemyManager *em): pEM(em) {}
+	explicit EMPlayerMovedHandler(EnemyManager *em) : pEM(em) {}
 	// Methods
 	virtual void handleEvent(Event::Data e);
 private:
@@ -101,7 +102,7 @@ public:
 	// Destructor
 	~EnemyManager();
 
-	void init(sf::Texture *et, sf::Texture *bt, sf::Texture *ct);
+	void init(sf::Texture *et, sf::Texture *bt, sf::Texture *ct, sf::Texture *b);
 	void setTileMap(TileMap *tm);
 
 	bool checkFrozenCollisions(Player *p, sf::FloatRect& intersection);
@@ -135,6 +136,8 @@ private:
 	int wbInd;
 	int dbInd;
 	int crInd;
+	Boss *boss;
+	int bInd;
 	TileMap *map;
 
 	sf::Vector2f playerPos;

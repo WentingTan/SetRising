@@ -206,7 +206,7 @@ void Audio::init()
 	sounds = new sf::Sound[NUM_SOUNDS];
 
 	tracks = new sf::Music[NUM_TRACKS];
-
+	current = 0;
 	playSong(TITLE_MUSIC);
 
 	sBuffers[PLAYER_HIT].loadFromFile(PLAYER_HIT_SB);

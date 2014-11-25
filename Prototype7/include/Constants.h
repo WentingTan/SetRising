@@ -158,12 +158,14 @@ const int MAX_STATIONARY_SNAKES = 16;
 const int MAX_WAIT_BATS = 8;
 const int MAX_DIVE_BATS = 8;
 const int MAX_CRAWLERS = 8;
+const int MAX_BOSS = 2;
 
 const int E_NONE = 0;
 const int E_PATROLLING_SNAKE = 1;
 const int E_STATIONARY_SNAKE = 2;
 const int E_WAIT_BAT = 3;
 const int E_DIVE_BAT = 4;
+const int E_BOSS = 9;
 const int E_CRAWLER = 5;
 
 const char SNAKE_FILE[] = "snake.txt";
@@ -183,6 +185,11 @@ const float CRAWLER_DAMAGE = 5.0f;
 
 const float PS_SHOOT_TIME_LO = 2.0f;
 const float PS_SHOOT_TIME_HI = 2.5f;
+
+const int BOSS_NUM_SHOTS_IN_BURST = 6;
+const float BOSS_BURST_TIME = 0.1f;
+const float BOSS_HEALTH = 100.0f;
+
 
 const int SS_NUM_SHOTS_IN_BURST = 3;
 const float SS_BURST_TIME = 0.75f;
