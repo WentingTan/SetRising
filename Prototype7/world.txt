@@ -3,19 +3,22 @@
 11
 28
 map0.txt 0 0 1
-map1.txt 0 0 1
+map1.txt 0 1 0
 map2.txt 0 1 0
 map3.txt 0 1 0
 map4.txt 0 1 0
-map5.txt 0 1 0
+map5.txt 0 0 1
 map6.txt 0 0 1
 map7.txt 0 0 1
 map8.txt 0 0 1
 map9.txt 0 0 1
-map10.txt	0 0 1
+blank22x17.txt	0 0 1
 blank22x17.txt	0 0 1
 map12.txt 0 0 1	
 blank22x17.txt	0 0 1
+map14.txt	0 0 1
+map15.txt	0 1 0
+map16.txt	0 0 1
 blank22x17.txt	0 0 1
 blank22x17.txt	0 0 1
 blank22x17.txt	0 0 1
@@ -25,10 +28,7 @@ blank22x17.txt	0 0 1
 blank22x17.txt	0 0 1
 blank22x17.txt	0 0 1
 blank22x17.txt	0 0 1
-blank22x17.txt	0 0 1
-blank22x17.txt	0 0 1
-blank22x17.txt	0 0 1
-map26.txt 0 0 1
+map26.txt 0 1 0
 map27.txt 0 1 0
 58
 0 8 1 1 1 2		
@@ -52,7 +52,7 @@ map27.txt 0 1 0
 9 7 0 1 1 0		
 9 61 14 41 1 1		
 10 21 14 1 1 1		
-10 21 44 1 31 1		
+10 21 44 1 31 1	
 22 0 0 0 0 0		
 26 0 5 1 1 1		
 26 21 44 1 31 1	
@@ -62,12 +62,12 @@ map27.txt 0 1 0
 28 0 0 0 0 0		
 29 0 0 0 0 0		
 30 0 0 0 0 0		
-31 0 0 0 0 0		
-32 0 0 0 0 0		
-33 0 0 0 0 0		
-34 0 0 0 0 0		
-35 0 0 0 0 0		
-36 0 0 0 0 0		
+14 0 13 1 1 1		
+15 17 46 1 31 0		
+15 17 46 1 31 0	
+15 21 5 1 1 1		
+16 0 14 1 1 1		
+16 60 4 41 1 1		
 37 0 0 0 0 0		
 38 0 0 0 0 0		
 39 0 0 0 0 0		
