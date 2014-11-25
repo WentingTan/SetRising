@@ -13,7 +13,7 @@ const int TILE_SIZE = 32;
 // Energy Bar
 const float EB_OFFSET = 4.0f;
 
-const float MAX_HEALTH = 80.0f;
+const float MAX_HEALTH = 80.0;
 const float HEALTH_POS_X = 50.0f;
 const float HEALTH_POS_Y = 50.0f;
 
