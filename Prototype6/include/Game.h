@@ -18,7 +18,7 @@ const int MAX_STATES = 8;
 
 // NOTE: Before completion, we will consolidate all textures into as few textures
 // as possible.
-const int NUM_TEXTURES = 19;
+const int NUM_TEXTURES = 20;
 const char TILE_TEXTURE[] = "tiles.png";
 const char PLAYER_TEXTURE[] = "setsprite.png";
 const char ENEMY_TEXTURE[] = "SnakeEnemy.png";
@@ -38,6 +38,7 @@ const char ENERGY_TEXTURE[] = "weapons.png";
 const char CRAWLER_TEXTURE[] = "crawler.png";
 const char SCREENS_TEXTURE[] = "screens.png";
 const char ICE_TEXTURE[] = "iceblock.png";
+const char BOSS_TEXTURE[] = "metroid_boss.png";
 
 // Texture ID's
 const int TILES = 0;
@@ -59,7 +60,7 @@ const int ENERGY = 15;
 const int CRAWLER = 16;
 const int SCREENS = 17;
 const char ICE = 18;
-
+const int BOSS = 19;
 class Game
 {
 public:

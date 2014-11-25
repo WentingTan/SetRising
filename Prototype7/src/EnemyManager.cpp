@@ -58,25 +58,28 @@ EnemyManager::EnemyManager()
 	sSnakes = NULL;
 	wBats = NULL;
 	dBats = NULL;
+	boss = NULL;
 	crawlers = NULL;
 	scrollHandler = NULL;
 	spawnHandler = NULL;
 	transitionHandler = NULL;
 	newMapHandler = NULL;
 }
-	// Destructor
+// Destructor
 EnemyManager::~EnemyManager()
 {
 	if (pSnakes)
-		delete [] pSnakes;
+		delete[] pSnakes;
 	if (sSnakes)
-		delete [] sSnakes;
+		delete[] sSnakes;
 	if (wBats)
-		delete [] wBats;
+		delete[] wBats;
 	if (dBats)
-		delete [] dBats;
+		delete[] dBats;
 	if (crawlers)
-		delete []crawlers;
+		delete[]crawlers;
+	if (boss)
+		delete[]boss;
 	if (scrollHandler)
 		delete scrollHandler;
 	if (spawnHandler)
@@ -89,13 +92,21 @@ EnemyManager::~EnemyManager()
 		delete pMovedHandler;
 }
 
-void EnemyManager::init(sf::Texture *et, sf::Texture *bt, sf::Texture *ct)
+void EnemyManager::init(sf::Texture *et, sf::Texture *bt, sf::Texture *ct, sf::Texture *b)
 {
 	pSnakes = new PatrollingSnake[MAX_PATROLLING_SNAKES];
 	sSnakes = new StationarySnake[MAX_STATIONARY_SNAKES];
 	wBats = new WaitBat[MAX_WAIT_BATS];
 	dBats = new DiveBat[MAX_DIVE_BATS];
 	crawlers = new Crawler[MAX_CRAWLERS];
+	boss = new Boss[MAX_BOSS];
+
+	for (int i = 0; i < MAX_BOSS; i++)
+	{
+		boss[i].setTexture(b);
+		boss[i].init();
+	}
+	bInd = 0;
 
 	for (int i = 0; i < MAX_PATROLLING_SNAKES; i++)
 	{
@@ -176,6 +187,10 @@ void EnemyManager::spawn(sf::Vector2f pos, sf::Vector2i tile, int type)
 		crawlers[crInd].activate(pos, tile, playerPos);
 		crInd++;
 		break;
+	case E_BOSS:
+		boss[bInd].activate(pos, tile, playerPos);
+		bInd++;
+		break;
 	default:
 		break;
 	}
@@ -203,6 +218,10 @@ void EnemyManager::scroll(sf::Vector2f ds)
 	// Scroll active crawlers
 	for (int i = 0; i < crInd; i++)
 		crawlers[i].scroll(ds);
+
+	//Boss scrolling
+	for (int i = 0; i < bInd; i++)
+		boss[i].scroll(ds);
 }
 
 bool EnemyManager::checkCollisions(Laser *laser)
@@ -254,7 +273,14 @@ bool EnemyManager::checkCollisions(Laser *laser)
 			return true;
 	}
 
-    return false;
+	for (int i = 0; i < bInd; i++)
+	{
+		if (boss[i].checkCollision(laser, collided))
+			remove(i, E_BOSS);
+		if (collided)
+			return true;
+	}
+	return false;
 }
 
 bool EnemyManager::checkCollisions(FreezeRay *fRay)
@@ -306,7 +332,7 @@ bool EnemyManager::checkCollisions(FreezeRay *fRay)
 			return true;
 	}
 
-    return false;
+	return false;
 }
 
 void EnemyManager::checkCollisions(Flame *flame)
@@ -438,8 +464,8 @@ void EnemyManager::checkCollisions(Player *player)
 		if (!pSnakes[i].isFrozen() && !pSnakes[i].isInGravField())
 			if (pSnakes[i].checkCollision(player, overlap))
 			{
-				player->damage(SNAKE_DAMAGE);
-				return;
+			player->damage(SNAKE_DAMAGE);
+			return;
 			}
 	}
 
@@ -449,8 +475,8 @@ void EnemyManager::checkCollisions(Player *player)
 		if (!sSnakes[i].isFrozen() && !sSnakes[i].isInGravField())
 			if (sSnakes[i].checkCollision(player, overlap))
 			{
-				player->damage(SNAKE_DAMAGE);
-				return;
+			player->damage(SNAKE_DAMAGE);
+			return;
 			}
 	}
 
@@ -460,8 +486,8 @@ void EnemyManager::checkCollisions(Player *player)
 		if (!wBats[i].isFrozen() && !wBats[i].isInGravField())
 			if (wBats[i].checkCollision(player, overlap))
 			{
-				player->damage(BAT_DAMAGE);
-				return;
+			player->damage(BAT_DAMAGE);
+			return;
 			}
 	}
 
@@ -471,8 +497,8 @@ void EnemyManager::checkCollisions(Player *player)
 		if (!dBats[i].isFrozen() && !dBats[i].isInGravField())
 			if (dBats[i].checkCollision(player, overlap))
 			{
-				player->damage(BAT_DAMAGE);
-				return;
+			player->damage(BAT_DAMAGE);
+			return;
 			}
 	}
 
@@ -482,8 +508,17 @@ void EnemyManager::checkCollisions(Player *player)
 		if (!crawlers[i].isFrozen() && !crawlers[i].isInGravField())
 			if (crawlers[i].checkCollision(player, overlap))
 			{
-				player->damage(CRAWLER_DAMAGE);
-				return;
+			player->damage(CRAWLER_DAMAGE);
+			return;
+			}
+	}
+	for (int i = 0; i < bInd; i++)
+	{
+		if (!boss[i].isFrozen() && !boss[i].isInGravField())
+			if (boss[i].checkCollision(player, overlap))
+			{
+			player->damage(CRAWLER_DAMAGE);
+			return;
 			}
 	}
 }
@@ -541,6 +576,12 @@ void EnemyManager::update(float dt)
 			remove(i, E_CRAWLER);
 		else
 			i++;
+	i = 0;
+	while (boss[i].isActive() && i < MAX_BOSS)
+		if (boss[i].update(dt, playerPos))
+			remove(i, E_BOSS);
+		else
+			i++;
 }
 
 void EnemyManager::draw(sf::RenderWindow& window)
@@ -564,6 +605,10 @@ void EnemyManager::draw(sf::RenderWindow& window)
 	// Draw active crawlers to the screen
 	for (int i = 0; i < crInd; i++)
 		crawlers[i].draw(window);
+
+	for (int i = 0; i < bInd; i++)
+		boss[i].draw(window);
+
 }
 
 //===========================================
@@ -596,12 +641,16 @@ void EnemyManager::clear()
 	for (int i = 0; i < crInd; i++)
 		crawlers[i].despawn();
 	crInd = 0;
+
+	for (int i = 0; i < bInd; i++)
+		boss[i].despawn();
+	bInd = 0;
 }
 
 
 void EnemyManager::remove(int ind, int type)
 {
-   int j;
+	int j;
 
 	switch (type)
 	{
@@ -644,6 +693,14 @@ void EnemyManager::remove(int ind, int type)
 		crawlers[ind].copy(crawlers[j]);
 		crawlers[j].deactivate();
 		crInd--;
+		break;
+	case E_BOSS:
+		j = MAX_BOSS - 1;
+		while (j > ind && !boss[j].isActive())
+			j--;
+		boss[ind].copy(boss[j]);
+		boss[j].deactivate();
+		bInd--;
 		break;
 	default:
 		break;

@@ -390,6 +390,7 @@ void TileMap::spawn(sf::Vector2i tile)
 	case E_STATIONARY_SNAKE:
 	case E_WAIT_BAT:
 	case E_DIVE_BAT:
+	case E_BOSS:
 	case E_CRAWLER:
 		spawnEnemy(tile);
 		break;

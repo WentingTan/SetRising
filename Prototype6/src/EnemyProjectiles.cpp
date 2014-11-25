@@ -4,6 +4,7 @@
 //==========================//
 #include "EnemyProjectiles.h"
 #include "AcidSpit.h"
+#include "BossSpit.h"
 #include "Player.h"
 #include "EventManager.h"
 #include "Constants.h"
@@ -36,6 +37,7 @@ EnemyProjectiles::EnemyProjectiles()
 	shootHandler = NULL;
 	transitionHandler = NULL;
 	acidSpits = NULL;
+	bossSpits = NULL;
 }
 // Destructor
 EnemyProjectiles::~EnemyProjectiles()
@@ -49,6 +51,8 @@ EnemyProjectiles::~EnemyProjectiles()
 
 	if (acidSpits)
 		delete [] acidSpits;
+	if (bossSpits)
+		delete[] bossSpits;
 }
 
 void EnemyProjectiles::init(sf::Texture *t)
@@ -60,6 +64,14 @@ void EnemyProjectiles::init(sf::Texture *t)
 		acidSpits[i].init();
 	}
 	asInd = 0;
+
+	bossSpits = new BossSpit[MAX_ACID_SPITS];
+	for (int i = 0; i < MAX_ACID_SPITS; i++)
+	{
+		bossSpits[i].setTexture(t);
+		bossSpits[i].init();
+	}
+	bsInd = 0;
 
 	// Register event handlers
 	scrollHandler = new EPScrollHandler(this);
@@ -80,6 +92,12 @@ void EnemyProjectiles::spawn(sf::Vector2f pos, float dir, int type)
 			return;
 		acidSpits[asInd].activate(pos, dir);
 		asInd++;
+		break;
+	case W_BOSS_SPIT:
+		if (asInd == MAX_ACID_SPITS)
+			return;
+		bossSpits[bsInd].activate(pos, dir);
+		bsInd++;
 		break;
 	default:
 		break;
@@ -102,6 +120,17 @@ void EnemyProjectiles::checkCollisions(Player *player)
 		}
 		i++;
 	}
+	i = 0;
+	while (bossSpits[i].isActive())
+	{
+		if (bossSpits[i].getHitbox().intersects(player->getHitBox()))
+		{
+			player->damage(bossSpits[i].getDamage());
+			remove(i, W_BOSS_SPIT);
+			return;
+		}
+		i++;
+	}
 }
 
 void EnemyProjectiles::clear()
@@ -110,6 +139,10 @@ void EnemyProjectiles::clear()
 	for (int i = 0; i < asInd; i++)
 		acidSpits[i].deactivate();
 	asInd = 0;
+
+	for (int i = 0; i < bsInd; i++)
+		bossSpits[i].deactivate();
+	bsInd = 0;
 }
 
 void EnemyProjectiles::scroll(sf::Vector2f ds)
@@ -118,6 +151,10 @@ void EnemyProjectiles::scroll(sf::Vector2f ds)
 	int i = 0;
 	while (acidSpits[i].isActive() && i < MAX_ACID_SPITS)
 		acidSpits[i++].scroll(ds);
+
+	i = 0;
+	while (bossSpits[i].isActive() && i < MAX_ACID_SPITS)
+		bossSpits[i++].scroll(ds);
 }
 
 void EnemyProjectiles::update(float dt)
@@ -139,6 +176,22 @@ void EnemyProjectiles::update(float dt)
             remove(i, W_ACID_SPIT);
 		else
             i++;
+	}
+
+	i = 0;
+	// Update any acid spits on screen
+	while (bossSpits[i].isActive() && i < MAX_ACID_SPITS)
+	{
+		dir = bossSpits[i].getDir();
+		bossSpits[i].move(sf::Vector2f(dir * bossSpits[i].getSpeed() * dt, 0.0f));
+
+		// If acid spit is offscreen, deactivate it
+		offScreenRight = bossSpits[i].getPosition().x > SCREEN_WIDTH;
+		offScreenLeft = bossSpits[i].getPosition().x < 0.0f - bossSpits[i].getHitbox().width;
+		if (offScreenRight || offScreenLeft)
+			remove(i, W_BOSS_SPIT);
+		else
+			i++;
 	}
 
 }
@@ -164,6 +217,14 @@ void EnemyProjectiles::remove(int ind, int type)
 		acidSpits[ind].copy(acidSpits[j]);
 		acidSpits[j].deactivate();
 		asInd--;
+		break;
+	case W_BOSS_SPIT:
+		j = MAX_ACID_SPITS - 1;
+		while (j > ind && !bossSpits[j].isActive())
+			j--;
+		bossSpits[ind].copy(bossSpits[j]);
+		bossSpits[j].deactivate();
+		bsInd--;
 		break;
 	default:
 		break;

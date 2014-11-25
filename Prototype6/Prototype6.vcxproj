@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7E892ADC-5C06-4470-B85F-7EB3B7EC0AAD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\Jinri\Pictures\SFML-2.1\include;C:\Users\Jinri\Documents\GitHub\SetRising\Prototype6\include;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\Jinri\Pictures\SFML-2.1\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-audio-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AcidSpit.cpp" />
+    <ClCompile Include="src\AlphaOscillator.cpp" />
+    <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="src\Background.cpp" />
+    <ClCompile Include="src\BarrierManager.cpp" />
+    <ClCompile Include="src\Bat.cpp" />
+    <ClCompile Include="src\Blackhole.cpp" />
+    <ClCompile Include="src\Boss.cpp" />
+    <ClCompile Include="src\BossSpit.cpp" />
+    <ClCompile Include="src\ClimbState.cpp" />
+    <ClCompile Include="src\Crawler.cpp" />
+    <ClCompile Include="src\DeathAnimation.cpp" />
+    <ClCompile Include="src\DeathAnimator.cpp" />
+    <ClCompile Include="src\DiveBat.cpp" />
+    <ClCompile Include="src\Enemy.cpp" />
+    <ClCompile Include="src\EnemyManager.cpp" />
+    <ClCompile Include="src\EnemyProjectiles.cpp" />
+    <ClCompile Include="src\EnergyBar.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\EventManager.cpp" />
+    <ClCompile Include="src\FallState.cpp" />
+    <ClCompile Include="src\Flame.cpp" />
+    <ClCompile Include="src\FreezeRay.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\GameOverState.cpp" />
+    <ClCompile Include="src\GameWorld.cpp" />
+    <ClCompile Include="src\GravEntity.cpp" />
+    <ClCompile Include="src\GravityBomb.cpp" />
+    <ClCompile Include="src\HUD.cpp" />
+    <ClCompile Include="src\IceBlock.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\JumpState.cpp" />
+    <ClCompile Include="src\Laser.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainMenuState.cpp" />
+    <ClCompile Include="src\MessageState.cpp" />
+    <ClCompile Include="src\PatrollingSnake.cpp" />
+    <ClCompile Include="src\Pickup.cpp" />
+    <ClCompile Include="src\PickupManager.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\PlayerProjectiles.cpp" />
+    <ClCompile Include="src\PlayState.cpp" />
+    <ClCompile Include="src\Snake.cpp" />
+    <ClCompile Include="src\StandState.cpp" />
+    <ClCompile Include="src\StationarySnake.cpp" />
+    <ClCompile Include="src\Tile.cpp" />
+    <ClCompile Include="src\TileMap.cpp" />
+    <ClCompile Include="src\WaitBat.cpp" />
+    <ClCompile Include="src\WalkState.cpp" />
+    <ClCompile Include="src\WeaponPickup.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AcidSpit.h" />
+    <ClInclude Include="include\AlphaOscillator.h" />
+    <ClInclude Include="include\Audio.h" />
+    <ClInclude Include="include\Background.h" />
+    <ClInclude Include="include\BarrierManager.h" />
+    <ClInclude Include="include\Bat.h" />
+    <ClInclude Include="include\Blackhole.h" />
+    <ClInclude Include="include\Boss.h" />
+    <ClInclude Include="include\BossSpit.h" />
+    <ClInclude Include="include\ClimbState.h" />
+    <ClInclude Include="include\Constants.h" />
+    <ClInclude Include="include\Crawler.h" />
+    <ClInclude Include="include\DeathAnimation.h" />
+    <ClInclude Include="include\DeathAnimator.h" />
+    <ClInclude Include="include\DiveBat.h" />
+    <ClInclude Include="include\Enemy.h" />
+    <ClInclude Include="include\EnemyManager.h" />
+    <ClInclude Include="include\EnemyProjectiles.h" />
+    <ClInclude Include="include\EnergyBar.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\Event.h" />
+    <ClInclude Include="include\EventHandler.h" />
+    <ClInclude Include="include\EventManager.h" />
+    <ClInclude Include="include\FallState.h" />
+    <ClInclude Include="include\Flame.h" />
+    <ClInclude Include="include\FreezeRay.h" />
+    <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\GameOverState.h" />
+    <ClInclude Include="include\GameState.h" />
+    <ClInclude Include="include\GameWorld.h" />
+    <ClInclude Include="include\GravEntity.h" />
+    <ClInclude Include="include\GravityBomb.h" />
+    <ClInclude Include="include\HUD.h" />
+    <ClInclude Include="include\IceBlock.h" />
+    <ClInclude Include="include\Input.h" />
+    <ClInclude Include="include\JumpState.h" />
+    <ClInclude Include="include\Laser.h" />
+    <ClInclude Include="include\MainMenuState.h" />
+    <ClInclude Include="include\MessageState.h" />
+    <ClInclude Include="include\PatrollingSnake.h" />
+    <ClInclude Include="include\Pickup.h" />
+    <ClInclude Include="include\PickupManager.h" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\PlayerProjectiles.h" />
+    <ClInclude Include="include\PlayerState.h" />
+    <ClInclude Include="include\PlayState.h" />
+    <ClInclude Include="include\Snake.h" />
+    <ClInclude Include="include\StandState.h" />
+    <ClInclude Include="include\StationarySnake.h" />
+    <ClInclude Include="include\Tile.h" />
+    <ClInclude Include="include\TileMap.h" />
+    <ClInclude Include="include\WaitBat.h" />
+    <ClInclude Include="include\WalkState.h" />
+    <ClInclude Include="include\WeaponPickup.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\bat.png" />
+    <Image Include="assets\bkgd.png" />
+    <Image Include="assets\blackhole.png" />
+    <Image Include="assets\cave_bkgd.png" />
+    <Image Include="assets\crawler.png" />
+    <Image Include="assets\deaths.png" />
+    <Image Include="assets\flame.png" />
+    <Image Include="assets\freeze_ray.png" />
+    <Image Include="assets\gravity.png" />
+    <Image Include="assets\hbar.png" />
+    <Image Include="assets\hp.png" />
+    <Image Include="assets\iceblock.png" />
+    <Image Include="assets\laser.png" />
+    <Image Include="assets\screens.png" />
+    <Image Include="assets\setsprite.png" />
+    <Image Include="assets\SnakeEnemy.png" />
+    <Image Include="assets\spit.png" />
+    <Image Include="assets\tiles.png" />
+    <Image Include="assets\weapons.png" />
+    <Image Include="metroid_boss.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\bat.txt" />
+    <Text Include="assets\crawler.txt" />
+    <Text Include="assets\map1.txt" />
+    <Text Include="assets\map2.txt" />
+    <Text Include="assets\map3.txt" />
+    <Text Include="assets\mapv.txt" />
+    <Text Include="assets\snake.txt" />
+    <Text Include="assets\world.txt" />
+    <Text Include="assets\worldv.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\big_death.wav" />
+    <Media Include="assets\enemy_freeze.wav" />
+    <Media Include="assets\enemy_hit.wav" />
+    <Media Include="assets\enemy_shoot.wav" />
+    <Media Include="assets\freeze_ray.wav" />
+    <Media Include="assets\gb_implode.wav" />
+    <Media Include="assets\get_weapon.wav" />
+    <Media Include="assets\jump.wav" />
+    <Media Include="assets\laser.wav" />
+    <Media Include="assets\player_death.wav" />
+    <Media Include="assets\player_heal.wav" />
+    <Media Include="assets\player_hit.wav" />
+    <Media Include="assets\player_pickup.wav" />
+    <Media Include="assets\small_death.wav" />
+    <Media Include="assets\title.wav" />
+    <Media Include="assets\track1.wav" />
+    <Media Include="assets\track2.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\libsndfile-1.dll" />
+    <None Include="assets\openal32.dll" />
+    <None Include="assets\sfml-audio-2.dll" />
+    <None Include="assets\sfml-audio-d-2.dll" />
+    <None Include="assets\sfml-graphics-2.dll" />
+    <None Include="assets\sfml-graphics-d-2.dll" />
+    <None Include="assets\sfml-network-2.dll" />
+    <None Include="assets\sfml-network-d-2.dll" />
+    <None Include="assets\sfml-system-2.dll" />
+    <None Include="assets\sfml-system-d-2.dll" />
+    <None Include="assets\sfml-window-2.dll" />
+    <None Include="assets\sfml-window-d-2.dll" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

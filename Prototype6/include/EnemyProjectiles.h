@@ -11,6 +11,7 @@
 class EnemyManager;
 class Player;
 class AcidSpit;
+class BossSpit;
 class EnemyProjectiles;
 
 //==================================================
@@ -81,7 +82,9 @@ public:
 
 private:
 	AcidSpit *acidSpits;
+	BossSpit *bossSpits;
 	int asInd;
+	int bsInd;
 	EventHandler *scrollHandler;
 	EventHandler *shootHandler;
 	EventHandler *transitionHandler;
