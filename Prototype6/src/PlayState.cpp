@@ -67,7 +67,7 @@ bool PlayState::init()
 
 	deathAnimator.init(pGame->getTexture(DEATH));
 
-	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(BAT), pGame->getTexture(CRAWLER));
+	enemies.init(pGame->getTexture(ENEMY), pGame->getTexture(BAT), pGame->getTexture(CRAWLER), pGame->getTexture(BOSS));
 	eProjectiles.init(pGame->getTexture(SPIT));
 
 	barriers.init(pGame->getTexture(ICE));

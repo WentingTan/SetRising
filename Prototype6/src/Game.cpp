@@ -64,7 +64,7 @@ void Game::init()
 	textures[CRAWLER].loadFromFile(CRAWLER_TEXTURE);
 	textures[SCREENS].loadFromFile(SCREENS_TEXTURE);
 	textures[ICE].loadFromFile(ICE_TEXTURE);
-
+	textures[BOSS].loadFromFile(BOSS_TEXTURE);
 	// Seed the random number generator with the current time
 	srand(time(NULL));
 

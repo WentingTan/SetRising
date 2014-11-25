@@ -10,6 +10,7 @@
 #include "StationarySnake.h"
 #include "WaitBat.h"
 #include "DiveBat.h"
+#include "Boss.h"
 #include "Crawler.h"
 #include "EventHandler.h"
 
@@ -101,7 +102,7 @@ public:
 	// Destructor
 	~EnemyManager();
 
-	void init(sf::Texture *et, sf::Texture *bt, sf::Texture *ct);
+	void init(sf::Texture *et, sf::Texture *bt, sf::Texture *ct, sf::Texture *b);
 	void setTileMap(TileMap *tm);
 
 	bool checkFrozenCollisions(Player *p, sf::FloatRect& intersection);
@@ -135,6 +136,8 @@ private:
 	int wbInd;
 	int dbInd;
 	int crInd;
+	Boss *boss;
+	int bInd;
 	TileMap *map;
 
 	sf::Vector2f playerPos;

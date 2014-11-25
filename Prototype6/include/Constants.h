@@ -150,6 +150,7 @@ const int MAX_FREEZE_RAYS = 6;
 
 // Enemy Weapons Types
 const int W_ACID_SPIT = 0;
+const int W_BOSS_SPIT = 1;
 const int MAX_ACID_SPITS = 16;
 
 // Enemy Types
@@ -158,6 +159,8 @@ const int MAX_STATIONARY_SNAKES = 16;
 const int MAX_WAIT_BATS = 8;
 const int MAX_DIVE_BATS = 8;
 const int MAX_CRAWLERS = 8;
+const int MAX_BOSS = 2;
+
 
 const int E_NONE = 0;
 const int E_PATROLLING_SNAKE = 1;
@@ -165,6 +168,7 @@ const int E_STATIONARY_SNAKE = 2;
 const int E_WAIT_BAT = 3;
 const int E_DIVE_BAT = 4;
 const int E_CRAWLER = 5;
+const int E_BOSS = 9;
 
 const char SNAKE_FILE[] = "snake.txt";
 const char BAT_FILE[] = "bat.txt";
@@ -185,10 +189,13 @@ const float PS_SHOOT_TIME_LO = 2.0f;
 const float PS_SHOOT_TIME_HI = 2.5f;
 
 const int SS_NUM_SHOTS_IN_BURST = 3;
+const int BOSS_NUM_SHOTS_IN_BURST = 6;
+const float BOSS_BURST_TIME = 0.1f;
 const float SS_BURST_TIME = 0.75f;
 const float SS_SHOOT_TIME_LO = 2.0f;
 const float SS_SHOOT_TIME_HI = 2.75f;
 
+const float BOSS_HEALTH = 100.0f;
 // Bat animation
 const int BAT_FRAMES = 10;
 const float BAT_FRAME_TIME = 0.07f;

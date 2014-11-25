@@ -410,7 +410,7 @@ void Player::move(float x, float y)
 	if (isOffscreen(x, y))
 	{
 		tile = map->getTileByPos(sprite.getPosition().x, sprite.getPosition().y);
-		if (tile->exit != -1)
+		if (tile != NULL && tile->exit != -1)
 		{
 			e.type = Event::TM_TRANSITION;
 			e.entrance = tile->exit;
