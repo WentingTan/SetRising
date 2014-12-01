@@ -1,0 +1,16 @@
+Installation instructions:
+In top-level directory (FinalGame) run 'cmake .'
+Then run 'make'
+
+
+Controls:
+Menu selection:
+	move cursor:	up/down arrows
+	select option:	enter/return
+
+Gameplay:
+	walk left/right:	left/right arrows
+	climb up/down ladders:	up/down arrows
+	jump:			A
+	cycle through weapons:	D
+	shoot:			S
